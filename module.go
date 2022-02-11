@@ -14,20 +14,26 @@ var (
 // Register makes a database module available by the provided name.
 // If Register is called twice with the same name or if module is nil,
 // it panics.
-func Register(name module.Name, m module.Module) {
+func Register(m module.Module) {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
 	if m == nil {
 		panic("of: Register module is nil")
 	}
-	if name >= module.NameMax {
-		panic("of: Register called over module max " + name.String())
+	if m.Name() >= module.NameMax {
+		panic("of: Register called over module max " + m.Name().String())
 	}
-	modules[name] = m
+	modules[m.Name()] = m
 }
 
 func Load() []module.Module {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
-	return modules[:]
+	ms := make([]module.Module, 0)
+	for i := range modules {
+		if modules[i] != nil {
+			ms = append(ms, modules[i])
+		}
+	}
+	return ms
 }

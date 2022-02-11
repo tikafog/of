@@ -5,4 +5,6 @@ package module
 type Name int
 
 type Module interface {
+	Start() error
+	Name() Name
 }
