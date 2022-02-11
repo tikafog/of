@@ -1,0 +1,3 @@
+module github.com/tikalink/of
+
+go 1.18
