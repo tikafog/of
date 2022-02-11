@@ -9,5 +9,5 @@ type TypeHandleFunc = func(id string, data []byte) error
 type Module interface {
 	Start() error
 	Name() Name
-	TypeHandleFunc
+	HandleData(id string, data []byte) error
 }
