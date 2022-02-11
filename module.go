@@ -8,20 +8,26 @@ import (
 
 var (
 	modulesMu sync.RWMutex
-	modules   = make(map[string]module.Module)
+	modules   [module.NameMax]module.Module
 )
 
 // Register makes a database module available by the provided name.
 // If Register is called twice with the same name or if module is nil,
 // it panics.
-func Register(name string, m module.Module) {
+func Register(name module.Name, m module.Module) {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
 	if m == nil {
 		panic("of: Register module is nil")
 	}
-	if _, dup := modules[name]; dup {
-		panic("of: Register called twice for module " + name)
+	if name >= module.NameMax {
+		panic("of: Register called over module max " + name.String())
 	}
 	modules[name] = m
+}
+
+func Load() []module.Module {
+	modulesMu.Lock()
+	defer modulesMu.Unlock()
+	return modules[:]
 }
