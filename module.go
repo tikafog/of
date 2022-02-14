@@ -8,7 +8,7 @@ import (
 
 var (
 	modulesMu sync.RWMutex
-	modules   [module.NameMax]module.Module
+	modules   map[module.Name]module.Module
 )
 
 // Register makes a database module available by the provided name.
@@ -26,14 +26,12 @@ func Register(m module.Module) {
 	modules[m.Name()] = m
 }
 
-func Load() []module.Module {
+func Load(name module.Name) module.Module {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
-	ms := make([]module.Module, 0)
-	for i := range modules {
-		if modules[i] != nil {
-			ms = append(ms, modules[i])
-		}
+	m, ok := modules[name]
+	if ok {
+		return m
 	}
-	return ms
+	return module.EmptyModule(name)
 }
