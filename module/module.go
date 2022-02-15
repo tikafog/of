@@ -5,7 +5,7 @@ import (
 )
 
 //Name returns the names of all the modules
-//ENUM(bootstrap,instruct,max)
+//ENUM(bootNode,instruct,max)
 type Name int
 
 type TypeHandleFunc = func(id string, data json.RawMessage) error

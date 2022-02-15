@@ -11,20 +11,20 @@ import (
 )
 
 const (
-	// NameBootstrap is a Name of type Bootstrap.
-	NameBootstrap Name = iota
+	// NameBootNode is a Name of type BootNode.
+	NameBootNode Name = iota
 	// NameInstruct is a Name of type Instruct.
 	NameInstruct
 	// NameMax is a Name of type Max.
 	NameMax
 )
 
-const _NameName = "bootstrapinstructmax"
+const _NameName = "bootnodeinstructmax"
 
 var _NameMap = map[Name]string{
-	NameBootstrap: _NameName[0:9],
-	NameInstruct:  _NameName[9:17],
-	NameMax:       _NameName[17:20],
+	NameBootNode: _NameName[0:8],
+	NameInstruct: _NameName[8:16],
+	NameMax:      _NameName[16:19],
 }
 
 // String implements the Stringer interface.
@@ -36,9 +36,9 @@ func (x Name) String() string {
 }
 
 var _NameValue = map[string]Name{
-	_NameName[0:9]:   NameBootstrap,
-	_NameName[9:17]:  NameInstruct,
-	_NameName[17:20]: NameMax,
+	_NameName[0:8]:   NameBootNode,
+	_NameName[8:16]:  NameInstruct,
+	_NameName[16:19]: NameMax,
 }
 
 // ParseName attempts to convert a string to a Name.
