@@ -2,10 +2,16 @@ package module
 
 import (
 	"encoding/json"
+
+	"github.com/tikalink/of/module/option"
 )
 
 type emptyModule struct {
 	name Name
+}
+
+func (n emptyModule) Option(op option.Option) error {
+	return nil
 }
 
 func (n emptyModule) Valid() bool {
