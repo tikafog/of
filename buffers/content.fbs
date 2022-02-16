@@ -1,0 +1,55 @@
+namespace content;
+
+enum Type : uint { 	
+            None = 0,
+            Core,
+            User,
+            Bootstrap,
+            Information,
+            Instruct,
+            Update,
+            Announce,
+            TopList,
+            Discovery,
+            Page,
+            Max }
+
+table Message {
+  last:int64;
+  version:int;
+  data:string;
+}
+
+table Node {
+  pid:string;
+  cpuid:string;
+  addr:string;
+  data:string;
+  addrs:string;
+}
+
+enum ExtType : uint {
+              None = 0,
+              Node,
+              Report,
+              Exception,
+              Play,
+              Feedback,
+              Pin,
+              Max }
+
+table Ext {
+  type:ExtType;
+  data:string;
+}
+
+table Content {
+  version:string;
+  type:Type;
+  message:Message;
+  ext:[Ext];
+  node:Node;
+}
+
+
+root_type Content;
