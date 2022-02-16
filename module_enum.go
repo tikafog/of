@@ -4,7 +4,7 @@
 // Build Date: 2022-01-23T20:31:33Z
 // Built By: goreleaser
 
-package module
+package of
 
 import (
 	"fmt"

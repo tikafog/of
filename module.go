@@ -1,41 +1,22 @@
 package of
 
 import (
-	"sync"
+	"context"
+	"encoding/json"
 
-	"github.com/tikalink/of/module"
+	"github.com/tikalink/of/option"
 )
 
-var (
-	modulesMu sync.RWMutex
-	modules   = map[module.Name]module.Module{}
-)
+//Name returns the names of all the modules
+//ENUM(bootNode,instruct,max)
+type Name int
 
-// Register makes a database module available by the provided name.
-// If Register is called twice with the same name or if module is nil,
-// it panics.
-func Register(m module.Module) {
-	modulesMu.Lock()
-	defer modulesMu.Unlock()
-	if m == nil {
-		panic("of: Register module is nil")
-	}
-	if m.Name() >= module.NameMax {
-		panic("of: Register called over module max " + m.Name().String())
-	}
-	modules[m.Name()] = m
-}
+type TypeHandleFunc = func(id string, data json.RawMessage) error
 
-// Load ...
-// @Description: Load module
-// @param module.Name
-// @return module.Module
-func Load(name module.Name) module.Module {
-	modulesMu.Lock()
-	defer modulesMu.Unlock()
-	m, ok := modules[name]
-	if ok {
-		return m
-	}
-	return module.EmptyModule(name)
+type Module interface {
+	Valid() bool
+	Run(ctx context.Context) error
+	Name() Name
+	Option(op option.Option) error
+	HandleData(id string, data json.RawMessage) error
 }
