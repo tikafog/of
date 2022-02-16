@@ -4,12 +4,19 @@ import (
 	"github.com/tikalink/of"
 )
 
+type option struct {
+	id            of.ID
+	repo          string
+	fatherHandler func(father of.ID)
+	link          interface{}
+}
+
 type Option interface {
 	Apply(fns ...func(*option) Option)
 	ID() of.ID
+	Link() interface{}
 	Repo() string
 	FatherHandler() func(father of.ID)
-	Host() interface{}
 }
 
 func Repo(repo string) func(o *option) Option {
@@ -26,16 +33,16 @@ func FatherHandler(fn func(father of.ID)) func(o *option) Option {
 	}
 }
 
-func Host(host interface{}) func(o *option) Option {
+func ID(id of.ID) func(o *option) Option {
 	return func(o *option) Option {
-		o.host = host
+		o.id = id
 		return o
 	}
 }
 
-func ID(id of.ID) func(o *option) Option {
+func Link(link interface{}) func(o *option) Option {
 	return func(o *option) Option {
-		o.id = id
+		o.link = link
 		return o
 	}
 }
@@ -44,21 +51,14 @@ func Default() Option {
 	return &option{}
 }
 
-type option struct {
-	id            of.ID
-	repo          string
-	fatherHandler func(father of.ID)
-	host          interface{}
+func (o *option) Link() interface{} {
+	return o.link
 }
 
 func (o *option) Apply(fns ...func(*option) Option) {
 	for _, fn := range fns {
 		fn(o)
 	}
-}
-
-func (o option) Host() interface{} {
-	return o.host
 }
 
 func (o option) FatherHandler() func(father of.ID) {
