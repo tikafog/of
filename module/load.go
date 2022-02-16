@@ -4,17 +4,23 @@ import (
 	"sync"
 
 	"github.com/tikalink/of"
+	"github.com/tikalink/of/option"
 )
 
 var (
 	modulesMu sync.RWMutex
-	modules   = map[of.Name]of.Module{}
+	modules   = map[of.Name]Loader{}
 )
+
+type Loader interface {
+	of.Module
+	Option(option.Option) of.Module
+}
 
 // Register makes a database module available by the provided name.
 // If Register is called twice with the same name or if module is nil,
 // it panics.
-func Register(m of.Module) {
+func Register(m Loader) {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
 	if m == nil {
@@ -30,12 +36,12 @@ func Register(m of.Module) {
 // @Description: Load module
 // @param module.Name
 // @return module.Module
-func Load(name of.Name) of.Module {
+func Load(name of.Name, op option.Option) of.Module {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
 	m, ok := modules[name]
 	if ok {
-		return m
+		return m.Option(op)
 	}
 	return EmptyModule(name)
 }
