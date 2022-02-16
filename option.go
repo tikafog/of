@@ -1,8 +1,8 @@
-package option
+package of
 
 type Option interface {
 	Repo() string
-	FatherHandler() func(father string)
+	FatherHandler() func(father ID)
 }
 
 func Repo(repo string) func(o Option) Option {
@@ -13,7 +13,7 @@ func Repo(repo string) func(o Option) Option {
 	}
 }
 
-func FatherHandler(fn func(father string)) func(o Option) Option {
+func FatherHandler(fn func(father ID)) func(o Option) Option {
 	return func(o Option) Option {
 		op := o.(option)
 		op.fatherHandler = fn
@@ -27,10 +27,10 @@ func Default() Option {
 
 type option struct {
 	repo          string
-	fatherHandler func(father string)
+	fatherHandler func(father ID)
 }
 
-func (o option) FatherHandler() func(father string) {
+func (o option) FatherHandler() func(father ID) {
 	return o.fatherHandler
 }
 
