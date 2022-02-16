@@ -1,6 +1,7 @@
 package module
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/tikalink/of/module/option"
@@ -18,7 +19,7 @@ func (n emptyModule) Valid() bool {
 	return false
 }
 
-func (n emptyModule) Start() error {
+func (n emptyModule) Run(ctx context.Context) error {
 	return nil
 }
 

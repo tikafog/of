@@ -1,6 +1,7 @@
 package module
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/tikalink/of/module/option"
@@ -14,7 +15,7 @@ type TypeHandleFunc = func(id string, data json.RawMessage) error
 
 type Module interface {
 	Valid() bool
-	Start() error
+	Run(ctx context.Context) error
 	Name() Name
 	Option(op option.Option) error
 	HandleData(id string, data json.RawMessage) error
