@@ -2,6 +2,6 @@ package of
 
 type Message struct {
 	ID       ID
-	Protocol string
+	Protocol Protocol
 	Data     []byte
 }
