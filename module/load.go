@@ -14,7 +14,7 @@ var (
 
 type Loader interface {
 	of.Module
-	Option(option.Option) of.Module
+	WithOption(option.Option) of.Module
 }
 
 // Register makes a database module available by the provided name.
@@ -41,7 +41,7 @@ func Load(name of.Name, op option.Option) of.Module {
 	defer modulesMu.Unlock()
 	m, ok := modules[name]
 	if ok {
-		return m.Option(op)
+		return m.WithOption(op)
 	}
 	return EmptyModule(name)
 }

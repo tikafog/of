@@ -12,7 +12,11 @@ type emptyModule struct {
 	name of.Name
 }
 
-func (n emptyModule) Option(op option.Option) error {
+func (n emptyModule) SetCore(core of.Core) error {
+	return nil
+}
+
+func (n emptyModule) WithOption(op option.Option) error {
 	return nil
 }
 
