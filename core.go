@@ -6,5 +6,5 @@ import (
 
 type Core interface {
 	Context() context.Context
-	SendRequest(ctx context.Context, ID, data []byte) error
+	SendRequest(ctx context.Context, id ID, data []byte) error
 }

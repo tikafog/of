@@ -16,4 +16,5 @@ type Module interface {
 	Run(ctx context.Context) error
 	Name() Name
 	HandleData(id string, data json.RawMessage) error
+	SetCore(core Core) error
 }
