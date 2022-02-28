@@ -9,8 +9,17 @@ import (
 
 var (
 	modulesMu sync.RWMutex
-	modules   = map[of.Name]Loader{}
+	modules   = initLoadModules()
 )
+
+func initLoadModules() [of.NameMax]Loader {
+	return [of.NameMax]Loader{
+		of.NameAdmin:    newEmptyModule(of.NameAdmin),
+		of.NameCenter:   newEmptyModule(of.NameCenter),
+		of.NameBootNode: newEmptyModule(of.NameBootNode),
+		of.NameInstruct: newEmptyModule(of.NameInstruct),
+	}
+}
 
 type Loader interface {
 	of.Module
@@ -39,9 +48,8 @@ func Register(m Loader) {
 func Load(name of.Name, op option.Option) of.Module {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
-	m, ok := modules[name]
-	if ok {
-		return m.WithOption(op)
+	if name >= of.NameMax {
+		panic("of: Load called over module max " + name.String())
 	}
-	return EmptyModule(name)
+	return modules[name].WithOption(op)
 }

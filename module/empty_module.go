@@ -12,31 +12,47 @@ type emptyModule struct {
 	name of.Name
 }
 
-func (n emptyModule) SetCore(core of.Core) error {
+func (m emptyModule) Destroy() error {
 	return nil
 }
 
-func (n emptyModule) WithOption(op option.Option) error {
+func (m emptyModule) PreinstallCore(core of.Core) error {
 	return nil
 }
 
-func (n emptyModule) Valid() bool {
+func (m emptyModule) PreinstallAPI(api of.API) error {
+	return nil
+}
+
+func (m emptyModule) SetCore(core of.Core) error {
+	return nil
+}
+
+func (m emptyModule) WithOption(op option.Option) of.Module {
+	return m
+}
+
+func (m emptyModule) Valid() bool {
 	return false
 }
 
-func (n emptyModule) Run(ctx context.Context) error {
+func (m emptyModule) Run(ctx context.Context) error {
 	return nil
 }
 
-func (n emptyModule) Name() of.Name {
-	return n.name
+func (m emptyModule) Name() of.Name {
+	return m.name
 }
 
-func (n emptyModule) HandleData(id string, data json.RawMessage) error {
+func (m emptyModule) HandleData(id string, data json.RawMessage) error {
 	return nil
 }
 
-func EmptyModule(name of.Name) of.Module {
+func NewEmptyModule(name of.Name) of.Module {
+	return newEmptyModule(name)
+}
+
+func newEmptyModule(name of.Name) Loader {
 	return &emptyModule{
 		name: name,
 	}
