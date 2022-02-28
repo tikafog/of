@@ -2,19 +2,19 @@ package of
 
 import (
 	"context"
-	"encoding/json"
 )
 
 //Name returns the names of all the modules
-//ENUM(bootNode,instruct,max)
+//ENUM(admin,center,node,bootNode,instruct,max)
 type Name int
-
-type TypeHandleFunc = func(id string, data json.RawMessage) error
 
 type Module interface {
 	Valid() bool
 	Run(ctx context.Context) error
+	Destroy() error
 	Name() Name
-	HandleData(id string, data json.RawMessage) error
-	SetCore(core Core) error
+
+	//this all calls before run
+	PreinstallCore(core Core) error
+	PreinstallAPI(api API) error
 }

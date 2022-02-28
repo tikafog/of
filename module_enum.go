@@ -11,20 +11,29 @@ import (
 )
 
 const (
+	// NameAdmin is a Name of type Admin.
+	NameAdmin Name = iota
+	// NameCenter is a Name of type Center.
+	NameCenter
+	// NameNode is a Name of type Node.
+	NameNode
 	// NameBootNode is a Name of type BootNode.
-	NameBootNode Name = iota
+	NameBootNode
 	// NameInstruct is a Name of type Instruct.
 	NameInstruct
 	// NameMax is a Name of type Max.
 	NameMax
 )
 
-const _NameName = "bootnodeinstructmax"
+const _NameName = "admincenternodebootnodeinstructmax"
 
 var _NameMap = map[Name]string{
-	NameBootNode: _NameName[0:8],
-	NameInstruct: _NameName[8:16],
-	NameMax:      _NameName[16:19],
+	NameAdmin:    _NameName[0:5],
+	NameCenter:   _NameName[5:11],
+	NameNode:     _NameName[11:15],
+	NameBootNode: _NameName[15:23],
+	NameInstruct: _NameName[23:31],
+	NameMax:      _NameName[31:34],
 }
 
 // String implements the Stringer interface.
@@ -36,9 +45,12 @@ func (x Name) String() string {
 }
 
 var _NameValue = map[string]Name{
-	_NameName[0:8]:   NameBootNode,
-	_NameName[8:16]:  NameInstruct,
-	_NameName[16:19]: NameMax,
+	_NameName[0:5]:   NameAdmin,
+	_NameName[5:11]:  NameCenter,
+	_NameName[11:15]: NameNode,
+	_NameName[15:23]: NameBootNode,
+	_NameName[23:31]: NameInstruct,
+	_NameName[31:34]: NameMax,
 }
 
 // ParseName attempts to convert a string to a Name.
