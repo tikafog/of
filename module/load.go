@@ -16,6 +16,7 @@ func initLoadModules() [of.NameMax]Loader {
 	return [of.NameMax]Loader{
 		of.NameAdmin:    newEmptyModule(of.NameAdmin),
 		of.NameCenter:   newEmptyModule(of.NameCenter),
+		of.NameNode:     newEmptyModule(of.NameNode),
 		of.NameBootNode: newEmptyModule(of.NameBootNode),
 		of.NameInstruct: newEmptyModule(of.NameInstruct),
 	}
