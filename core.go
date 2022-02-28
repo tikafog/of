@@ -10,7 +10,7 @@ import (
 type TypeHandleFunc = func(id string, data json.RawMessage) error
 
 type Core interface {
+	Connection
 	Context() context.Context
-	Send(ctx context.Context, message *Message) error
 	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error
 }
