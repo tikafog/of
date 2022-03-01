@@ -7,7 +7,7 @@ import (
 	"github.com/tikalink/of/content"
 )
 
-type TypeHandleFunc = func(id string, data json.RawMessage) error
+type TypeHandleFunc = func(conn Conn, data json.RawMessage) error
 type TypeEventFunc = func(r *EventRequest) error
 
 type Core interface {
