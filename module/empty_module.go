@@ -12,15 +12,19 @@ type emptyModule struct {
 	name of.Name
 }
 
+func (m emptyModule) Init() error {
+	return nil
+}
+
 func (m emptyModule) Destroy() error {
 	return nil
 }
 
-func (m emptyModule) PreinstallCore(core of.Core) error {
+func (m emptyModule) PreloadCore(core of.Core) error {
 	return nil
 }
 
-func (m emptyModule) PreinstallAPI(api of.API) error {
+func (m emptyModule) PreloadAPI(api of.API) error {
 	return nil
 }
 
