@@ -10,11 +10,12 @@ type Name int
 
 type Module interface {
 	Valid() bool
+	Init() error
 	Run(ctx context.Context) error
 	Destroy() error
 	Name() Name
 
 	//this all calls before run
-	PreinstallCore(core Core) error
-	PreinstallAPI(api API) error
+	PreloadCore(core Core) error
+	PreloadAPI(api API) error
 }
