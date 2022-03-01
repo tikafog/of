@@ -8,13 +8,17 @@ import (
 )
 
 type TypeHandleFunc = func(conn Conn, data json.RawMessage) error
-type TypeEventFunc = func(r *EventRequest) error
 
 type Core interface {
 	Connection
 	Context() context.Context
-	//Ask(ctx context.Context, m *AskRequest) error
+
+	Inquire(ctx context.Context, r *InquireRequest) error
 	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error
 	RegisterEventHandler(from Name, fn TypeEventFunc) error
 	Event(ctx context.Context, n Name, r *EventRequest) error
+}
+
+type BootHandler interface {
+	AddBoot(ctx context.Context, conn Conn) error
 }
