@@ -10,7 +10,7 @@ type Name int
 
 type Module interface {
 	Valid() bool
-	//Init() error
+	Init() error
 	Run(ctx context.Context) error
 	Destroy() error
 	Name() Name
