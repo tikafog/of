@@ -17,5 +17,7 @@ type Module interface {
 
 	//this all calls before run
 	PreloadCore(core Core) error
-	PreloadAPI(api API) error
+
+	//this all calls after run
+	RegisterAPI(api API) error
 }
