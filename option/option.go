@@ -27,29 +27,29 @@ type Option interface {
 	StartOption
 }
 
-func Repo(repo string) func(o *option) InitializeOption {
-	return func(o *option) InitializeOption {
+func Repo(repo string) func(o *option) Option {
+	return func(o *option) Option {
 		o.repo = repo
 		return o
 	}
 }
 
-func FatherHandler(fn func(father of.ID)) func(o *option) InitializeOption {
-	return func(o *option) InitializeOption {
+func FatherHandler(fn func(father of.ID)) func(o *option) Option {
+	return func(o *option) Option {
 		o.fatherHandler = fn
 		return o
 	}
 }
 
-func ID(id of.ID) func(o *option) InitializeOption {
-	return func(o *option) InitializeOption {
+func ID(id of.ID) func(o *option) Option {
+	return func(o *option) Option {
 		o.id = id
 		return o
 	}
 }
 
-func Link(link interface{}) func(o *option) InitializeOption {
-	return func(o *option) InitializeOption {
+func Link(link interface{}) func(o *option) Option {
+	return func(o *option) Option {
 		o.link = link
 		return o
 	}
