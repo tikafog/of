@@ -12,6 +12,10 @@ type emptyModule struct {
 	name of.Name
 }
 
+func (m emptyModule) RegisterAPI(api of.API) error {
+	return nil
+}
+
 func (m emptyModule) Init() error {
 	return nil
 }
@@ -24,15 +28,11 @@ func (m emptyModule) PreloadCore(core of.Core) error {
 	return nil
 }
 
-func (m emptyModule) PreloadAPI(api of.API) error {
-	return nil
-}
-
 func (m emptyModule) SetCore(core of.Core) error {
 	return nil
 }
 
-func (m emptyModule) WithOption(op option.Option) of.Module {
+func (m emptyModule) WithOption(op option.InitializeOption) of.Module {
 	return m
 }
 

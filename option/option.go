@@ -11,37 +11,45 @@ type option struct {
 	link          interface{}
 }
 
-type Option interface {
-	Apply(fns ...func(*option) Option)
+type InitializeOption interface {
+	Repo() string
+}
+
+type StartOption interface {
+	InitializeOption
 	ID() of.ID
 	Link() interface{}
-	Repo() string
 	FatherHandler() func(father of.ID)
 }
 
-func Repo(repo string) func(o *option) Option {
-	return func(o *option) Option {
+type Option interface {
+	Apply(fns ...func(*option) Option)
+	StartOption
+}
+
+func Repo(repo string) func(o *option) InitializeOption {
+	return func(o *option) InitializeOption {
 		o.repo = repo
 		return o
 	}
 }
 
-func FatherHandler(fn func(father of.ID)) func(o *option) Option {
-	return func(o *option) Option {
+func FatherHandler(fn func(father of.ID)) func(o *option) InitializeOption {
+	return func(o *option) InitializeOption {
 		o.fatherHandler = fn
 		return o
 	}
 }
 
-func ID(id of.ID) func(o *option) Option {
-	return func(o *option) Option {
+func ID(id of.ID) func(o *option) InitializeOption {
+	return func(o *option) InitializeOption {
 		o.id = id
 		return o
 	}
 }
 
-func Link(link interface{}) func(o *option) Option {
-	return func(o *option) Option {
+func Link(link interface{}) func(o *option) InitializeOption {
+	return func(o *option) InitializeOption {
 		o.link = link
 		return o
 	}

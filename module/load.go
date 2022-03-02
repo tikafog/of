@@ -24,7 +24,7 @@ func initLoadModules() [of.NameMax]Loader {
 
 type Loader interface {
 	of.Module
-	WithOption(option.Option) of.Module
+	WithOption(option.InitializeOption) of.Module
 }
 
 // Register makes a database module available by the provided name.
@@ -46,7 +46,7 @@ func Register(m Loader) {
 // @Description: Load module
 // @param module.Name
 // @return module.Module
-func Load(name of.Name, op option.Option) of.Module {
+func Load(name of.Name, op option.InitializeOption) of.Module {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
 	if name >= of.NameMax {
