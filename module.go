@@ -2,6 +2,7 @@ package of
 
 import (
 	"context"
+	"strings"
 )
 
 //Name returns the names of all the modules
@@ -19,4 +20,8 @@ type Module interface {
 
 	//this all calls after run
 	RegisterAPI(api API) error
+}
+
+func (n Name) String() string {
+	return strings.ToLower(string(n))
 }
