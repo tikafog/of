@@ -12,7 +12,7 @@ type emptyModule struct {
 	name of.Name
 }
 
-func (m emptyModule) WithInit(initializeOption option.InitializeOption) of.Module {
+func (m emptyModule) WithInit(o option.InitializeOption) of.Module {
 	return nil
 }
 
