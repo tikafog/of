@@ -5,8 +5,7 @@ import (
 )
 
 //Name returns the names of all the modules
-//ENUM(admin,center,node,bootNode,instruct,max)
-type Name int
+type Name string
 
 type Module interface {
 	Valid() bool

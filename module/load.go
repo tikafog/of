@@ -12,14 +12,8 @@ var (
 	modules   = initLoadModules()
 )
 
-func initLoadModules() [of.NameMax]Loader {
-	return [of.NameMax]Loader{
-		of.NameAdmin:    newEmptyModule(of.NameAdmin),
-		of.NameCenter:   newEmptyModule(of.NameCenter),
-		of.NameNode:     newEmptyModule(of.NameNode),
-		of.NameBootNode: newEmptyModule(of.NameBootNode),
-		of.NameInstruct: newEmptyModule(of.NameInstruct),
-	}
+func initLoadModules() map[of.Name]Loader {
+	return make(map[of.Name]Loader, 128)
 }
 
 type Loader interface {
@@ -37,8 +31,9 @@ func Register(m Loader) {
 	if m == nil {
 		panic("of: Register module is nil")
 	}
-	if m.Name() >= of.NameMax {
-		panic("of: Register called over module max " + m.Name().String())
+
+	if _, ok := modules[m.Name()]; ok {
+		panic("of: Register called twice for module " + m.Name())
 	}
 	modules[m.Name()] = m
 }
@@ -51,10 +46,10 @@ func Register(m Loader) {
 func Initialize(name of.Name, op option.InitializeOption) of.Module {
 	modulesMu.RLock()
 	defer modulesMu.RUnlock()
-	if name >= of.NameMax {
-		panic("of: Initialize called over module max " + name.String())
+	if m, ok := modules[name]; ok {
+		return m.WithInit(op)
 	}
-	return modules[name].WithInit(op)
+	return newEmptyModule(name)
 }
 
 // Load ...
@@ -64,8 +59,8 @@ func Initialize(name of.Name, op option.InitializeOption) of.Module {
 func Load(name of.Name, op option.Option) of.Module {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
-	if name >= of.NameMax {
-		panic("of: Load called over module max " + name.String())
+	if m, ok := modules[name]; ok {
+		return m.WithOption(op)
 	}
-	return modules[name].WithOption(op)
+	return newEmptyModule(name)
 }
