@@ -19,12 +19,7 @@ type Core interface {
 	Event(ctx context.Context, n Name, r *EventRequest) error
 
 	//core tools
-	Identifier() Identifier
-}
-
-type Identifier interface {
-	Decode(id string) (ID, error)
-	Encode(id ID) string
+	Tools() Tools
 }
 
 type BootHandler interface {
