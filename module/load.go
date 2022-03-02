@@ -24,7 +24,8 @@ func initLoadModules() [of.NameMax]Loader {
 
 type Loader interface {
 	of.Module
-	WithOption(option.InitializeOption) of.Module
+	WithInit(option.InitializeOption) of.Module
+	WithOption(option.Option) of.Module
 }
 
 // Register makes a database module available by the provided name.
@@ -42,11 +43,25 @@ func Register(m Loader) {
 	modules[m.Name()] = m
 }
 
+// Initialize ...
+// @Description:
+// @param of.Name
+// @param option.InitializeOption
+// @return of.Module
+func Initialize(name of.Name, op option.InitializeOption) of.Module {
+	modulesMu.RLock()
+	defer modulesMu.RUnlock()
+	if name >= of.NameMax {
+		panic("of: Initialize called over module max " + name.String())
+	}
+	return modules[name].WithInit(op)
+}
+
 // Load ...
 // @Description: Load module
 // @param module.Name
 // @return module.Module
-func Load(name of.Name, op option.InitializeOption) of.Module {
+func Load(name of.Name, op option.Option) of.Module {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
 	if name >= of.NameMax {
