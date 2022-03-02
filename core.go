@@ -17,6 +17,14 @@ type Core interface {
 	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error
 	RegisterEventHandler(from Name, fn TypeEventFunc) error
 	Event(ctx context.Context, n Name, r *EventRequest) error
+
+	//core tools
+	Identifier() Identifier
+}
+
+type Identifier interface {
+	Decode(id string) (ID, error)
+	Encode(id ID) string
 }
 
 type BootHandler interface {
