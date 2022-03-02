@@ -28,8 +28,8 @@ func (m emptyModule) Init() error {
 	return nil
 }
 
-func (m emptyModule) Destroy() error {
-	return nil
+func (m emptyModule) Destroy() {
+
 }
 
 func (m emptyModule) PreloadCore(core of.Core) error {
