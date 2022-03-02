@@ -24,11 +24,11 @@ var (
 //Message ...
 //@Description:
 type Message struct {
-	Last    int64           `json:"last,omitempty"`
-	Index   int64           `json:"index,omitempty"`
-	Version int             `json:"version,omitempty"` // current info version
-	Length  int             `json:"length,omitempty"`
-	Data    json.RawMessage `json:"data,omitempty"`
+	Last    int64  `json:"last,omitempty"`
+	Index   int64  `json:"index,omitempty"`
+	Version int    `json:"version,omitempty"` // current info version
+	Length  int    `json:"length,omitempty"`
+	Data    []byte `json:"data,omitempty"`
 }
 
 // ExtType ...
