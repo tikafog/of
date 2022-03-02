@@ -39,7 +39,7 @@ type ExtType = content.ExtType
 type Ext struct {
 	ExtType content.ExtType `json:"ext_type,omitempty"`
 	Length  int             `json:"length,omitempty"`
-	Data    json.RawMessage `json:"data,omitempty"`
+	Data    []byte          `json:"data,omitempty"`
 }
 
 // Type ...
