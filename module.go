@@ -25,3 +25,11 @@ type Module interface {
 func (n Name) String() string {
 	return strings.ToLower(string(n))
 }
+
+func (n Name) Compare(other Name) bool {
+	return n.String() == other.String()
+}
+
+func CompareName(n, o Name) bool {
+	return n.String() == o.String()
+}
