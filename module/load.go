@@ -38,29 +38,28 @@ func Register(m Loader) {
 	modules[m.Name()] = m
 }
 
-// Initialize ...
-// @Description:
-// @param of.Name
-// @param option.InitializeOption
-// @return of.Module
-func Initialize(name of.Name, op option.InitializeOption) of.Module {
-	modulesMu.RLock()
-	defer modulesMu.RUnlock()
-	if m, ok := modules[name]; ok {
-		return m.WithInit(op)
-	}
-	return newEmptyModule(name)
-}
-
 // Load ...
 // @Description: Load module
 // @param module.Name
 // @return module.Module
-func Load(name of.Name, op option.Option) of.Module {
+func Load(name of.Name) Loader {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
 	if m, ok := modules[name]; ok {
-		return m.WithOption(op)
+		return m
 	}
-	return newEmptyModule(name)
+	return newEmptyLoader(name)
+}
+
+// ListLoaders ...
+// @Description: List all registered modules
+// @return []of.Name
+func ListLoaders() []of.Name {
+	names := make([]of.Name, 0, len(modules))
+	modulesMu.RLock()
+	defer modulesMu.RUnlock()
+	for name := range modules {
+		names = append(names, name)
+	}
+	return names
 }

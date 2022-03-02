@@ -57,10 +57,10 @@ func (m emptyModule) HandleData(id string, data json.RawMessage) error {
 }
 
 func NewEmptyModule(name of.Name) of.Module {
-	return newEmptyModule(name)
+	return newEmptyLoader(name)
 }
 
-func newEmptyModule(name of.Name) Loader {
+func newEmptyLoader(name of.Name) Loader {
 	return &emptyModule{
 		name: name,
 	}
