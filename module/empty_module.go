@@ -12,6 +12,14 @@ type emptyModule struct {
 	name of.Name
 }
 
+func (m emptyModule) WithInit(initializeOption option.InitializeOption) of.Module {
+	return nil
+}
+
+func (m emptyModule) WithOption(o option.Option) of.Module {
+	return nil
+}
+
 func (m emptyModule) RegisterAPI(api of.API) error {
 	return nil
 }
@@ -30,10 +38,6 @@ func (m emptyModule) PreloadCore(core of.Core) error {
 
 func (m emptyModule) SetCore(core of.Core) error {
 	return nil
-}
-
-func (m emptyModule) WithOption(op option.InitializeOption) of.Module {
-	return m
 }
 
 func (m emptyModule) Valid() bool {
