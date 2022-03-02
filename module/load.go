@@ -12,8 +12,8 @@ var (
 	modules   = initLoadModules()
 )
 
-func initLoadModules() map[of.Name]Loader {
-	return make(map[of.Name]Loader, 128)
+func initLoadModules() map[string]Loader {
+	return make(map[string]Loader, 128)
 }
 
 type Loader interface {
@@ -32,10 +32,10 @@ func Register(m Loader) {
 		panic("of: Register module is nil")
 	}
 
-	if _, ok := modules[m.Name()]; ok {
+	if _, ok := modules[m.Name().String()]; ok {
 		panic("of: Register called twice for module " + m.Name())
 	}
-	modules[m.Name()] = m
+	modules[m.Name().String()] = m
 }
 
 // Load ...
@@ -45,7 +45,7 @@ func Register(m Loader) {
 func Load(name of.Name) Loader {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
-	if m, ok := modules[name]; ok {
+	if m, ok := modules[name.String()]; ok {
 		return m
 	}
 	return newEmptyLoader(name)
@@ -59,7 +59,7 @@ func ListLoaders() []of.Name {
 	modulesMu.RLock()
 	defer modulesMu.RUnlock()
 	for name := range modules {
-		names = append(names, name)
+		names = append(names, of.Name(name))
 	}
 	return names
 }
