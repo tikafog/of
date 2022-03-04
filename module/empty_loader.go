@@ -12,6 +12,10 @@ type emptyModule struct {
 	name of.Name
 }
 
+func (m emptyModule) IsRunning() bool {
+	return false
+}
+
 func (m emptyModule) WithInit(o option.InitializeOption) of.Module {
 	return nil
 }
