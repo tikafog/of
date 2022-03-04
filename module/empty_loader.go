@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/tikalink/of"
-	"github.com/tikalink/of/option"
+	"github.com/tikafog/of"
+	"github.com/tikafog/of/option"
 )
 
 type emptyModule struct {

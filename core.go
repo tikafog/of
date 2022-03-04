@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/tikalink/of/content"
+	"github.com/tikafog/of/content"
 )
 
 type TypeHandleFunc = func(conn Conn, data json.RawMessage) error

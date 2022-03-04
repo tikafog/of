@@ -1,7 +1,7 @@
 package option
 
 import (
-	"github.com/tikalink/of"
+	"github.com/tikafog/of"
 )
 
 type option struct {

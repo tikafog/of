@@ -3,7 +3,7 @@ package content
 import (
 	"encoding/json"
 
-	"github.com/tikalink/of/buffers/content"
+	"github.com/tikafog/of/buffers/content"
 )
 
 // NodeState ...

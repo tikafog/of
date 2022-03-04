@@ -1,4 +1,4 @@
-module github.com/tikalink/of
+module github.com/tikafog/of
 
 go 1.16
 

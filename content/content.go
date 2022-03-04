@@ -8,8 +8,8 @@ import (
 
 	flatbuffers "github.com/google/flatbuffers/go"
 
-	"github.com/tikalink/of/buffers/content"
-	"github.com/tikalink/of/version"
+	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/version"
 )
 
 const CurrentDataVersion = 1

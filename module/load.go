@@ -3,8 +3,8 @@ package module
 import (
 	"sync"
 
-	"github.com/tikalink/of"
-	"github.com/tikalink/of/option"
+	"github.com/tikafog/of"
+	"github.com/tikafog/of/option"
 )
 
 var (
