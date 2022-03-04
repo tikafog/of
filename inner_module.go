@@ -7,6 +7,8 @@
 package of
 
 const (
+	// NameNotSet is a Name of type when you don't specify a name
+	NameNotSet Name = "notset"
 	// NameAccount is a Name of type Account.
 	NameAccount Name = "account"
 	// NameAdmin is a Name of type Admin.
