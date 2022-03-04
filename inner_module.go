@@ -19,8 +19,8 @@ const (
 	NameNode Name = "node"
 	// NameBootNode is a Name of type BootNode.
 	NameBootNode Name = "bootnode"
-	// NameInstruct is a Name of type Instruct.
-	NameInstruct Name = "instruct"
+	// NameUpgrade is a Name of type Upgrade.
+	NameUpgrade Name = "upgrade"
 	// NameMedia is a Name of type Media.
 	NameMedia Name = "media"
 	// NameKernel is a Name of type Kernel.
