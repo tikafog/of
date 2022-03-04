@@ -7,6 +7,8 @@
 package of
 
 const (
+	// NameAccount is a Name of type Account.
+	NameAccount Name = "account"
 	// NameAdmin is a Name of type Admin.
 	NameAdmin Name = "admin"
 	// NameCenter is a Name of type Center.
@@ -17,4 +19,8 @@ const (
 	NameBootNode Name = "bootnode"
 	// NameInstruct is a Name of type Instruct.
 	NameInstruct Name = "instruct"
+	// NameMedia is a Name of type Media.
+	NameMedia Name = "media"
+	// NameKernel is a Name of type Kernel.
+	NameKernel Name = "kernel"
 )
