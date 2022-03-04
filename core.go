@@ -17,7 +17,7 @@ type Core interface {
 	Inquire(ctx context.Context, r *InquireRequest) error
 	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error
 	RegisterEventHandler(from Name, fn TypeEventFunc) error
-	Event(ctx context.Context, n Name, r *EventRequest) error
+	Event(n Name, r *EventRequest) error
 	//core tools
 	Tools() Tools
 }
