@@ -12,6 +12,7 @@ type Module interface {
 	Valid() bool
 	Init() error
 	Run(ctx context.Context) error
+	IsRunning() bool
 	Destroy()
 	Name() Name
 
