@@ -1,7 +1,7 @@
 package of
 
 type TypeEventFunc = func(r *EventRequest) error
-type TypeEventCallbackFunc = func(v interface{}) error
+type TypeEventCallbackFunc = func(v interface{}, err error)
 
 type Event interface {
 	Event(n Name, r *EventRequest) error
