@@ -11,13 +11,14 @@ type TypeHandleFunc = func(conn Conn, data json.RawMessage) error
 
 type Core interface {
 	Connection
+	Event
 	Context() context.Context
 	State() State
 
 	Inquire(ctx context.Context, r *InquireRequest) error
 	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error
 	RegisterEventHandler(from Name, fn TypeEventFunc) error
-	Event(n Name, r *EventRequest) error
+
 	//core tools
 	Tools() Tools
 }
