@@ -9,13 +9,17 @@ import (
 
 type TypeHandleFunc = func(conn Conn, data json.RawMessage) error
 
-type Core interface {
-	Connection
-	Event
+type core interface {
 	Context() context.Context
 	State() State
+}
 
-	Inquire(ctx context.Context, r *InquireRequest) error
+type Core interface {
+	core
+	Connection
+	CoreModule
+	Event
+
 	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error
 	RegisterEventHandler(from Name, fn TypeEventFunc) error
 
