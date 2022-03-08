@@ -18,4 +18,4 @@ func (n notsetModule) Name() of.Name {
 	return of.NameNotSet
 }
 
-var NotSet of.ModuleStater = notsetModule{}
+var NotSet of.ModuleStater = &notsetModule{}
