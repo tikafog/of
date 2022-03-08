@@ -8,13 +8,17 @@ import (
 //Name returns the names of all the modules
 type Name string
 
-type Module interface {
+type ModuleStater interface {
 	Valid() bool
+	IsRunning() bool
+	Name() Name
+}
+
+type Module interface {
+	ModuleStater
 	Init() error
 	Run(ctx context.Context) error
-	IsRunning() bool
 	Destroy()
-	Name() Name
 
 	//this all calls before run
 	PreloadCore(core Core) error
