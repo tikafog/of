@@ -6,6 +6,18 @@
 
 package of
 
+var SupportModuleNames = []Name{
+	NameAccount,
+	NameAdmin,
+	NameCenter,
+	NameNode,
+	NameBootNode,
+	NameUpgrade,
+	NameMedia,
+	NameKernel,
+	NameGateway,
+}
+
 const (
 	// NameNotSet is a Name of type when you don't specify a name
 	NameNotSet Name = "notset"
