@@ -14,7 +14,6 @@ type Core interface {
 	Event
 	Context() context.Context
 	State() State
-	StoragePath() string
 
 	Inquire(ctx context.Context, r *InquireRequest) error
 	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error

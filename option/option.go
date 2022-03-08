@@ -7,12 +7,14 @@ import (
 type option struct {
 	id            of.ID
 	repo          string
+	sp            string
 	fatherHandler func(father of.ID)
 	link          interface{}
 }
 
 type InitializeOption interface {
 	Repo() string
+	StoragePath() string
 }
 
 type StartOption interface {
@@ -30,6 +32,13 @@ type Option interface {
 func Repo(repo string) func(o *option) Option {
 	return func(o *option) Option {
 		o.repo = repo
+		return o
+	}
+}
+
+func StoragePath(sp string) func(o *option) Option {
+	return func(o *option) Option {
+		o.sp = sp
 		return o
 	}
 }
@@ -75,6 +84,10 @@ func (o option) FatherHandler() func(father of.ID) {
 
 func (o option) Repo() string {
 	return o.repo
+}
+
+func (o option) StoragePath() string {
+	return o.sp
 }
 
 func (o option) ID() of.ID {
