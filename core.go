@@ -21,6 +21,7 @@ type Core interface {
 
 	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error
 	RegisterEventHandler(from Name, fn TypeEventFunc) error
+	Inquire(ctx context.Context, r *InquireRequest) error
 
 	Node() Node
 
