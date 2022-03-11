@@ -13,7 +13,6 @@ type Conn interface {
 
 type Connection interface {
 	Send(ctx context.Context, message *Message) error
-
 	Connect(ctx context.Context, bootaddr ...string) error
 	BestPeerConn(id ID) (Conn, error)
 }
