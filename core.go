@@ -16,12 +16,13 @@ type core interface {
 
 type Core interface {
 	core
-	Connection
 	CoreModule
 	Event
 
 	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error
 	RegisterEventHandler(from Name, fn TypeEventFunc) error
+
+	Node() Node
 
 	//core tools
 	Tools() Tools
