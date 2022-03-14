@@ -4,12 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Handler struct {
+type APIHandler struct {
 	Path   string
 	Method string
 	Func   gin.HandlerFunc
 }
 
 type API interface {
-	Register(module Module, handler ...Handler) error
+	Register(module ModuleStater, handler ...APIHandler) error
 }
