@@ -80,3 +80,19 @@ func ParseState(name string) (State, error) {
 	}
 	return State(0), fmt.Errorf("%s is not a valid State", name)
 }
+
+// MarshalText implements the text marshaller method.
+func (x State) MarshalText() ([]byte, error) {
+	return []byte(x.String()), nil
+}
+
+// UnmarshalText implements the text unmarshaller method.
+func (x *State) UnmarshalText(text []byte) error {
+	name := string(text)
+	tmp, err := ParseState(name)
+	if err != nil {
+		return err
+	}
+	*x = tmp
+	return nil
+}
