@@ -1,9 +1,9 @@
 package of
 
 //State the state of the device
-//ENUM(init,preload,loading,waiting,running,error)
+//ENUM(init,preload,loading,waiting,running,syncing,stopping,stopped,error,max)
 type State int
 
-func (s State) Is(other State) bool {
-	return s == other
+func (x State) Is(other State) bool {
+	return x == other
 }

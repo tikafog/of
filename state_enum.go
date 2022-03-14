@@ -21,19 +21,31 @@ const (
 	StateWaiting
 	// StateRunning is a State of type Running.
 	StateRunning
+	// StateSyncing is a State of type Syncing.
+	StateSyncing
+	// StateStopping is a State of type Stopping.
+	StateStopping
+	// StateStopped is a State of type Stopped.
+	StateStopped
 	// StateError is a State of type Error.
 	StateError
+	// StateMax is a State of type Max.
+	StateMax
 )
 
-const _StateName = "initpreloadloadingwaitingrunningerror"
+const _StateName = "initpreloadloadingwaitingrunningsyncingstoppingstoppederrormax"
 
 var _StateMap = map[State]string{
-	StateInit:    _StateName[0:4],
-	StatePreload: _StateName[4:11],
-	StateLoading: _StateName[11:18],
-	StateWaiting: _StateName[18:25],
-	StateRunning: _StateName[25:32],
-	StateError:   _StateName[32:37],
+	StateInit:     _StateName[0:4],
+	StatePreload:  _StateName[4:11],
+	StateLoading:  _StateName[11:18],
+	StateWaiting:  _StateName[18:25],
+	StateRunning:  _StateName[25:32],
+	StateSyncing:  _StateName[32:39],
+	StateStopping: _StateName[39:47],
+	StateStopped:  _StateName[47:54],
+	StateError:    _StateName[54:59],
+	StateMax:      _StateName[59:62],
 }
 
 // String implements the Stringer interface.
@@ -50,7 +62,11 @@ var _StateValue = map[string]State{
 	_StateName[11:18]: StateLoading,
 	_StateName[18:25]: StateWaiting,
 	_StateName[25:32]: StateRunning,
-	_StateName[32:37]: StateError,
+	_StateName[32:39]: StateSyncing,
+	_StateName[39:47]: StateStopping,
+	_StateName[47:54]: StateStopped,
+	_StateName[54:59]: StateError,
+	_StateName[59:62]: StateMax,
 }
 
 // ParseState attempts to convert a string to a State.
