@@ -11,8 +11,10 @@ import (
 )
 
 const (
+	// StateInvalid is a State of type Invalid.
+	StateInvalid State = iota
 	// StateInit is a State of type Init.
-	StateInit State = iota
+	StateInit
 	// StatePreload is a State of type Preload.
 	StatePreload
 	// StateLoading is a State of type Loading.
@@ -33,19 +35,20 @@ const (
 	StateMax
 )
 
-const _StateName = "initpreloadloadingwaitingrunningsyncingstoppingstoppederrormax"
+const _StateName = "invalidinitpreloadloadingwaitingrunningsyncingstoppingstoppederrormax"
 
 var _StateMap = map[State]string{
-	StateInit:     _StateName[0:4],
-	StatePreload:  _StateName[4:11],
-	StateLoading:  _StateName[11:18],
-	StateWaiting:  _StateName[18:25],
-	StateRunning:  _StateName[25:32],
-	StateSyncing:  _StateName[32:39],
-	StateStopping: _StateName[39:47],
-	StateStopped:  _StateName[47:54],
-	StateError:    _StateName[54:59],
-	StateMax:      _StateName[59:62],
+	StateInvalid:  _StateName[0:7],
+	StateInit:     _StateName[7:11],
+	StatePreload:  _StateName[11:18],
+	StateLoading:  _StateName[18:25],
+	StateWaiting:  _StateName[25:32],
+	StateRunning:  _StateName[32:39],
+	StateSyncing:  _StateName[39:46],
+	StateStopping: _StateName[46:54],
+	StateStopped:  _StateName[54:61],
+	StateError:    _StateName[61:66],
+	StateMax:      _StateName[66:69],
 }
 
 // String implements the Stringer interface.
@@ -57,16 +60,17 @@ func (x State) String() string {
 }
 
 var _StateValue = map[string]State{
-	_StateName[0:4]:   StateInit,
-	_StateName[4:11]:  StatePreload,
-	_StateName[11:18]: StateLoading,
-	_StateName[18:25]: StateWaiting,
-	_StateName[25:32]: StateRunning,
-	_StateName[32:39]: StateSyncing,
-	_StateName[39:47]: StateStopping,
-	_StateName[47:54]: StateStopped,
-	_StateName[54:59]: StateError,
-	_StateName[59:62]: StateMax,
+	_StateName[0:7]:   StateInvalid,
+	_StateName[7:11]:  StateInit,
+	_StateName[11:18]: StatePreload,
+	_StateName[18:25]: StateLoading,
+	_StateName[25:32]: StateWaiting,
+	_StateName[32:39]: StateRunning,
+	_StateName[39:46]: StateSyncing,
+	_StateName[46:54]: StateStopping,
+	_StateName[54:61]: StateStopped,
+	_StateName[61:66]: StateError,
+	_StateName[66:69]: StateMax,
 }
 
 // ParseState attempts to convert a string to a State.
