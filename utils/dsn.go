@@ -17,7 +17,7 @@ type dsnAction struct {
 	fn  dsnInitFunc
 }
 
-var dsns = [DSNTypeMax]*dsnAction{
+var dsnActions = [DSNTypeMax]*dsnAction{
 	DSNTypeSqlite3: &dsnAction{
 		dsn: "file:%v?cache=shared&_journal=WAL&_fk=1",
 		fn:  openSqlite3,
@@ -31,7 +31,7 @@ func OpenDSN(t DSNType, path string, name string) (string, bool, error) {
 	if t != DSNTypeSqlite3 {
 		return "", false, fmt.Errorf("now not support dsn type:%v", t)
 	}
-	return dsns[t].fn(dsns[t].dsn, path, name)
+	return dsnActions[t].fn(dsnActions[t].dsn, path, name)
 
 }
 
