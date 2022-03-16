@@ -2,6 +2,7 @@ package of
 
 type Tools interface {
 	Identifier() Identifier
+	Net() Net
 }
 
 type Identifier interface {
