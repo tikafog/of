@@ -13,7 +13,7 @@ type Identifier interface {
 type Addr interface {
 	ID() ID
 	Addrs() []string
-	StringAddr() []string
+	AddrStrings() []string
 }
 
 type Net interface {
