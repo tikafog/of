@@ -20,7 +20,6 @@ type Core interface {
 	Event
 
 	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error
-	RegisterEventHandler(from Name, fn TypeEventFunc) error
 
 	Node() Node
 

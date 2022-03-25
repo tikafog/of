@@ -3,6 +3,7 @@ package module
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/option"
@@ -10,6 +11,10 @@ import (
 
 type emptyModule struct {
 	name of.Name
+}
+
+func (m emptyModule) Data(limit int, last int64) ([]byte, error) {
+	return nil, errors.New("empty module")
 }
 
 func (m emptyModule) IsRunning() bool {
@@ -44,7 +49,7 @@ func (m emptyModule) SetCore(core of.Core) error {
 	return nil
 }
 
-func (m emptyModule) Valid() bool {
+func (m emptyModule) IsNil() bool {
 	return false
 }
 

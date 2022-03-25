@@ -1,5 +1,5 @@
 package of
 
 type CoreModule interface {
-	Module(name Name) ModuleStater
+	Module(name Name) Module
 }

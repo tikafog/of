@@ -6,7 +6,7 @@ import (
 
 type notsetModule struct{}
 
-func (n notsetModule) Valid() bool {
+func (n notsetModule) IsNil() bool {
 	return false
 }
 

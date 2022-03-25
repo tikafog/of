@@ -8,14 +8,7 @@ import (
 //Name returns the names of all the modules
 type Name string
 
-type ModuleStater interface {
-	Valid() bool
-	IsRunning() bool
-	Name() Name
-}
-
-type Module interface {
-	ModuleStater
+type ModuleStarter interface {
 	Init() error
 	Run(ctx context.Context) error
 	Destroy()
@@ -25,6 +18,19 @@ type Module interface {
 
 	//this all calls after run
 	RegisterAPI(api API) error
+
+	Module
+}
+
+type ModuleStater interface {
+	Name() Name
+	IsNil() bool
+	IsRunning() bool
+}
+
+type Module interface {
+	ModuleStater
+	Data(limit int, last int64) ([]byte, error)
 }
 
 func (n Name) String() string {

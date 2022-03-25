@@ -17,7 +17,7 @@ func initLoadModules() map[string]Loader {
 }
 
 type Loader interface {
-	of.Module
+	of.ModuleStarter
 	WithInit(option.InitializeOption) of.Module
 	WithOption(option.Option) of.Module
 }
