@@ -11,6 +11,8 @@ type core interface {
 	State() State
 }
 
+// Core
+// @Description: the core of the framework
 type Core interface {
 	core
 	CoreModule
