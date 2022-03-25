@@ -13,6 +13,7 @@ type Identifier interface {
 type Addr interface {
 	ID() ID
 	Addrs() []string
+	AddAddr(addr ...string) error
 	String() []string
 }
 
