@@ -2,12 +2,9 @@ package of
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/tikafog/of/content"
 )
-
-type TypeHandleFunc = func(conn Conn, data json.RawMessage, args ...Arg) error
 
 type core interface {
 	Context() context.Context
@@ -19,7 +16,7 @@ type Core interface {
 	CoreModule
 	Event
 
-	RegisterDataHandler(ct content.Type, fn TypeHandleFunc) error
+	RegisterDataHandler(ct content.Type, handler DataHandler) error
 
 	Node() Node
 
@@ -27,6 +24,6 @@ type Core interface {
 	Tools() Tools
 }
 
-type BootHandler interface {
-	AddBoot(ctx context.Context, conn Conn) error
-}
+//type BootHandler interface {
+//	AddBoot(ctx context.Context, conn Conn) error
+//}

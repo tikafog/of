@@ -30,8 +30,8 @@ type ModuleStater interface {
 
 type Module interface {
 	ModuleStater
-	Data(limit int, last int64) ([]byte, error)
-	Wait()
+	Query(limit int, last int64) ([]byte, error)
+	WaitEvent(name Name, args ...Arg) error
 }
 
 func (n Name) String() string {
