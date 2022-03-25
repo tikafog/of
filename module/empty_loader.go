@@ -31,12 +31,12 @@ func (m emptyModule) IsRunning() bool {
 	return false
 }
 
-func (m emptyModule) WithInit(o option.InitializeOption) of.Module {
-	return nil
+func (m emptyModule) WithInit(o option.InitializeOption) of.ModuleStarter {
+	return m
 }
 
-func (m emptyModule) WithOption(o option.Option) of.Module {
-	return nil
+func (m emptyModule) WithOption(o option.Option) of.ModuleStarter {
+	return m
 }
 
 func (m emptyModule) RegisterAPI(api of.API) error {
