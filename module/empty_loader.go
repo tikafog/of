@@ -13,8 +13,18 @@ type emptyModule struct {
 	name of.Name
 }
 
+var ErrEmptyModule = errors.New("empty module")
+
+func (m emptyModule) Query(limit int, last int64) ([]byte, error) {
+	return nil, ErrEmptyModule
+}
+
+func (m emptyModule) WaitEvent(name of.Name, args ...of.Arg) error {
+	return ErrEmptyModule
+}
+
 func (m emptyModule) Data(limit int, last int64) ([]byte, error) {
-	return nil, errors.New("empty module")
+	return nil, ErrEmptyModule
 }
 
 func (m emptyModule) IsRunning() bool {
