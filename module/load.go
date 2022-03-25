@@ -18,8 +18,8 @@ func initLoadModules() map[string]Loader {
 
 type Loader interface {
 	of.ModuleStarter
-	WithInit(option.InitializeOption) of.Module
-	WithOption(option.Option) of.Module
+	WithInit(option.InitializeOption) of.ModuleStarter
+	WithOption(option.Option) of.ModuleStarter
 }
 
 // Register makes a database module available by the provided name.
