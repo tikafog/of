@@ -31,6 +31,7 @@ type ModuleStater interface {
 type Module interface {
 	ModuleStater
 	Data(limit int, last int64) ([]byte, error)
+	Wait()
 }
 
 func (n Name) String() string {

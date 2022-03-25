@@ -7,7 +7,7 @@ import (
 	"github.com/tikafog/of/content"
 )
 
-type TypeHandleFunc = func(conn Conn, data json.RawMessage) error
+type TypeHandleFunc = func(conn Conn, data json.RawMessage, args ...Arg) error
 
 type core interface {
 	Context() context.Context

@@ -12,6 +12,7 @@ type Event interface {
 type EventRequest struct {
 	Receiver Name
 	Type     string
+	Args     []Arg
 	Value    interface{}
 	Callback TypeEventCallbackFunc
 }

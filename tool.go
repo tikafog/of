@@ -13,11 +13,12 @@ type Identifier interface {
 type Addr interface {
 	ID() ID
 	Addrs() []string
-	AddrStrings() ([]string, error)
+	String() []string
 }
 
 type Net interface {
 	ParseStringAddr(addr string) (Addr, error)
 	ParseStringAddrs(addrs ...string) ([]Addr, error)
-	StringAddr(addr Addr) ([]string, error)
+	AddrToStrings(addr Addr) ([]string, error)
+	AddrsToStrings(addrs ...Addr) ([]string, error)
 }
