@@ -30,7 +30,6 @@ type ModuleStater interface {
 
 type Module interface {
 	ModuleStater
-	Query(limit int, last int64) ([]byte, error)
 	WaitEvent(name Name, args ...Arg) error
 }
 
