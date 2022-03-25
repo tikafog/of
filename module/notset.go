@@ -6,6 +6,10 @@ import (
 
 type notsetModule struct{}
 
+func (n notsetModule) WaitEvent(name of.Name, args ...of.Arg) error {
+	return nil
+}
+
 func (n notsetModule) IsNil() bool {
 	return false
 }
@@ -18,4 +22,4 @@ func (n notsetModule) Name() of.Name {
 	return of.NameNotSet
 }
 
-var NotSet of.ModuleStater = &notsetModule{}
+var NotSet of.Module = &notsetModule{}
