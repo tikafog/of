@@ -21,6 +21,10 @@ function schemaGenerate() {
 
 for i in "${!DBS[@]}" ; do
     dbname=${DBS[$i]}
+    if [ ! -d "${dbname}" ]; then
+    continue
+    fi
+
     echo "Process $dbname module"
 
     echo "Delete old schema file"

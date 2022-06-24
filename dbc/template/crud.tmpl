@@ -5,8 +5,7 @@
     {{/* ... */}}
 {{ end }}
 
-{{ define "input" }}
-
+{{ define "crud" }}
     {{/* Add the base header for the generated file */}}
     {{ $pkg := base $.Config.Package }}
     {{ template "header" $ }}
@@ -18,7 +17,7 @@
         func ({{ $createReceiver }} *{{ $creater }}) Set{{ $n.Name }}(input *{{ $n.Name }}) *{{ $creater }} {
         {{- range $f := $n.Fields }}
             {{- if ne $f.StructField "DeletedUnix"}}
-                {{- if not $f.Optional}}
+                {{- if not $f.Optional }}
                     {{- if $f.Nillable}}
                         {{"if"}} input.{{ $f.StructField }} {{"!= nil {"}}
                         {{- $setter := print "Set" $f.StructField }}
@@ -29,6 +28,23 @@
                         {{ $createReceiver }}.{{ $setter }}(input.{{ $f.StructField }})
                     {{- end}}
                 {{- end}}
+            {{- end}}
+        {{- end }}
+        return {{ $createReceiver }}
+        }
+
+        func ({{ $createReceiver }} *{{ $creater }}) Set{{ $n.Name }}WithOptional(input *{{ $n.Name }}) *{{ $creater }} {
+        {{- range $f := $n.Fields }}
+            {{- if ne $f.StructField "DeletedUnix"}}
+                    {{- if $f.Nillable}}
+                        {{"if"}} input.{{ $f.StructField }} {{"!= nil {"}}
+                        {{- $setter := print "Set" $f.StructField }}
+                        {{ $createReceiver }}.{{ $setter }}(*input.{{ $f.StructField }})
+                        {{"}"}}
+                    {{- else}}
+                        {{- $setter := print "Set" $f.StructField }}
+                        {{ $createReceiver }}.{{ $setter }}(input.{{ $f.StructField }})
+                    {{- end}}
             {{- end}}
         {{- end }}
         return {{ $createReceiver }}
@@ -111,13 +127,30 @@
         return {{ $updateReceiver }}
         }
 
+        func ({{ $updateReceiver }} *{{ $updater }}) Set{{ $n.Name }}WithOptional(input *{{ $n.Name }}) *{{ $updater }} {
+        {{- range $f := $n.Fields }}
+            {{- if eq $f.StructField "DeletedUnix" "CreatedUnix" }}
+            {{- else}}
+                    {{- if $f.Nillable}}
+                        {{"if"}} input.{{ $f.StructField }} {{"!= nil {"}}
+                        {{- $setter := print "Set" $f.StructField }}
+                        {{ $updateReceiver }}.{{ $setter }}(*input.{{ $f.StructField }})
+                        {{"}"}}
+                    {{- else}}
+                        {{- $setter := print "Set" $f.StructField }}
+                        {{ $updateReceiver }}.{{ $setter }}(input.{{ $f.StructField }})
+                    {{- end}}
+                {{- end}}
+        {{- end }}
+        return {{ $updateReceiver }}
+        }
 
 
         {{ $querier := $n.QueryName }}
         {{ $queryReceiver := receiver $querier }}
         {{- range $f := $n.Fields }}
             {{- if eq $f.StructField "DeletedUnix"}}
-                func ({{ $queryReceiver }} *{{ $querier }}) SoftDelete() *{{ $querier }} {
+                func ({{ $queryReceiver }} *{{ $querier }}) UseSoftDelete *{{ $querier }} {
                 {{- $setter := print  $f.StructField "IsNil"}}
                 return {{ $queryReceiver }}.Where({{$n.Package}}.{{ $setter }}())
                 }
