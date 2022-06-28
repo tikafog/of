@@ -3,8 +3,6 @@ package dbc
 import (
 	"fmt"
 
-	"github.com/tikafog/of/config"
-
 	"github.com/tikafog/of/dbc/bootnode"
 	"github.com/tikafog/of/dbc/kernel"
 )
@@ -13,7 +11,7 @@ type client interface {
 	*bootnode.Client | *kernel.Client
 }
 
-type OpenFunc[T client] func(name, path string, dbconfig config.Database) (T, error)
+type OpenFunc[T client] func(name, path string, op *Option) (T, error)
 
 type module[T client] struct {
 	name  string
@@ -24,7 +22,7 @@ func (m module[T]) Name() string {
 	return m.name
 }
 
-func open[T client](name, path string, dbconfig config.Database) (T, error) {
+func open[T client](name, path string, op *Option) (T, error) {
 	m := module[T]{
 		name: name,
 		funcs: map[string]OpenFunc[T]{
@@ -32,13 +30,13 @@ func open[T client](name, path string, dbconfig config.Database) (T, error) {
 			"kernel":   openKernel[T],
 		},
 	}
-	return m.open(path, dbconfig)
+	return m.open(path, op)
 }
 
-func (m module[T]) open(path string, dbconfig config.Database) (T, error) {
+func (m module[T]) open(path string, op *Option) (T, error) {
 	v, exist := m.funcs[m.name]
 	if exist {
-		return v(m.name, path, dbconfig)
+		return v(m.name, path, op)
 	}
 	return nil, fmt.Errorf("module[%s] not found", m.name)
 }
