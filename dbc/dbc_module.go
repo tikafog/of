@@ -5,10 +5,11 @@ import (
 
 	"github.com/tikafog/of/dbc/bootnode"
 	"github.com/tikafog/of/dbc/kernel"
+	"github.com/tikafog/of/dbc/upgrade"
 )
 
 type client interface {
-	*bootnode.Client | *kernel.Client
+	*bootnode.Client | *kernel.Client | *upgrade.Client
 }
 
 type OpenFunc[T client] func(name, path string, op *Option) (T, error)
@@ -28,6 +29,7 @@ func open[T client](name, path string, op *Option) (T, error) {
 		funcs: map[string]OpenFunc[T]{
 			"bootnode": openBootNode[T],
 			"kernel":   openKernel[T],
+			"upgrade":  openUpgrade[T],
 		},
 	}
 	return m.open(path, op)

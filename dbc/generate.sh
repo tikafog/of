@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DBS=("bootnode" "kernel")
+DBS=("bootnode" "kernel" "upgrade")
 DBNAME=$1
 
 SHELL_FOLDER=$(cd "$(dirname "$0")" || exit;pwd)
@@ -22,6 +22,7 @@ function schemaGenerate() {
 for i in "${!DBS[@]}" ; do
     dbname=${DBS[$i]}
     if [ ! -d "${dbname}" ]; then
+      echo "skipping schema generation $dbname"
     continue
     fi
 
