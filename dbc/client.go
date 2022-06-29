@@ -3,6 +3,7 @@ package dbc
 import (
 	"fmt"
 
+	"github.com/tikafog/of"
 	"github.com/tikafog/of/dbc/bootnode"
 	"github.com/tikafog/of/dbc/kernel"
 	"github.com/tikafog/of/dbc/media"
@@ -13,23 +14,21 @@ type clientAble interface {
 	*bootnode.Client | *kernel.Client | *upgrade.Client | *media.Client
 }
 
-type OpenFunc[T clientAble] func(name, path string, op *Option) (T, error)
+type OpenFunc[T clientAble] func(name of.Name, path string, op *Option) (T, error)
 
 type client[T clientAble] struct {
-	name  string
-	funcs map[string]OpenFunc[T]
+	name  of.Name
+	funcs map[of.Name]OpenFunc[T]
 }
 
-func (c client[T]) Name() string {
-	return c.name
-}
+func (c client[T]) Name() of.Name { return c.name }
 
 //type clientFns[T clientAble] map[string]OpenFunc[T]
 
-func open[T clientAble](name, path string, op *Option) (T, error) {
+func open[T clientAble](name of.Name, path string, op *Option) (T, error) {
 	c := client[T]{
 		name: name,
-		funcs: map[string]OpenFunc[T]{
+		funcs: map[of.Name]OpenFunc[T]{
 			"bootnode": openBootNode[T],
 			"kernel":   openKernel[T],
 			"upgrade":  openUpgrade[T],

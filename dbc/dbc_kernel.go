@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/tikafog/of"
 	"github.com/tikafog/of/utils"
 
 	"github.com/tikafog/of/dbc/kernel"
@@ -12,8 +13,8 @@ import (
 	"github.com/tikafog/of/dbc/kernel/schema"
 )
 
-func openKernel[T *kernel.Client](name, path string, o *Option) (T, error) {
-	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name)
+func openKernel[T *kernel.Client](name of.Name, path string, o *Option) (T, error) {
+	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String())
 	if err != nil {
 		return nil, err
 	}

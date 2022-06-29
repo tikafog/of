@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/tikafog/of"
 	"github.com/tikafog/of/dbc/upgrade"
 	"github.com/tikafog/of/dbc/upgrade/migrate"
 	"github.com/tikafog/of/dbc/upgrade/schema"
 	"github.com/tikafog/of/utils"
 )
 
-func openUpgrade[T *upgrade.Client](name, path string, o *Option) (T, error) {
-	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name)
+func openUpgrade[T *upgrade.Client](name of.Name, path string, o *Option) (T, error) {
+	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String())
 	if err != nil {
 		return nil, err
 	}
