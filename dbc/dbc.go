@@ -3,6 +3,7 @@ package dbc
 import (
 	"github.com/tikafog/of/dbc/bootnode"
 	"github.com/tikafog/of/dbc/kernel"
+	"github.com/tikafog/of/dbc/media"
 	"github.com/tikafog/of/dbc/upgrade"
 )
 
@@ -11,6 +12,7 @@ type DBC struct {
 	clik *kernel.Client
 	clib *bootnode.Client
 	cliu *upgrade.Client
+	clim *media.Client
 }
 
 func Open(path string, opts ...Opts) (*DBC, error) {
@@ -31,11 +33,18 @@ func Open(path string, opts ...Opts) (*DBC, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	cliM, err := open[*media.Client]("media", path, o)
+	if err != nil {
+		return nil, err
+	}
+
 	return &DBC{
 		opt:  o,
 		clib: cliB,
 		clik: cliK,
 		cliu: cliU,
+		clim: cliM,
 	}, nil
 }
 
@@ -49,4 +58,8 @@ func (d *DBC) Kernel() *kernel.Client {
 
 func (d *DBC) Upgrade() *upgrade.Client {
 	return d.cliu
+}
+
+func (d *DBC) Media() *media.Client {
+	return d.clim
 }

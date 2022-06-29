@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DBS=("bootnode" "kernel" "upgrade")
+DBS=("bootnode" "kernel" "media" "upgrade")
 DBNAME=$1
 
 SHELL_FOLDER=$(cd "$(dirname "$0")" || exit;pwd)
