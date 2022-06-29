@@ -2,6 +2,7 @@ package option
 
 import (
 	"github.com/tikafog/of"
+	"github.com/tikafog/of/dbc"
 )
 
 type option struct {
@@ -10,11 +11,17 @@ type option struct {
 	sp            string
 	fatherHandler func(father of.ID)
 	link          interface{}
+	dbc           *dbc.DBC
+}
+
+func (o *option) DBC() *dbc.DBC {
+	return o.dbc
 }
 
 type InitializeOption interface {
 	Repo() string
 	StoragePath() string
+	DBC() *dbc.DBC
 }
 
 type StartOption interface {
@@ -27,6 +34,13 @@ type StartOption interface {
 type Option interface {
 	Apply(fns ...func(*option) Option)
 	StartOption
+}
+
+func DBC(dbc *dbc.DBC) func(o *option) Option {
+	return func(o *option) Option {
+		o.dbc = dbc
+		return o
+	}
 }
 
 func Repo(repo string) func(o *option) Option {
