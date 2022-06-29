@@ -17,7 +17,7 @@ func openUpgrade[T *upgrade.Client](name of.Name, path string, o *Option) (T, er
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("open database", "path", dbPath, "exist", exist)
+	fmt.Println("openBootNode database", "path", dbPath, "exist", exist)
 	cli, err := openUpgradeDatabase(dbPath, true)
 	if err != nil {
 		return nil, err
