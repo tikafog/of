@@ -29,10 +29,10 @@ func open[T clientAble](name of.Name, path string, op *Option) (T, error) {
 	c := client[T]{
 		name: name,
 		funcs: map[of.Name]OpenFunc[T]{
-			"bootnode": openBootNode[T],
-			"kernel":   openKernel[T],
-			"upgrade":  openUpgrade[T],
-			"media":    openMedia[T],
+			of.NameBootNode: openBootNode[T],
+			of.NameKernel:   openKernel[T],
+			of.NameUpgrade:  openUpgrade[T],
+			of.NameMedia:    openMedia[T],
 		},
 	}
 	return c.open(path, op)
