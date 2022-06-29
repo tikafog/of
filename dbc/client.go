@@ -1,7 +1,7 @@
 package dbc
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/dbc/bootnode"
@@ -26,12 +26,30 @@ type client[T clientAble] struct {
 
 func (c client[T]) Name() of.Name { return c.name }
 
-func openClient[T clientAble](name of.Name, path string, op *Option) (T, error) {
-	c := client[T]{
-		name: name,
-		path: path,
+func openClient[T clientAble](path string, op *Option) (T, error) {
+	var t T
+	var it interface{} = t
+	var err error
+	var name of.Name
+	switch it.(type) {
+	case *bootnode.Client:
+		name = of.NameBootNode
+		it, err = openBootNode[*bootnode.Client](name, path, op)
+	case *kernel.Client:
+		name = of.NameKernel
+		it, err = openKernel[*kernel.Client](name, path, op)
+	case *upgrade.Client:
+		name = of.NameUpgrade
+		it, err = openUpgrade[*upgrade.Client](name, path, op)
+	case *media.Client:
+		name = of.NameMedia
+		it, err = openMedia[*media.Client](name, path, op)
+	default:
+		return nil, errors.New("unsupported client type")
 	}
-	return c.open(op)
+	return it.(T), err
+
+	//return c.open(op)
 }
 
 //c := client[T]{
@@ -60,25 +78,25 @@ func openClient[T clientAble](name of.Name, path string, op *Option) (T, error) 
 //return c.open(path, op)
 //}
 //
-func (c client[T]) open(op *Option) (T, error) {
-	var it interface{}
-	var err error
-	switch c.name {
-	case of.NameBootNode:
-		it, err = openBootNode[*bootnode.Client](c.name, c.path, op)
-	case of.NameKernel:
-		it, err = openKernel[*kernel.Client](c.name, c.path, op)
-	case of.NameUpgrade:
-		it, err = openUpgrade[*upgrade.Client](c.name, c.path, op)
-	case of.NameMedia:
-		it, err = openMedia[*media.Client](c.name, c.path, op)
-	default:
-		return nil, fmt.Errorf("client[%s] not found", c.name)
-	}
-	return it.(T), err
-	//v, exist := c.funcs[c.name]
-	//if exist {
-	//	return v(c.name, path, op)
-	//}
-
-}
+//func (c client[T]) open(op *Option) (T, error) {
+//	var it interface{}
+//	var err error
+//	switch c.name {
+//	case of.NameBootNode:
+//		it, err = openBootNode[*bootnode.Client](c.name, c.path, op)
+//	case of.NameKernel:
+//		it, err = openKernel[*kernel.Client](c.name, c.path, op)
+//	case of.NameUpgrade:
+//		it, err = openUpgrade[*upgrade.Client](c.name, c.path, op)
+//	case of.NameMedia:
+//		it, err = openMedia[*media.Client](c.name, c.path, op)
+//	default:
+//		return nil, fmt.Errorf("client[%s] not found", c.name)
+//	}
+//	return it.(T), err
+//	//v, exist := c.funcs[c.name]
+//	//if exist {
+//	//	return v(c.name, path, op)
+//	//}
+//
+//}
