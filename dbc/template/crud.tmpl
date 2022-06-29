@@ -150,7 +150,7 @@
         {{ $queryReceiver := receiver $querier }}
         {{- range $f := $n.Fields }}
             {{- if eq $f.StructField "DeletedUnix"}}
-                func ({{ $queryReceiver }} *{{ $querier }}) UseSoftDelete *{{ $querier }} {
+                func ({{ $queryReceiver }} *{{ $querier }}) UseSoftDelete() *{{ $querier }} {
                 {{- $setter := print  $f.StructField "IsNil"}}
                 return {{ $queryReceiver }}.Where({{$n.Package}}.{{ $setter }}())
                 }
