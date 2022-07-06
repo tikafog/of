@@ -5,7 +5,7 @@ package of
 // DataHandler
 // @Description: DataHandler
 type DataHandler[T any, V any] interface {
-	DataHandle(conn Conn, data T, args ...V) error
+	DataHandle(data T, args ...V) error
 	Query(limit int, last int64) ([]byte, error)
 	Last() int64
 }
