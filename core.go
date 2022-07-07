@@ -18,7 +18,7 @@ type Core interface {
 	CoreModule
 	Event
 
-	RegisterDataHandler(ct content.Type, handler DataHandler) error
+	RegisterDataHandler(ct content.Type, handler DataHandler[any, any]) error
 
 	Node() Node
 
