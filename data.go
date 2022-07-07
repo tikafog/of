@@ -14,8 +14,8 @@ type DataHandler[T any, V any] interface {
 }
 
 type DataQueryHandler interface {
-	Query(ctx context.Context, limit, offset int64) ([]byte, error)
-	Last(ctx context.Context) int64
+	Query(ctx context.Context, limit, last int64) ([]byte, error)
+	Last() int64
 }
 
 type DataUpdateHandler[T any, V any] interface {
