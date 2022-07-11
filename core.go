@@ -18,7 +18,7 @@ type Core interface {
 	CoreModule
 	Event
 
-	Query(ct content.Type) DataQueryHandler
+	Query(ct content.Type) (DataQueryHandler, error)
 
 	Node() Node
 
