@@ -3,7 +3,7 @@ package of
 import (
 	"context"
 
-	"github.com/tikafog/of/content"
+	"github.com/tikafog/of/buffers/content"
 )
 
 type core interface {
@@ -18,7 +18,7 @@ type Core interface {
 	CoreModule
 	Event
 
-	RegisterDataHandler(ct content.Type, handler DataHandler[any, any]) error
+	Query(ct content.Type) DataQueryHandler
 
 	Node() Node
 
