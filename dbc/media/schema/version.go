@@ -10,7 +10,7 @@ type Version struct {
 	ent.Schema
 }
 
-const CurrentVersion = 16
+const CurrentVersion = 1
 const CurrentDataVersion = 1
 
 // Fields of the Version.
