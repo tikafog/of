@@ -19,5 +19,5 @@ type DataQueryHandler interface {
 }
 
 type DataUpdateHandler[T any, V any] interface {
-	Update(ctx context.Context, data T, args ...V) error
+	Update(ctx context.Context, data T, args ...V) (int, error)
 }
