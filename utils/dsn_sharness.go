@@ -3,6 +3,6 @@
 
 package utils
 
-func sharnessDSN(dsn string) string {
+func dnsSharness(dsn string) string {
 	return dsn + "_sharness"
 }
