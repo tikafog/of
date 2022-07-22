@@ -5,6 +5,8 @@ import (
 	"github.com/tikafog/of/dbc"
 )
 
+type SetFunc func(o *option) Option
+
 type option struct {
 	id            of.ID
 	repo          string
@@ -24,61 +26,65 @@ type InitializeOption interface {
 	DBC() *dbc.DBC
 }
 
-type StartOption interface {
+type Option interface {
 	InitializeOption
 	ID() of.ID
 	Link() interface{}
 	FatherHandler() func(father of.ID)
 }
 
-type Option interface {
-	Apply(fns ...func(*option) Option)
-	StartOption
+//type Option interface {
+//	StartOption
+//}
+
+type ApplyOption interface {
+	Option
+	Apply(fns ...SetFunc)
 }
 
-func DBC(dbc *dbc.DBC) func(o *option) Option {
+func DBC(dbc *dbc.DBC) SetFunc {
 	return func(o *option) Option {
 		o.dbc = dbc
 		return o
 	}
 }
 
-func Repo(repo string) func(o *option) Option {
+func Repo(repo string) SetFunc {
 	return func(o *option) Option {
 		o.repo = repo
 		return o
 	}
 }
 
-func StoragePath(sp string) func(o *option) Option {
+func StoragePath(sp string) SetFunc {
 	return func(o *option) Option {
 		o.sp = sp
 		return o
 	}
 }
 
-func FatherHandler(fn func(father of.ID)) func(o *option) Option {
+func FatherHandler(fn func(father of.ID)) SetFunc {
 	return func(o *option) Option {
 		o.fatherHandler = fn
 		return o
 	}
 }
 
-func ID(id of.ID) func(o *option) Option {
+func ID(id of.ID) SetFunc {
 	return func(o *option) Option {
 		o.id = id
 		return o
 	}
 }
 
-func Link(link interface{}) func(o *option) Option {
+func Link(link interface{}) SetFunc {
 	return func(o *option) Option {
 		o.link = link
 		return o
 	}
 }
 
-func Default() Option {
+func DefaultApply() ApplyOption {
 	return &option{}
 }
 
@@ -86,7 +92,7 @@ func (o *option) Link() interface{} {
 	return o.link
 }
 
-func (o *option) Apply(fns ...func(*option) Option) {
+func (o *option) Apply(fns ...SetFunc) {
 	for _, fn := range fns {
 		fn(o)
 	}

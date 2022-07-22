@@ -19,6 +19,9 @@ type ModuleStarter interface {
 	//this all calls after run
 	RegisterAPI(api API) error
 
+	//this all calls after init
+	//RegisterMessageHandler(name string, handler MessageHandler) error
+
 	Module
 }
 
