@@ -6,24 +6,31 @@ import (
 	"github.com/tikafog/of/buffers/content"
 )
 
-type core interface {
+type BasicCore interface {
 	Context() context.Context
 	State() State
+
+	//BasicCore tools
+	Tools() Tools
+}
+
+type InitCore interface {
+	RegisterMessageHandler(protocol Protocol, handler MessageHandler) error
+}
+
+type StartCore interface {
+	QueryHandler(ct content.Type) (DataQueryHandler, error)
 }
 
 // Core
-// @Description: the core of the framework
+// @Description: the BasicCore of the framework
 type Core interface {
-	core
+	BasicCore
+	InitCore
+	StartCore
 	CoreModule
 	Event
-
-	QueryHandler(ct content.Type) (DataQueryHandler, error)
-
 	Node() Node
-
-	//core tools
-	Tools() Tools
 }
 
 //type BootHandler interface {
