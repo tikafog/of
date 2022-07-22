@@ -21,6 +21,8 @@ const (
 	NameMedia Name = "media"
 	// NameKernel is a Name of type Kernel.
 	NameKernel Name = "kernel"
+	// NameSystem is a Name of type System.
+	NameSystem Name = "system"
 	// NameGateway is a Name of type Gateway.
 	NameGateway Name = "gateway"
 )
