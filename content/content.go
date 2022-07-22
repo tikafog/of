@@ -151,6 +151,12 @@ func (c Content) JSON() ([]byte, error) {
 	return json.Marshal(c)
 }
 
+func (c *Content) Clear() {
+	c.Message = Message{}
+	c.Node = ExtNode{}
+	c.Exts = []Ext{}
+}
+
 // FinishBytes ...
 // @Description:
 // @receiver Content
