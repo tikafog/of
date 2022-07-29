@@ -1,8 +1,8 @@
 package of
 
 import (
-	"bytes"
 	"context"
+	"io"
 )
 
 type Message struct {
@@ -11,4 +11,4 @@ type Message struct {
 	Data     []byte
 }
 
-type MessageHandler func(ctx context.Context, conn Conn, buf *bytes.Buffer) error
+type MessageHandler func(ctx context.Context, conn Conn, reader io.Reader) error

@@ -13,6 +13,8 @@ import (
 const (
 	// ProtocolAnswer is a Protocol of type Answer.
 	ProtocolAnswer Protocol = iota
+	// ProtocolGossip is a Protocol of type Gossip.
+	ProtocolGossip
 	// ProtocolDataSwap is a Protocol of type DataSwap.
 	ProtocolDataSwap
 	// ProtocolMessage is a Protocol of type Message.
@@ -23,14 +25,15 @@ const (
 	ProtocolMax
 )
 
-const _ProtocolName = "answerdataswapmessagemessagev2max"
+const _ProtocolName = "AnswerGossipDataSwapMessageMessageV2Max"
 
 var _ProtocolMap = map[Protocol]string{
 	ProtocolAnswer:    _ProtocolName[0:6],
-	ProtocolDataSwap:  _ProtocolName[6:14],
-	ProtocolMessage:   _ProtocolName[14:21],
-	ProtocolMessageV2: _ProtocolName[21:30],
-	ProtocolMax:       _ProtocolName[30:33],
+	ProtocolGossip:    _ProtocolName[6:12],
+	ProtocolDataSwap:  _ProtocolName[12:20],
+	ProtocolMessage:   _ProtocolName[20:27],
+	ProtocolMessageV2: _ProtocolName[27:36],
+	ProtocolMax:       _ProtocolName[36:39],
 }
 
 // String implements the Stringer interface.
@@ -43,10 +46,11 @@ func (x Protocol) String() string {
 
 var _ProtocolValue = map[string]Protocol{
 	_ProtocolName[0:6]:   ProtocolAnswer,
-	_ProtocolName[6:14]:  ProtocolDataSwap,
-	_ProtocolName[14:21]: ProtocolMessage,
-	_ProtocolName[21:30]: ProtocolMessageV2,
-	_ProtocolName[30:33]: ProtocolMax,
+	_ProtocolName[6:12]:  ProtocolGossip,
+	_ProtocolName[12:20]: ProtocolDataSwap,
+	_ProtocolName[20:27]: ProtocolMessage,
+	_ProtocolName[27:36]: ProtocolMessageV2,
+	_ProtocolName[36:39]: ProtocolMax,
 }
 
 // ParseProtocol attempts to convert a string to a Protocol.

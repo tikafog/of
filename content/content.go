@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"io"
 
 	flatbuffers "github.com/google/flatbuffers/go"
 
@@ -65,14 +66,15 @@ func ParseJSONContent(bytes []byte) (*Content, error) {
 	if err != nil {
 		return nil, err
 	}
-	//rv, err := version.NewVersion(c.Version)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//if !rv.Equal(version.Must(version.NewVersion(VersionOne))) {
-	//	return nil, fmt.Errorf("need version(%v) not equal to version(%v)",
-	//		VersionOne, c.Version)
-	//}
+	return &c, err
+}
+
+func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
+	var c Content
+	err := json.NewDecoder(reader).Decode(&c)
+	if err != nil {
+		return nil, err
+	}
 	return &c, err
 }
 
@@ -89,15 +91,6 @@ func ParseContent(bytes []byte) (retC *Content, err error) {
 		}
 	}()
 	c := content.GetRootAsContent(bytes, 0)
-	//rv, err := version.NewVersion(string(c.Version()))
-	//if err != nil {
-	//	return nil, err
-	//}
-	//if !rv.Equal(version.Must(version.NewVersion(VersionTwo))) {
-	//	return nil, fmt.Errorf("need version(%v) not equal to version(%v)",
-	//		VersionTwo, string(c.Version()))
-	//}
-
 	return rootToContent(c), err
 }
 
