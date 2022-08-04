@@ -13,11 +13,11 @@ type EventRequest struct {
 	Receiver Name
 	Type     string
 	Args     []Arg
-	Value    interface{}
+	Value    any
 	Callback TypeEventCallbackFunc
 }
 
 type EventResult struct {
-	Result interface{}
+	Result any
 	Error  error
 }

@@ -16,7 +16,6 @@ type Conn interface {
 type Connection interface {
 	Receive(ctx context.Context, data *content.Content) error
 	Send(ctx context.Context, message *Message) error
-	Gossip(ctx context.Context, data []byte) error
 	Connect(ctx context.Context, bootaddr ...string) error
 	BestPeerConn(id ID) (Conn, error)
 }
