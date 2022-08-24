@@ -1,0 +1,10 @@
+namespace message;
+
+table Message {
+  id:string;
+  topic:string;
+  last:int64;
+  data:string;
+}
+
+root_type Message;
