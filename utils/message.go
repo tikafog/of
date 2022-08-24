@@ -21,10 +21,10 @@ func NewBufferMessage(id string, topic string, last int64, data []byte) []byte {
 	return builder.FinishedBytes()
 }
 
-func ParseBufferMessage(data []byte) (wm *message.Message) {
+func ParseBufferMessage(data []byte) (msg *message.Message) {
 	defer func() {
 		if err := recover(); err != nil {
-			wm = nil
+			msg = nil
 		}
 	}()
 	return message.GetRootAsMessage(data, 0)

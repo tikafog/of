@@ -51,10 +51,10 @@ func Load(name of.Name) Loader {
 	return newEmptyLoader(name)
 }
 
-// ListLoaders ...
+// LoadModuleNames ...
 // @Description: List all registered modules
 // @return []of.Name
-func ListLoaders() []of.Name {
+func LoadModuleNames() []of.Name {
 	names := make([]of.Name, 0, len(modules))
 	modulesMu.RLock()
 	defer modulesMu.RUnlock()

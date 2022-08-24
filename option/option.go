@@ -14,16 +14,14 @@ type option struct {
 	fatherHandler func(father of.ID)
 	link          interface{}
 	dbc           *dbc.DBC
-}
-
-func (o *option) DBC() *dbc.DBC {
-	return o.dbc
+	tools         of.Tools
 }
 
 type InitializeOption interface {
 	Repo() string
 	StoragePath() string
 	DBC() *dbc.DBC
+	Tools() of.Tools
 }
 
 type Option interface {
@@ -33,13 +31,16 @@ type Option interface {
 	FatherHandler() func(father of.ID)
 }
 
-//type Option interface {
-//	StartOption
-//}
-
 type ApplyOption interface {
 	Option
 	Apply(fns ...SetFunc)
+}
+
+func Tools(tools of.Tools) SetFunc {
+	return func(o *option) Option {
+		o.tools = tools
+		return o
+	}
 }
 
 func DBC(dbc *dbc.DBC) SetFunc {
@@ -98,18 +99,26 @@ func (o *option) Apply(fns ...SetFunc) {
 	}
 }
 
-func (o option) FatherHandler() func(father of.ID) {
+func (o *option) FatherHandler() func(father of.ID) {
 	return o.fatherHandler
 }
 
-func (o option) Repo() string {
+func (o *option) Repo() string {
 	return o.repo
 }
 
-func (o option) StoragePath() string {
+func (o *option) StoragePath() string {
 	return o.sp
 }
 
-func (o option) ID() of.ID {
+func (o *option) ID() of.ID {
 	return o.id
+}
+
+func (o *option) Tools() of.Tools {
+	return o.tools
+}
+
+func (o *option) DBC() *dbc.DBC {
+	return o.dbc
 }
