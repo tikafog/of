@@ -37,7 +37,7 @@ func OpenDSN(t DSNType, path string, name string) (string, bool, error) {
 
 func openSqlite3(dsn string, path string, name string) (string, bool, error) {
 	fp := filepath.Join(path, dsnSharness(name))
-	dsn = fmt.Sprintf(dsn, fp)
+	dsn = fmt.Sprintf(dsn, filepath.ToSlash(fp))
 	if FileNotExists(path) {
 		//ignore mkdir error
 		_ = os.MkdirAll(path, 0755)
