@@ -6,6 +6,10 @@ import (
 
 type notsetModule struct{}
 
+func (n notsetModule) IsValid() bool {
+	return false
+}
+
 func (n notsetModule) WaitEvent(name of.Name, args ...of.Arg) error {
 	return nil
 }

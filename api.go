@@ -11,5 +11,5 @@ type APIHandler struct {
 }
 
 type API interface {
-	Register(module ModuleStater, handler ...APIHandler) error
+	Register(module ModuleStarter, handler ...APIHandler) error
 }

@@ -19,7 +19,7 @@ func openKernel[T *kernel.Client](name of.Name, path string, o *Option) (T, erro
 		return nil, err
 	}
 	fmt.Println("openBootNode database", "path", dbPath, "exist", exist)
-	cli, err := openKernelDatabase(dbPath, true)
+	cli, err := openKernelDatabase(dbPath, o.debug)
 	if err != nil {
 		return nil, err
 	}

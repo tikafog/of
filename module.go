@@ -25,16 +25,16 @@ type ModuleStarter interface {
 	Module
 }
 
-type ModuleStater interface {
+type Module interface {
 	Name() Name
-	IsNil() bool
-	IsRunning() bool
+	IsValid() bool
+	//IsRunning() bool
 }
 
-type Module interface {
-	ModuleStater
-	WaitEvent(name Name, args ...Arg) error
-}
+//type Module interface {
+//	ModuleStater
+//WaitEvent(name Name, args ...Arg) error
+//}
 
 func (n Name) String() string {
 	return strings.ToLower(string(n))

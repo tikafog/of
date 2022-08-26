@@ -19,7 +19,7 @@ func openMedia[T *media.Client](name of.Name, path string, o *Option) (T, error)
 		return nil, err
 	}
 	fmt.Println("openBootNode database", "path", dbPath, "exist", exist)
-	cli, err := openMediaDatabase(dbPath, true)
+	cli, err := openMediaDatabase(dbPath, o.debug)
 	if err != nil {
 		return nil, err
 	}

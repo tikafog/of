@@ -19,7 +19,7 @@ func openBootNode[T *bootnode.Client](name of.Name, path string, o *Option) (T, 
 		return nil, err
 	}
 	fmt.Println("openBootNode database", "path", dbPath, "exist", exist)
-	cli, err := openBootNodeDatabase(dbPath, true)
+	cli, err := openBootNodeDatabase(dbPath, o.debug)
 	if err != nil {
 		return nil, err
 	}

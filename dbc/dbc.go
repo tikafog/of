@@ -16,7 +16,8 @@ type DBC struct {
 }
 
 func Open(path string, opts ...Opts) (*DBC, error) {
-	o := opt(opts)
+	o := parseOption(opts)
+
 	cliB, err := openClient[*bootnode.Client](path, o)
 	if err != nil {
 		return nil, err

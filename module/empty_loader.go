@@ -13,6 +13,10 @@ type emptyModule struct {
 	name of.Name
 }
 
+func (m emptyModule) IsValid() bool {
+	return false
+}
+
 var ErrEmptyModule = errors.New("empty module")
 
 func (m emptyModule) Query(limit int, last int64) ([]byte, error) {
