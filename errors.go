@@ -19,6 +19,10 @@ type errIndex interface {
 	Index() int
 }
 
+type errMessage interface {
+	Message() string
+}
+
 var ErrUnknown = &errError{idx: 0, err: nil, str: "unknown error"}
 
 func (e *errError) Error() string {
@@ -35,6 +39,10 @@ func (e *errError) Unwrap() error {
 
 func (e *errError) Index() int {
 	return e.idx
+}
+
+func (e *errError) Message() string {
+	return e.str
 }
 
 func (e *errError) Is(target error) bool {
@@ -68,6 +76,26 @@ func IndexError(i Err) error {
 
 func UnwrapError(err error) error {
 	return errors.Unwrap(err)
+}
+
+func ErrorIs(err, target error) bool {
+	return errors.Is(err, target)
+}
+
+func ErrorMessageIs(str string, err error) bool {
+	e, ok := err.(errMessage)
+	if !ok {
+		return false
+	}
+	return str == e.Message()
+}
+
+func ErrorIndexIs(i Err, err error) bool {
+	e, ok := err.(errIndex)
+	if !ok {
+		return false
+	}
+	return int(i) == e.Index()
 }
 
 func wrapError(i int, str string) error {
