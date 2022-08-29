@@ -15,6 +15,15 @@ type errError struct {
 	str string
 }
 
+type innerError interface {
+	Error() string
+	String() string
+	Unwrap() error
+	Index() int
+	Message() string
+	Is(target error) bool
+}
+
 type errIndex interface {
 	Index() int
 }
@@ -53,6 +62,11 @@ func (e *errError) Is(target error) bool {
 	if ok {
 		return e.idx == idx.Index()
 	}
+	msg, ok := target.(errMessage)
+	if ok {
+		return e.str == msg.Message()
+	}
+
 	return false
 }
 
