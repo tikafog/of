@@ -66,7 +66,7 @@ func IndexError(i Err) error {
 	return wrapError(int(i), i.String())
 }
 
-func Unwrap(err error) error {
+func UnwrapError(err error) error {
 	return errors.Unwrap(err)
 }
 
