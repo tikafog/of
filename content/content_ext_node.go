@@ -32,7 +32,7 @@ type ExtNode struct {
 // @Description:
 // @receiver ExtNode
 // @return content.ExtType
-func (c ExtNode) ExtType() content.ExtType {
+func (c *ExtNode) ExtType() content.ExtType {
 	return content.ExtTypeNode
 }
 
@@ -40,7 +40,7 @@ func (c ExtNode) ExtType() content.ExtType {
 // @Description:
 // @receiver ExtNode
 // @return data
-func (c ExtNode) MarshalData() (data []byte, err error) {
+func (c *ExtNode) MarshalData() (data []byte, err error) {
 	return json.Marshal(c)
 }
 

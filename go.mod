@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	entgo.io/ent v0.11.1
+	github.com/bxcodec/faker/v4 v4.0.0-beta
 	github.com/gin-gonic/gin v1.8.1
 	github.com/google/flatbuffers v2.0.6+incompatible
 	github.com/google/uuid v1.3.0
