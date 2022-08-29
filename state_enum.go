@@ -29,7 +29,7 @@ const (
 	StateStopping
 	// StateStopped is a State of type Stopped.
 	StateStopped
-	// StateError is a State of type Error.
+	// StateError is a State of type IndexError.
 	StateError
 	// StateMax is a State of type Max.
 	StateMax

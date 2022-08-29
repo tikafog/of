@@ -9,81 +9,77 @@ import (
 //ENUM(core is nil,father not found,no data found,channel closed)
 type Err int
 
-type err struct {
+type errError struct {
 	idx int
 	err error
 	str string
 }
 
-func (e *err) Error() string {
-	return fmt.Sprintf("[err] %v:%v", e.str, e.err)
+type errIndex interface {
+	Index() int
 }
 
-func (e *err) String() string {
+var ErrUnknown = &errError{idx: 0, err: nil, str: "unknown error"}
+
+func (e *errError) Error() string {
+	return fmt.Sprintf("%v: %v", e.str, e.err)
+}
+
+func (e *errError) String() string {
 	return e.Error()
 }
 
-func (e *err) Unwrap() error {
+func (e *errError) Unwrap() error {
 	return e.err
 }
 
-func (e *err) Index() int {
+func (e *errError) Index() int {
 	return e.idx
 }
 
-func (e *err) Is(target error) bool {
-	idx, ok := target.(interface {
-		Index() int
-	})
+func (e *errError) Is(target error) bool {
+	if e == target {
+		return true
+	}
+	idx, ok := target.(errIndex)
 	if ok {
 		return e.idx == idx.Index()
 	}
 	return false
 }
 
-func wrapError(i int, str string) error {
-	return &err{
-		idx: i,
-		str: str,
-	}
-}
-
-func WrapIndexError(e error, i int) error {
+func WrapIndexError(e error, i Err) error {
 	if e == nil {
-		return nil
+		return wrapError(int(i), i.String())
 	}
-	if i < 0 || i > len(errs)-1 {
-		return &err{idx: i, err: e, str: "unknown"}
-	}
-	return &err{idx: i, err: e, str: errs[i]}
+	return wrapErrorWithErr(e, i, i.String())
 }
 
 func WrapError(e error, str string) error {
 	if e == nil {
-		return nil
+		return wrapError(0, str)
 	}
-	return &err{err: e, str: str}
+	return wrapErrorWithErr(e, 0, str)
+}
+
+func IndexError(i Err) error {
+	return wrapError(int(i), i.String())
 }
 
 func Unwrap(err error) error {
 	return errors.Unwrap(err)
 }
 
-var _ error = &err{}
-
-var errs = [...]string{
-	"core is nil",
-	"father not found",
-	"no data found",
-	"channel closed",
+func wrapError(i int, str string) error {
+	return &errError{
+		idx: i,
+		str: str,
+	}
 }
-
-func Error(i Err) error {
-	return wrapError(int(i), i.String())
+func wrapErrorWithErr(parent error, i Err, str string) error {
+	return &errError{
+		idx: int(i),
+		str: str,
+		err: parent,
+	}
 }
-
-var ErrUnknown = &err{idx: 0, err: nil, str: "unknown error"}
-
-//var ErrFatherNotFound = errors.New("father not found")
-//var ErrNoDataFound = errors.New("no data found")
-//var ErrChannelClosed = errors.New("channel closed")
