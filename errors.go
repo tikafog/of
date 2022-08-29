@@ -22,7 +22,7 @@ type errIndex interface {
 var ErrUnknown = &errError{idx: 0, err: nil, str: "unknown error"}
 
 func (e *errError) Error() string {
-	return fmt.Sprintf("%v: %v", e.str, e.err)
+	return fmt.Sprintf("[of] %v: %v", e.str, e.err)
 }
 
 func (e *errError) String() string {
