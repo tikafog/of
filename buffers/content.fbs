@@ -20,14 +20,6 @@ table Message {
   data:string;
 }
 
-table Node {
-  pid:string;
-  cpuid:string;
-  addr:string;
-  data:string;
-  addrs:string;
-}
-
 enum ExtType : uint {
               None = 0,
               Node,
@@ -48,7 +40,6 @@ table Content {
   type:Type;
   message:Message;
   ext:[Ext];
-  node:Node;
 }
 
 

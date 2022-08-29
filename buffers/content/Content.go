@@ -86,21 +86,8 @@ func (rcv *Content) ExtLength() int {
 	return 0
 }
 
-func (rcv *Content) Node(obj *Node) *Node {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
-	if o != 0 {
-		x := rcv._tab.Indirect(o + rcv._tab.Pos)
-		if obj == nil {
-			obj = new(Node)
-		}
-		obj.Init(rcv._tab.Bytes, x)
-		return obj
-	}
-	return nil
-}
-
 func ContentStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(4)
 }
 func ContentAddVersion(builder *flatbuffers.Builder, version flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(version), 0)
@@ -116,9 +103,6 @@ func ContentAddExt(builder *flatbuffers.Builder, ext flatbuffers.UOffsetT) {
 }
 func ContentStartExtVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
-}
-func ContentAddNode(builder *flatbuffers.Builder, node flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(node), 0)
 }
 func ContentEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

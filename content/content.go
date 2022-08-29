@@ -52,7 +52,6 @@ type Content struct {
 	Type    content.Type `json:"type,omitempty"`
 	Message Message      `json:"message,omitempty"`
 	Exts    []Ext        `json:"ext,omitempty"`
-	Node    ExtNode      `json:"node,omitempty"`
 }
 
 // ParseJSONContent ...
@@ -96,10 +95,10 @@ func ParseContent(bytes []byte) (retC *Content, err error) {
 
 func rootToContent(c *content.Content) *Content {
 	var message content.Message
-	var node content.Node
+	//var node content.Node
 	ext := make([]content.Ext, c.ExtLength())
 	c.Message(&message)
-	c.Node(&node)
+	//c.Node(&node)
 	for i := 0; i < c.ExtLength(); i++ {
 		c.Ext(&ext[i], i)
 	}
@@ -123,14 +122,6 @@ func rootToContent(c *content.Content) *Content {
 			Data:    message.Data(),
 		},
 		Exts: cexts,
-		Node: ExtNode{
-			PID:    string(node.Pid()),
-			CPUID:  string(node.Cpuid()),
-			Addr:   string(node.Addr()),
-			Addrs:  bytesToStringArray(node.Addrs()),
-			Length: len(node.Data()),
-			Data:   node.Data(),
-		},
 	}
 }
 
@@ -146,7 +137,7 @@ func (c Content) JSON() ([]byte, error) {
 
 func (c *Content) Clear() {
 	c.Message = Message{}
-	c.Node = ExtNode{}
+	//c.Node = ExtNode{}
 	c.Exts = []Ext{}
 }
 
@@ -156,18 +147,18 @@ func (c *Content) Clear() {
 // @return []byte
 func (c Content) FinishBytes() []byte {
 	builder := flatbuffers.NewBuilder(0)
-	_addr := builder.CreateString(c.Node.Addr)
-	_addrs := builder.CreateByteString(stringArrayToBytes(c.Node.Addrs...))
-	_pid := builder.CreateString(c.Node.PID)
-	_cpuid := builder.CreateString(c.Node.CPUID)
-	_dataN := builder.CreateByteString(c.Node.Data)
-	content.NodeStart(builder)
-	content.NodeAddAddr(builder, _addr)
-	content.NodeAddAddrs(builder, _addrs)
-	content.NodeAddPid(builder, _pid)
-	content.NodeAddCpuid(builder, _cpuid)
-	content.NodeAddData(builder, _dataN)
-	_node := content.NodeEnd(builder)
+	//_addr := builder.CreateString(c.Node.Addr)
+	//_addrs := builder.CreateByteString(stringArrayToBytes(c.Node.Addrs...))
+	//_pid := builder.CreateString(c.Node.PID)
+	//_cpuid := builder.CreateString(c.Node.CPUID)
+	//_dataN := builder.CreateByteString(c.Node.Data)
+	//content.NodeStart(builder)
+	//content.NodeAddAddr(builder, _addr)
+	//content.NodeAddAddrs(builder, _addrs)
+	//content.NodeAddPid(builder, _pid)
+	//content.NodeAddCpuid(builder, _cpuid)
+	//content.NodeAddData(builder, _dataN)
+	//_node := content.NodeEnd(builder)
 
 	_dataM := builder.CreateByteString(c.Message.Data)
 	content.MessageStart(builder)
@@ -194,7 +185,7 @@ func (c Content) FinishBytes() []byte {
 	content.ContentStart(builder)
 	content.ContentAddExt(builder, _extsVec)
 	content.ContentAddMessage(builder, _message)
-	content.ContentAddNode(builder, _node)
+	//content.ContentAddNode(builder, _node)
 	content.ContentAddVersion(builder, _version)
 	content.ContentAddType(builder, c.Type)
 	builder.Finish(content.ContentEnd(builder))
