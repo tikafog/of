@@ -59,12 +59,12 @@ func (e *errError) Is(target error) bool {
 		return true
 	}
 	idx, ok := target.(errIndex)
-	if ok {
-		return e.idx == idx.Index()
+	if ok && e.idx == idx.Index() {
+		return true
 	}
 	msg, ok := target.(errMessage)
-	if ok {
-		return e.str == msg.Message()
+	if ok && e.str == msg.Message() {
+		return true
 	}
 
 	return false
