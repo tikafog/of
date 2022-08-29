@@ -17,15 +17,15 @@ type NodeType int
 //ExtNode ...
 //@Description:
 type ExtNode struct {
-	State    NodeState       `json:"state,omitempty"`
-	Type     NodeType        `json:"type,omitempty"`
-	PID      string          `json:"pid,omitempty"`
-	CPUID    string          `json:"cpuid,omitempty"`
-	Addr     string          `json:"addr,omitempty"`
-	Addrs    []string        `json:"addrs,omitempty"`
-	Length   int             `json:"length,omitempty"`
-	Data     json.RawMessage `json:"data,omitempty"`
-	NodeType string          `json:"node_type,omitempty"`
+	State    NodeState `json:"state,omitempty"`
+	Type     NodeType  `json:"type,omitempty"`
+	PID      string    `json:"pid,omitempty"`
+	CPUID    string    `json:"cpuid,omitempty"`
+	Addr     string    `json:"addr,omitempty"`
+	Addrs    []string  `json:"addrs,omitempty"`
+	Length   int       `json:"length,omitempty"`
+	Data     []byte    `json:"data,omitempty"`
+	NodeType string    `json:"node_type,omitempty"`
 }
 
 // ExtType ...
