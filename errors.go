@@ -5,6 +5,10 @@ import (
 	"fmt"
 )
 
+//Err
+//ENUM(core is nil,father not found,no data found,channel closed)
+type Err int
+
 type err struct {
 	idx int
 	err error
@@ -37,10 +41,10 @@ func (e *err) Is(target error) bool {
 	return false
 }
 
-func wrapError(i int) error {
+func wrapError(i int, str string) error {
 	return &err{
 		idx: i,
-		str: errs[i],
+		str: str,
 	}
 }
 
@@ -74,11 +78,8 @@ var errs = [...]string{
 	"channel closed",
 }
 
-func Error(i int) error {
-	if i < 0 || i > len(errs)-1 {
-		return ErrUnknown
-	}
-	return wrapError(i)
+func Error(i Err) error {
+	return wrapError(int(i), i.String())
 }
 
 var ErrUnknown = &err{idx: 0, err: nil, str: "unknown error"}
