@@ -6,7 +6,7 @@ import (
 )
 
 //Err
-//ENUM(core is nil,father not found,no data found,channel closed)
+//ENUM(core is nil,father not found,no data found,channel closed,skip old data)
 type Err int
 
 type errError struct {

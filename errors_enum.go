@@ -19,15 +19,18 @@ const (
 	ErrNoDataFound
 	// ErrChannelClosed is a Err of type Channel Closed.
 	ErrChannelClosed
+	// ErrSkipOldData is a Err of type Skip Old Data.
+	ErrSkipOldData
 )
 
-const _ErrName = "core is nilfather not foundno data foundchannel closed"
+const _ErrName = "core is nilfather not foundno data foundchannel closedskip old data"
 
 var _ErrMap = map[Err]string{
 	ErrCoreIsNil:      _ErrName[0:11],
 	ErrFatherNotFound: _ErrName[11:27],
 	ErrNoDataFound:    _ErrName[27:40],
 	ErrChannelClosed:  _ErrName[40:54],
+	ErrSkipOldData:    _ErrName[54:67],
 }
 
 // String implements the Stringer interface.
@@ -43,6 +46,7 @@ var _ErrValue = map[string]Err{
 	_ErrName[11:27]: ErrFatherNotFound,
 	_ErrName[27:40]: ErrNoDataFound,
 	_ErrName[40:54]: ErrChannelClosed,
+	_ErrName[54:67]: ErrSkipOldData,
 }
 
 // ParseErr attempts to convert a string to a Err.
