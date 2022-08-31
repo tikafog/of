@@ -77,11 +77,25 @@ func WrapIndexError(e error, i Err) error {
 	return wrapErrorWithErr(e, i, i.String())
 }
 
+func WrapIndexErrorN(e error, i Err) error {
+	if e == nil {
+		return nil
+	}
+	return WrapIndexError(e, i)
+}
+
 func WrapError(e error, str string) error {
 	if e == nil {
 		return wrapError(0, str)
 	}
 	return wrapErrorWithErr(e, 0, str)
+}
+
+func WrapErrorN(err error, str string) error {
+	if err == nil {
+		return nil
+	}
+	return WrapError(err, str)
 }
 
 func IndexError(i Err) error {
@@ -97,6 +111,9 @@ func ErrorIs(err, target error) bool {
 }
 
 func ErrorMessageIs(str string, err error) bool {
+	if err == nil {
+		return false
+	}
 	e, ok := err.(errMessage)
 	if !ok {
 		return false
@@ -105,6 +122,9 @@ func ErrorMessageIs(str string, err error) bool {
 }
 
 func ErrorIndexIs(i Err, err error) bool {
+	if err == nil {
+		return false
+	}
 	e, ok := err.(errIndex)
 	if !ok {
 		return false
