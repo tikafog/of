@@ -21,11 +21,13 @@ const (
 	ProtocolMessage
 	// ProtocolMessageV2 is a Protocol of type MessageV2.
 	ProtocolMessageV2
+	// ProtocolInstruct is a Protocol of type Instruct.
+	ProtocolInstruct
 	// ProtocolMax is a Protocol of type Max.
 	ProtocolMax
 )
 
-const _ProtocolName = "AnswerGossipDataSwapMessageMessageV2Max"
+const _ProtocolName = "AnswerGossipDataSwapMessageMessageV2InstructMax"
 
 var _ProtocolMap = map[Protocol]string{
 	ProtocolAnswer:    _ProtocolName[0:6],
@@ -33,7 +35,8 @@ var _ProtocolMap = map[Protocol]string{
 	ProtocolDataSwap:  _ProtocolName[12:20],
 	ProtocolMessage:   _ProtocolName[20:27],
 	ProtocolMessageV2: _ProtocolName[27:36],
-	ProtocolMax:       _ProtocolName[36:39],
+	ProtocolInstruct:  _ProtocolName[36:44],
+	ProtocolMax:       _ProtocolName[44:47],
 }
 
 // String implements the Stringer interface.
@@ -50,7 +53,8 @@ var _ProtocolValue = map[string]Protocol{
 	_ProtocolName[12:20]: ProtocolDataSwap,
 	_ProtocolName[20:27]: ProtocolMessage,
 	_ProtocolName[27:36]: ProtocolMessageV2,
-	_ProtocolName[36:39]: ProtocolMax,
+	_ProtocolName[36:44]: ProtocolInstruct,
+	_ProtocolName[44:47]: ProtocolMax,
 }
 
 // ParseProtocol attempts to convert a string to a Protocol.
