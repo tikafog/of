@@ -1,4 +1,4 @@
-package module
+package boot
 
 import (
 	"github.com/tikafog/of"
