@@ -4,20 +4,19 @@ import (
 	"context"
 )
 
-//type TypeHandleFunc = func(conn Conn, data json.RawMessage, args ...Arg) error
-
-// DataHandler
-// @Description: DataHandler
-type DataHandler[T any, V any] interface {
-	DataUpdateHandler[T, V]
-	DataQueryHandler
+// DataHandler is a data handler interface\
+type DataHandler[T any, A any] interface {
+	DataUpdateHandler[T, A]
+	DataQueryHandler[A]
 }
 
-type DataQueryHandler interface {
-	Query(ctx context.Context, limit int, last int64) ([]byte, error)
-	Last() int64
+//DataQueryHandler is a query handler interface
+type DataQueryHandler[A any] interface {
+	Query(ctx context.Context, limit int, last int64, args ...A) ([]byte, error)
+	Last(args ...A) int64
 }
 
-type DataUpdateHandler[T any, V any] interface {
-	Update(ctx context.Context, data T, args ...V) (int, error)
+// DataUpdateHandler is a update handler interface
+type DataUpdateHandler[T any, A any] interface {
+	Update(ctx context.Context, data T, args ...A) (int, error)
 }
