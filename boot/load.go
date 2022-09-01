@@ -8,12 +8,15 @@ import (
 )
 
 var (
+	initOnce  sync.Once
 	modulesMu sync.RWMutex
-	modules   = initLoadModules()
+	modules   map[of.Name]Loader
 )
 
-func initLoadModules() map[string]Loader {
-	return make(map[string]Loader, 128)
+func init() {
+	initOnce.Do(func() {
+		modules = make(map[of.Name]Loader, 128)
+	})
 }
 
 type Loader interface {
@@ -32,10 +35,10 @@ func Register(m Loader) {
 		panic("of: Register module is nil")
 	}
 
-	if _, ok := modules[m.Name().String()]; ok {
+	if _, ok := modules[m.Name()]; ok {
 		panic("of: Register called twice for module " + m.Name())
 	}
-	modules[m.Name().String()] = m
+	modules[m.Name()] = m
 }
 
 // Load ...
@@ -45,7 +48,7 @@ func Register(m Loader) {
 func Load(name of.Name) Loader {
 	modulesMu.Lock()
 	defer modulesMu.Unlock()
-	if m, ok := modules[name.String()]; ok {
+	if m, ok := modules[name]; ok {
 		return m
 	}
 	return newEmptyLoader(name)
