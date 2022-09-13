@@ -25,30 +25,36 @@ const (
 	StateRunning
 	// StateSyncing is a State of type Syncing.
 	StateSyncing
+	// StateSyncingOnline is a State of type Syncing_online.
+	StateSyncingOnline
+	// StateSyncingOffline is a State of type Syncing_offline.
+	StateSyncingOffline
 	// StateStopping is a State of type Stopping.
 	StateStopping
 	// StateStopped is a State of type Stopped.
 	StateStopped
-	// StateError is a State of type IndexError.
+	// StateError is a State of type Error.
 	StateError
 	// StateMax is a State of type Max.
 	StateMax
 )
 
-const _StateName = "invalidinitpreloadloadingwaitingrunningsyncingstoppingstoppederrormax"
+const _StateName = "invalidinitpreloadloadingwaitingrunningsyncingsyncing_onlinesyncing_offlinestoppingstoppederrormax"
 
 var _StateMap = map[State]string{
-	StateInvalid:  _StateName[0:7],
-	StateInit:     _StateName[7:11],
-	StatePreload:  _StateName[11:18],
-	StateLoading:  _StateName[18:25],
-	StateWaiting:  _StateName[25:32],
-	StateRunning:  _StateName[32:39],
-	StateSyncing:  _StateName[39:46],
-	StateStopping: _StateName[46:54],
-	StateStopped:  _StateName[54:61],
-	StateError:    _StateName[61:66],
-	StateMax:      _StateName[66:69],
+	StateInvalid:        _StateName[0:7],
+	StateInit:           _StateName[7:11],
+	StatePreload:        _StateName[11:18],
+	StateLoading:        _StateName[18:25],
+	StateWaiting:        _StateName[25:32],
+	StateRunning:        _StateName[32:39],
+	StateSyncing:        _StateName[39:46],
+	StateSyncingOnline:  _StateName[46:60],
+	StateSyncingOffline: _StateName[60:75],
+	StateStopping:       _StateName[75:83],
+	StateStopped:        _StateName[83:90],
+	StateError:          _StateName[90:95],
+	StateMax:            _StateName[95:98],
 }
 
 // String implements the Stringer interface.
@@ -67,10 +73,12 @@ var _StateValue = map[string]State{
 	_StateName[25:32]: StateWaiting,
 	_StateName[32:39]: StateRunning,
 	_StateName[39:46]: StateSyncing,
-	_StateName[46:54]: StateStopping,
-	_StateName[54:61]: StateStopped,
-	_StateName[61:66]: StateError,
-	_StateName[66:69]: StateMax,
+	_StateName[46:60]: StateSyncingOnline,
+	_StateName[60:75]: StateSyncingOffline,
+	_StateName[75:83]: StateStopping,
+	_StateName[83:90]: StateStopped,
+	_StateName[90:95]: StateError,
+	_StateName[95:98]: StateMax,
 }
 
 // ParseState attempts to convert a string to a State.

@@ -1,7 +1,7 @@
 package of
 
 //State the state of the device
-//ENUM(invalid,init,preload,loading,waiting,running,syncing,stopping,stopped,error,max)
+//ENUM(invalid,init,preload,loading,waiting,running,syncing,syncing_online,syncing_offline,stopping,stopped,error,max)
 type State int
 
 func (x State) Is(other State) bool {
