@@ -3,6 +3,7 @@ package dbc
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/tikafog/of"
@@ -18,7 +19,7 @@ func openMedia[T *media.Client](name of.Name, path string, o *Option) (T, error)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("openBootNode database", "path", dbPath, "exist", exist)
+	log.Println("[DBC] open database", "path", dbPath, "exist", exist)
 	cli, err := openMediaDatabase(dbPath, o.debug)
 	if err != nil {
 		return nil, err
@@ -36,7 +37,7 @@ func openMedia[T *media.Client](name of.Name, path string, o *Option) (T, error)
 
 func createOrInitMedia(ctx context.Context, cli *media.Client, exist bool) error {
 	if !exist {
-		fmt.Println("create not exist")
+		log.Println("[DBC] media not exist")
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -52,7 +53,7 @@ func createOrInitMedia(ctx context.Context, cli *media.Client, exist bool) error
 		}
 		return nil
 	}
-	fmt.Println("create exist")
+	log.Println("[DBC] media exist")
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {

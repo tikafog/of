@@ -3,6 +3,7 @@ package dbc
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/tikafog/of"
@@ -18,7 +19,7 @@ func openKernel[T *kernel.Client](name of.Name, path string, o *Option) (T, erro
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("openBootNode database", "path", dbPath, "exist", exist)
+	log.Println("[DBC] open database", "path", dbPath, "exist", exist)
 	cli, err := openKernelDatabase(dbPath, o.debug)
 	if err != nil {
 		return nil, err
@@ -36,7 +37,7 @@ func openKernel[T *kernel.Client](name of.Name, path string, o *Option) (T, erro
 
 func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) error {
 	if !exist {
-		fmt.Println("create not exist")
+		log.Println("[DBC] kernel not exist")
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -52,7 +53,7 @@ func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) err
 		}
 		return nil
 	}
-	fmt.Println("create exist")
+	log.Println("[DBC] kernel exist")
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {

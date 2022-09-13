@@ -3,6 +3,7 @@ package dbc
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/tikafog/of"
@@ -17,7 +18,7 @@ func openUpgrade[T *upgrade.Client](name of.Name, path string, o *Option) (T, er
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("openBootNode database", "path", dbPath, "exist", exist)
+	log.Println("[DBC] open database", "path", dbPath, "exist", exist)
 	cli, err := openUpgradeDatabase(dbPath, o.debug)
 	if err != nil {
 		return nil, err
@@ -35,7 +36,7 @@ func openUpgrade[T *upgrade.Client](name of.Name, path string, o *Option) (T, er
 
 func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) error {
 	if !exist {
-		fmt.Println("create not exist")
+		log.Println("[DBC] upgrade not exist")
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -51,7 +52,7 @@ func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) e
 		}
 		return nil
 	}
-	fmt.Println("create exist")
+	log.Println("[DBC] upgrade exist")
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {

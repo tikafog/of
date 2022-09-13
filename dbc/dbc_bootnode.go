@@ -3,6 +3,7 @@ package dbc
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/tikafog/of"
@@ -18,7 +19,7 @@ func openBootNode[T *bootnode.Client](name of.Name, path string, o *Option) (T, 
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("openBootNode database", "path", dbPath, "exist", exist)
+	log.Println("[DBC] open database", "path", dbPath, "exist", exist)
 	cli, err := openBootNodeDatabase(dbPath, o.debug)
 	if err != nil {
 		return nil, err
@@ -37,7 +38,7 @@ func openBootNode[T *bootnode.Client](name of.Name, path string, o *Option) (T, 
 
 func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool) error {
 	if !exist {
-		fmt.Println("create not exist")
+		log.Println("[DBC] bootnode not exist")
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -53,7 +54,7 @@ func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool)
 		}
 		return nil
 	}
-	fmt.Println("create exist")
+	log.Println("[DBC] bootnode exist")
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {
