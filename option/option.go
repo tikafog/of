@@ -12,7 +12,7 @@ type option struct {
 	repo          string
 	sp            string
 	fatherHandler func(father of.ID)
-	link          interface{}
+	link          any
 	dbc           *dbc.DBC
 	tools         of.Tools
 }
@@ -27,7 +27,7 @@ type InitializeOption interface {
 type Option interface {
 	InitializeOption
 	ID() of.ID
-	Link() interface{}
+	Link() any
 	FatherHandler() func(father of.ID)
 }
 
@@ -78,7 +78,7 @@ func ID(id of.ID) SetFunc {
 	}
 }
 
-func Link(link interface{}) SetFunc {
+func Link(link any) SetFunc {
 	return func(o *option) Option {
 		o.link = link
 		return o
@@ -89,7 +89,7 @@ func DefaultApply() ApplyOption {
 	return &option{}
 }
 
-func (o *option) Link() interface{} {
+func (o *option) Link() any {
 	return o.link
 }
 

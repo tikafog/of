@@ -28,7 +28,7 @@ func (c client[T]) Name() of.Name { return c.name }
 
 func openClient[T clientAble](path string, op *Option) (T, error) {
 	var t T
-	var it interface{} = t
+	var it any = t
 	var err error
 	var name of.Name
 	switch it.(type) {
@@ -79,7 +79,7 @@ func openClient[T clientAble](path string, op *Option) (T, error) {
 //}
 //
 //func (c client[T]) open(op *Option) (T, error) {
-//	var it interface{}
+//	var it any
 //	var err error
 //	switch c.name {
 //	case of.NameBootNode:
