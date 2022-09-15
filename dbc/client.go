@@ -10,25 +10,25 @@ import (
 	"github.com/tikafog/of/dbc/upgrade"
 )
 
-type clientAble interface {
-	*bootnode.Client | *kernel.Client | *upgrade.Client | *media.Client
-	//openBootNode() clientAble
-}
+//type clientAble interface {
+//	*bootnode.Client | *kernel.Client | *upgrade.Client | *media.Client
+//openBootNode() clientAble
+//}
 
-type OpenFunc[T clientAble] func(name of.Name, path string, op *Option) (T, error)
+//type OpenFunc[T clientAble] func(name of.Name, path string, op *Option) (T, error)
 
-type client[T clientAble] struct {
-	name of.Name
-	path string
-	//funcs map[of.Name]OpenFunc[T]
-	//openBootNode  OpenFunc[T]
-}
+//type client[T clientAble] struct {
+//	name of.Name
+//	path string
+//funcs map[of.Name]OpenFunc[T]
+//openBootNode  OpenFunc[T]
+//}
 
-func (c client[T]) Name() of.Name { return c.name }
+//func (c client[T]) Name() of.Name { return c.name }
 
-func openClient[T clientAble](path string, op *Option) (T, error) {
-	var t T
-	var it any = t
+func openClient[C Client](path string, op *Option) (C, error) {
+	var c C
+	var it any = c
 	var err error
 	var name of.Name
 	switch it.(type) {
@@ -47,9 +47,7 @@ func openClient[T clientAble](path string, op *Option) (T, error) {
 	default:
 		return nil, errors.New("unsupported client type")
 	}
-	return it.(T), err
-
-	//return c.open(op)
+	return it.(C), err
 }
 
 //c := client[T]{
