@@ -17,5 +17,5 @@ type Connection interface {
 	Receive(ctx context.Context, data *content.Content) error
 	Send(ctx context.Context, message *Message) error
 	Connect(ctx context.Context, bootaddr ...string) error
-	BestPeerConn(id ID) (Conn, error)
+	PeerConn(id ID) (Conn, bool)
 }
