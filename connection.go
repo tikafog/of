@@ -18,4 +18,6 @@ type Connection interface {
 	Send(ctx context.Context, message *Message) error
 	Connect(ctx context.Context, bootaddr ...string) error
 	PeerConn(id ID) (Conn, bool)
+	PeerLen() int64
+	ConnPeers() []ID
 }
