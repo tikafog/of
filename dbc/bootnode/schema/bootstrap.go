@@ -19,7 +19,7 @@ type Bootstrap struct {
 // Fields of the Bootstrap.
 func (Bootstrap) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("pid").Unique(), //peerid
+		field.String("pid").Unique(),
 		field.Strings("addrs"),
 		field.Bool("expired").Default(false),
 		field.Enum("level").Values(
