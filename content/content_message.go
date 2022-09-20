@@ -14,11 +14,6 @@ func (m *Message) IsEmpty() bool {
 	return m == nil || m.Length == 0
 }
 
-func (m *Message) SetStartUnix(startUnix int64) *Message {
-	m.StartUnix = startUnix
-	return m
-}
-
 func (m *Message) SetIndex(index int64) *Message {
 	m.Index = index
 	return m
