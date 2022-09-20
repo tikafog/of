@@ -7,7 +7,7 @@ import (
 )
 
 // NodeState ...
-// ENUM(initialized,start,online,offline,max)
+// ENUM(offline,online,max)
 type NodeState int
 
 // NodeType ...

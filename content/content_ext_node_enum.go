@@ -11,26 +11,20 @@ import (
 )
 
 const (
-	// NodeStateInitialized is a NodeState of type Initialized.
-	NodeStateInitialized NodeState = iota
-	// NodeStateStart is a NodeState of type Start.
-	NodeStateStart
+	// NodeStateOffline is a NodeState of type Offline.
+	NodeStateOffline NodeState = iota
 	// NodeStateOnline is a NodeState of type Online.
 	NodeStateOnline
-	// NodeStateOffline is a NodeState of type Offline.
-	NodeStateOffline
 	// NodeStateMax is a NodeState of type Max.
 	NodeStateMax
 )
 
-const _NodeStateName = "initializedstartonlineofflinemax"
+const _NodeStateName = "offlineonlinemax"
 
 var _NodeStateMap = map[NodeState]string{
-	NodeStateInitialized: _NodeStateName[0:11],
-	NodeStateStart:       _NodeStateName[11:16],
-	NodeStateOnline:      _NodeStateName[16:22],
-	NodeStateOffline:     _NodeStateName[22:29],
-	NodeStateMax:         _NodeStateName[29:32],
+	NodeStateOffline: _NodeStateName[0:7],
+	NodeStateOnline:  _NodeStateName[7:13],
+	NodeStateMax:     _NodeStateName[13:16],
 }
 
 // String implements the Stringer interface.
@@ -42,11 +36,9 @@ func (x NodeState) String() string {
 }
 
 var _NodeStateValue = map[string]NodeState{
-	_NodeStateName[0:11]:  NodeStateInitialized,
-	_NodeStateName[11:16]: NodeStateStart,
-	_NodeStateName[16:22]: NodeStateOnline,
-	_NodeStateName[22:29]: NodeStateOffline,
-	_NodeStateName[29:32]: NodeStateMax,
+	_NodeStateName[0:7]:   NodeStateOffline,
+	_NodeStateName[7:13]:  NodeStateOnline,
+	_NodeStateName[13:16]: NodeStateMax,
 }
 
 // ParseNodeState attempts to convert a string to a NodeState.
