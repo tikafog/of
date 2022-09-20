@@ -64,12 +64,17 @@ func (c *Content) SetMessage(m *Message) *Content {
 }
 
 func (c *Content) NewMessage(data []byte) *Content {
-	c.Message = NewContentMessage(data)
+	if data != nil {
+		c.Message = NewContentMessage(data)
+	}
 	return c
 }
 
 func (c *Content) NewMessageDetail(data []byte, index, last int64) *Content {
-	c.Message = NewContentMessageWithDetail(data, index, last)
+	if data != nil {
+		c.Message = NewContentMessageWithDetail(data, index, last)
+	}
+
 	return c
 }
 
@@ -79,7 +84,7 @@ func (c *Content) NewMessageLast(last int64) *Content {
 }
 
 func (c *Content) NewMessageAndLast(data []byte, last int64) *Content {
-	c.Message = NewContentMessageAndLast(data, last)
+	c.Message = NewContentMessageLast(last)
 	return c
 }
 

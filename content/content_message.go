@@ -35,6 +35,17 @@ func (m *Message) SetLast(last int64) *Message {
 	return m
 }
 
+func (m *Message) Revise() *Message {
+	if m.IsEmpty() {
+		return m
+	}
+	if (m.Length == 0 && len(m.Data) == m.Length) &&
+		m.Index == 0 && m.Last == 0 {
+		return nil
+	}
+	return m
+}
+
 // NewContentMessage
 // @param []byte
 // @return *Message
