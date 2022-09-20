@@ -54,6 +54,8 @@ const (
 	NodeTypeServer NodeType = iota
 	// NodeTypeAdapter is a NodeType of type Adapter.
 	NodeTypeAdapter
+	// NodeTypeClient is a NodeType of type Client.
+	NodeTypeClient
 	// NodeTypeBox is a NodeType of type Box.
 	NodeTypeBox
 	// NodeTypeMobile is a NodeType of type Mobile.
@@ -62,14 +64,15 @@ const (
 	NodeTypeMax
 )
 
-const _NodeTypeName = "serveradapterboxmobilemax"
+const _NodeTypeName = "serveradapterclientboxmobilemax"
 
 var _NodeTypeMap = map[NodeType]string{
 	NodeTypeServer:  _NodeTypeName[0:6],
 	NodeTypeAdapter: _NodeTypeName[6:13],
-	NodeTypeBox:     _NodeTypeName[13:16],
-	NodeTypeMobile:  _NodeTypeName[16:22],
-	NodeTypeMax:     _NodeTypeName[22:25],
+	NodeTypeClient:  _NodeTypeName[13:19],
+	NodeTypeBox:     _NodeTypeName[19:22],
+	NodeTypeMobile:  _NodeTypeName[22:28],
+	NodeTypeMax:     _NodeTypeName[28:31],
 }
 
 // String implements the Stringer interface.
@@ -83,9 +86,10 @@ func (x NodeType) String() string {
 var _NodeTypeValue = map[string]NodeType{
 	_NodeTypeName[0:6]:   NodeTypeServer,
 	_NodeTypeName[6:13]:  NodeTypeAdapter,
-	_NodeTypeName[13:16]: NodeTypeBox,
-	_NodeTypeName[16:22]: NodeTypeMobile,
-	_NodeTypeName[22:25]: NodeTypeMax,
+	_NodeTypeName[13:19]: NodeTypeClient,
+	_NodeTypeName[19:22]: NodeTypeBox,
+	_NodeTypeName[22:28]: NodeTypeMobile,
+	_NodeTypeName[28:31]: NodeTypeMax,
 }
 
 // ParseNodeType attempts to convert a string to a NodeType.
