@@ -3,12 +3,11 @@ package content
 //Message ...
 //@Description:
 type Message struct {
-	StartUnix int64  `json:"start_unix,omitempty"`
-	Last      int64  `json:"last,omitempty"`
-	Index     int64  `json:"index,omitempty"`
-	Version   int    `json:"version,omitempty"` // current info version
-	Length    int    `json:"length,omitempty"`
-	Data      []byte `json:"data,omitempty"`
+	Last    int64  `json:"last,omitempty"`
+	Index   int64  `json:"index,omitempty"`
+	Version int    `json:"version,omitempty"` // current info version
+	Length  int    `json:"length,omitempty"`
+	Data    []byte `json:"data,omitempty"`
 }
 
 func (m *Message) IsEmpty() bool {

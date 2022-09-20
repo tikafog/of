@@ -156,12 +156,12 @@ func rootToContent(cc *content.Content) *Content {
 		}
 	}
 
-	oc := new(Content)
-	oc.Version = string(cc.Version())
+	oc := NewContent(cc.Type())
+	//oc.Version = string(cc.Version())
 	if message != nil {
 		oc.Message = &Message{
 			Last:    message.Last(),
-			Index:   0,
+			Index:   message.Index(),
 			Version: int(message.Version()),
 			Length:  len(message.Data()),
 			Data:    message.Data(),
@@ -198,6 +198,7 @@ func (c *Content) FinishBytes() []byte {
 		_dataM := builder.CreateByteString(c.Message.Data)
 		content.MessageStart(builder)
 		content.MessageAddLast(builder, c.Message.Last)
+		content.MessageAddIndex(builder, c.Message.Index)
 		content.MessageAddVersion(builder, int32(c.Message.Version))
 		content.MessageAddData(builder, _dataM)
 		_message = content.MessageEnd(builder)
@@ -217,11 +218,13 @@ func (c *Content) FinishBytes() []byte {
 	_extsVec := builder.EndVector(len(_exts))
 
 	_version := builder.CreateString(version.VersionTwo)
+	_from := builder.CreateString(c.From)
 	content.ContentStart(builder)
 	content.ContentAddExt(builder, _extsVec)
 	if !c.Message.IsEmpty() {
 		content.ContentAddMessage(builder, _message)
 	}
+	content.ContentAddFrom(builder, _from)
 	content.ContentAddVersion(builder, _version)
 	content.ContentAddType(builder, c.Type)
 	builder.Finish(content.ContentEnd(builder))
@@ -241,16 +244,40 @@ func NewContentMessage(data []byte) *Message {
 	return &msg
 }
 
-// NewContentWithType ...
-// @Description:
+// NewContentWithMessage ...
 // @param content.Type
-// @param ...func(content *Content)
+// @param *Message
 // @return *Content
-func NewContentWithType(tp content.Type) *Content {
-	_content := Content{
-		Type: tp,
+func NewContentWithMessage(p content.Type, message *Message) *Content {
+	return &Content{
+		Type:    p,
+		Message: message,
 	}
-	return &_content
+}
+
+func NewContentWithExts(p content.Type, exts ...Ext) *Content {
+	return &Content{
+		Type: p,
+		Exts: exts,
+	}
+}
+
+// NewContentWithType ...
+// @param content.Type
+// @return *Content
+func NewContentWithType(p content.Type) *Content {
+	return &Content{
+		Type: p,
+	}
+}
+
+// NewContent ...
+// @param content.Type
+// @return *Content
+func NewContent(p content.Type) *Content {
+	return &Content{
+		Type: p,
+	}
 }
 
 // bytesToStringArray ...

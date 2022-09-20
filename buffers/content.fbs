@@ -15,6 +15,7 @@ enum Type : uint {
             Max }
 
 table Message {
+  index:int64;
   last:int64;
   version:int;
   data:string;
@@ -37,6 +38,7 @@ table Ext {
 
 table Content {
   version:string;
+  from:string;
   type:Type;
   message:Message;
   ext:[Ext];

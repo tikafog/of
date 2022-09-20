@@ -41,8 +41,16 @@ func (rcv *Content) Version() []byte {
 	return nil
 }
 
-func (rcv *Content) Type() Type {
+func (rcv *Content) From() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Content) Type() Type {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return Type(rcv._tab.GetUint32(o + rcv._tab.Pos))
 	}
@@ -50,11 +58,11 @@ func (rcv *Content) Type() Type {
 }
 
 func (rcv *Content) MutateType(n Type) bool {
-	return rcv._tab.MutateUint32Slot(6, uint32(n))
+	return rcv._tab.MutateUint32Slot(8, uint32(n))
 }
 
 func (rcv *Content) Message(obj *Message) *Message {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		x := rcv._tab.Indirect(o + rcv._tab.Pos)
 		if obj == nil {
@@ -67,7 +75,7 @@ func (rcv *Content) Message(obj *Message) *Message {
 }
 
 func (rcv *Content) Ext(obj *Ext, j int) bool {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
 		x += flatbuffers.UOffsetT(j) * 4
@@ -79,7 +87,7 @@ func (rcv *Content) Ext(obj *Ext, j int) bool {
 }
 
 func (rcv *Content) ExtLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
 	}
@@ -87,19 +95,22 @@ func (rcv *Content) ExtLength() int {
 }
 
 func ContentStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func ContentAddVersion(builder *flatbuffers.Builder, version flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(version), 0)
 }
+func ContentAddFrom(builder *flatbuffers.Builder, from flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(from), 0)
+}
 func ContentAddType(builder *flatbuffers.Builder, type_ Type) {
-	builder.PrependUint32Slot(1, uint32(type_), 0)
+	builder.PrependUint32Slot(2, uint32(type_), 0)
 }
 func ContentAddMessage(builder *flatbuffers.Builder, message flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(message), 0)
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(message), 0)
 }
 func ContentAddExt(builder *flatbuffers.Builder, ext flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(ext), 0)
+	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(ext), 0)
 }
 func ContentStartExtVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
