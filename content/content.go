@@ -55,8 +55,28 @@ func (c *Content) SetExts(exts ...Ext) *Content {
 	return c
 }
 
+func (c *Content) AddExts(exts ...Ext) *Content {
+	c.Exts = append(c.Exts, exts...)
+	return c
+}
+
 func (c *Content) SetMessage(m *Message) *Content {
 	c.Message = m
+	return c
+}
+
+func (c *Content) NewMessage(data []byte) *Content {
+	c.Message = NewContentMessage(data)
+	return c
+}
+
+func (c *Content) NewMessageLast(last int64) *Content {
+	c.Message = NewContentMessage(nil).SetLast(last)
+	return c
+}
+
+func (c *Content) NewMessageAndLast(data []byte, last int64) *Content {
+	c.Message = NewContentMessage(data).SetLast(last)
 	return c
 }
 
