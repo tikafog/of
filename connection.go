@@ -19,5 +19,6 @@ type Connection interface {
 	Connect(ctx context.Context, bootaddr ...string) error
 	NodeConn(id ID) (Conn, bool)
 	NodeLen() int64
-	ConnNodes() []ID
+	ConnNodes() []Conn
+	ConnNodeIDs() []ID
 }
