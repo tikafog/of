@@ -19,8 +19,10 @@ func openMedia[T *media.Client](name of.Name, path string, o *Option) (T, error)
 	if err != nil {
 		return nil, err
 	}
-	log.Println("[DBC] open database", "path", dbPath, "exist", exist)
-	cli, err := openMediaDatabase(dbPath, o.debug)
+	if debug {
+		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
+	}
+	cli, err := openMediaDatabase(dbPath)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +39,9 @@ func openMedia[T *media.Client](name of.Name, path string, o *Option) (T, error)
 
 func createOrInitMedia(ctx context.Context, cli *media.Client, exist bool) error {
 	if !exist {
-		log.Println("[DBC] media not exist")
+		if debug {
+			log.Println("[DBC] media not exist")
+		}
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -53,7 +57,9 @@ func createOrInitMedia(ctx context.Context, cli *media.Client, exist bool) error
 		}
 		return nil
 	}
-	log.Println("[DBC] media exist")
+	if debug {
+		log.Println("[DBC] media exist")
+	}
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {
@@ -94,7 +100,7 @@ func createOrInitMedia(ctx context.Context, cli *media.Client, exist bool) error
 	return nil
 }
 
-func openMediaDatabase(path string, debug bool) (*media.Client, error) {
+func openMediaDatabase(path string) (*media.Client, error) {
 	var options []media.Option
 
 	if debug {

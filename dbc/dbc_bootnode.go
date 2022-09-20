@@ -19,8 +19,10 @@ func openBootNode[T *bootnode.Client](name of.Name, path string, o *Option) (T, 
 	if err != nil {
 		return nil, err
 	}
-	log.Println("[DBC] open database", "path", dbPath, "exist", exist)
-	cli, err := openBootNodeDatabase(dbPath, o.debug)
+	if debug {
+		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
+	}
+	cli, err := openBootNodeDatabase(dbPath)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +40,9 @@ func openBootNode[T *bootnode.Client](name of.Name, path string, o *Option) (T, 
 
 func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool) error {
 	if !exist {
-		log.Println("[DBC] bootnode not exist")
+		if debug {
+			log.Println("[DBC] bootnode not exist")
+		}
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -54,7 +58,9 @@ func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool)
 		}
 		return nil
 	}
-	log.Println("[DBC] bootnode exist")
+	if debug {
+		log.Println("[DBC] bootnode exist")
+	}
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {
@@ -95,7 +101,7 @@ func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool)
 	return nil
 }
 
-func openBootNodeDatabase(path string, debug bool) (*bootnode.Client, error) {
+func openBootNodeDatabase(path string) (*bootnode.Client, error) {
 	var options []bootnode.Option
 
 	if debug {

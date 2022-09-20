@@ -18,8 +18,10 @@ func openUpgrade[T *upgrade.Client](name of.Name, path string, o *Option) (T, er
 	if err != nil {
 		return nil, err
 	}
-	log.Println("[DBC] open database", "path", dbPath, "exist", exist)
-	cli, err := openUpgradeDatabase(dbPath, o.debug)
+	if debug {
+		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
+	}
+	cli, err := openUpgradeDatabase(dbPath)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +38,9 @@ func openUpgrade[T *upgrade.Client](name of.Name, path string, o *Option) (T, er
 
 func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) error {
 	if !exist {
-		log.Println("[DBC] upgrade not exist")
+		if debug {
+			log.Println("[DBC] upgrade not exist")
+		}
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -52,7 +56,9 @@ func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) e
 		}
 		return nil
 	}
-	log.Println("[DBC] upgrade exist")
+	if debug {
+		log.Println("[DBC] upgrade exist")
+	}
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {
@@ -93,7 +99,7 @@ func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) e
 	return nil
 }
 
-func openUpgradeDatabase(path string, debug bool) (*upgrade.Client, error) {
+func openUpgradeDatabase(path string) (*upgrade.Client, error) {
 	var options []upgrade.Option
 
 	if debug {

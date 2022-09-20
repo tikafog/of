@@ -33,8 +33,9 @@ var (
 
 func Open(path string, opts ...Opts) (*DBC, error) {
 	o := parseOption(opts)
-	clients := make(map[any]any)
+	debug = o.debug
 
+	clients := make(map[any]any)
 	cliB, err := openClient[*bootnode.Client](path, o)
 	if err != nil {
 		return nil, err

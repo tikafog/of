@@ -19,8 +19,10 @@ func openKernel[T *kernel.Client](name of.Name, path string, o *Option) (T, erro
 	if err != nil {
 		return nil, err
 	}
-	log.Println("[DBC] open database", "path", dbPath, "exist", exist)
-	cli, err := openKernelDatabase(dbPath, o.debug)
+	if debug {
+		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
+	}
+	cli, err := openKernelDatabase(dbPath)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +39,9 @@ func openKernel[T *kernel.Client](name of.Name, path string, o *Option) (T, erro
 
 func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) error {
 	if !exist {
-		log.Println("[DBC] kernel not exist")
+		if debug {
+			log.Println("[DBC] kernel not exist")
+		}
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -53,7 +57,9 @@ func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) err
 		}
 		return nil
 	}
-	log.Println("[DBC] kernel exist")
+	if debug {
+		log.Println("[DBC] kernel exist")
+	}
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {
@@ -94,7 +100,7 @@ func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) err
 	return nil
 }
 
-func openKernelDatabase(path string, debug bool) (*kernel.Client, error) {
+func openKernelDatabase(path string) (*kernel.Client, error) {
 	var options []kernel.Option
 
 	if debug {
