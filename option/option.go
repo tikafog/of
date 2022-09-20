@@ -15,6 +15,11 @@ type option struct {
 	link          any
 	dbc           *dbc.DBC
 	tools         of.Tools
+	event         of.Event
+}
+
+func (o *option) Event() of.Event {
+	return o.event
 }
 
 type InitializeOption interface {
@@ -22,6 +27,7 @@ type InitializeOption interface {
 	StoragePath() string
 	DBC() *dbc.DBC
 	Tools() of.Tools
+	Event() of.Event
 }
 
 type Option interface {
@@ -46,6 +52,13 @@ func Tools(tools of.Tools) SetFunc {
 func DBC(dbc *dbc.DBC) SetFunc {
 	return func(o *option) Option {
 		o.dbc = dbc
+		return o
+	}
+}
+
+func Event(event of.Event) SetFunc {
+	return func(o *option) Option {
+		o.event = event
 		return o
 	}
 }
