@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/json"
-	"fmt"
-	"io"
 
 	flatbuffers "github.com/google/flatbuffers/go"
 
@@ -93,86 +91,6 @@ func (c *Content) SetType(p content.Type) *Content {
 func (c *Content) SetFrom(s string) *Content {
 	c.From = s
 	return c
-}
-
-// ParseJSONContent ...
-// @Description: parse version 1 json data
-// @param []byte
-// @return *Content
-// @return error
-func ParseJSONContent(bytes []byte) (*Content, error) {
-	var c Content
-	err := json.Unmarshal(bytes, &c)
-	if err != nil {
-		return nil, err
-	}
-	if string(c.Version) != version.VersionOne {
-		return nil, ErrWrongVersionType
-	}
-	return &c, err
-}
-
-func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
-	var c Content
-	err := json.NewDecoder(reader).Decode(&c)
-	if err != nil {
-		return nil, err
-	}
-	if string(c.Version) != version.VersionOne {
-		return nil, ErrWrongVersionType
-	}
-	return &c, err
-}
-
-//ParseContent ...
-//@Description: parse version 2 flatbuffer data
-//@param []byte
-//@return retC
-//@return err
-func ParseContent(bytes []byte) (retC *Content, err error) {
-	defer func() {
-		if rerr := recover(); rerr != nil {
-			if rerr == ErrWrongVersionType {
-				err = ErrWrongVersionType
-				return
-			}
-			err = fmt.Errorf("parse content error: %v", rerr)
-		}
-	}()
-	c := content.GetRootAsContent(bytes, 0)
-	if string(c.Version()) != version.VersionTwo {
-		return nil, ErrWrongVersionType
-	}
-	return parseContent(c), err
-}
-
-func parseContent(cc *content.Content) *Content {
-	//var node oc.Node
-	message := cc.Message(nil)
-	ext := make([]content.Ext, cc.ExtLength())
-	var exts []Ext
-	for i := 0; i < cc.ExtLength(); i++ {
-		if cc.Ext(&ext[i], i) {
-			exts = append(exts, Ext{
-				ExtType: ext[i].Type(),
-				Length:  len(ext[i].Data()),
-				Data:    ext[i].Data(),
-			})
-		}
-	}
-
-	oc := NewContent(cc.Type())
-	if message != nil {
-		oc.Message = &Message{
-			Last:    message.Last(),
-			Index:   message.Index(),
-			Version: int(message.Version()),
-			Length:  len(message.Data()),
-			Data:    message.Data(),
-		}
-	}
-	oc.Exts = exts
-	return oc
 }
 
 // JSON ...
@@ -273,6 +191,22 @@ func NewContent(p content.Type) *Content {
 	return &Content{
 		Type: p,
 	}
+}
+
+// NewTypeContent
+// @param content.Type
+// @param ...func(content *Content)
+// @return *Content
+// Decrypted: to be used NewContent
+func NewTypeContent(tp content.Type, fns ...func(content *Content)) *Content {
+	_content := Content{
+		Version: version.VersionOne,
+		Type:    tp,
+	}
+	for i := range fns {
+		fns[i](&_content)
+	}
+	return &_content
 }
 
 // bytesToStringArray ...
