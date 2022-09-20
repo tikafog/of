@@ -14,7 +14,7 @@ import (
 )
 
 func openUpgrade[T *upgrade.Client](name of.Name, path string, o *Option) (T, error) {
-	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String())
+	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String(), o.debug)
 	if err != nil {
 		return nil, err
 	}
