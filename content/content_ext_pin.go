@@ -13,7 +13,6 @@ type ExtPin struct {
 	Step   string `json:"step,omitempty"`
 	Rid    string `json:"rid,omitempty"`
 	Error  string `json:"error,omitempty"`
-	Retry  int    `json:"retry,omitempty"`
 }
 
 // ExtType ...
