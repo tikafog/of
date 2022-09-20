@@ -11,7 +11,7 @@ import (
 type NodeState int
 
 // NodeType ...
-// ENUM(server,adapter,box,mobile,max)
+// ENUM(server,adapter,client,box,mobile,max)
 type NodeType int
 
 //ExtNode ...

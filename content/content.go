@@ -70,13 +70,18 @@ func (c *Content) NewMessage(data []byte) *Content {
 	return c
 }
 
+func (c *Content) NewMessageDetail(data []byte, index, last int64) *Content {
+	c.Message = NewContentMessageWithDetail(data, index, last)
+	return c
+}
+
 func (c *Content) NewMessageLast(last int64) *Content {
-	c.Message = NewContentMessage(nil).SetLast(last)
+	c.Message = NewContentMessageLast(last)
 	return c
 }
 
 func (c *Content) NewMessageAndLast(data []byte, last int64) *Content {
-	c.Message = NewContentMessage(data).SetLast(last)
+	c.Message = NewContentMessageAndLast(data, last)
 	return c
 }
 
@@ -138,10 +143,10 @@ func ParseContent(bytes []byte) (retC *Content, err error) {
 	if string(c.Version()) != version.VersionTwo {
 		return nil, ErrWrongVersionType
 	}
-	return rootToContent(c), err
+	return parseContent(c), err
 }
 
-func rootToContent(cc *content.Content) *Content {
+func parseContent(cc *content.Content) *Content {
 	//var node oc.Node
 	message := cc.Message(nil)
 	ext := make([]content.Ext, cc.ExtLength())
@@ -157,7 +162,6 @@ func rootToContent(cc *content.Content) *Content {
 	}
 
 	oc := NewContent(cc.Type())
-	//oc.Version = string(cc.Version())
 	if message != nil {
 		oc.Message = &Message{
 			Last:    message.Last(),
@@ -191,10 +195,14 @@ func (c *Content) Clear() {
 // @receiver Content
 // @return []byte
 func (c *Content) FinishBytes() []byte {
+	return contentToBytes(c, c.Message.IsEmpty())
+}
+
+func contentToBytes(c *Content, has bool) []byte {
 	builder := flatbuffers.NewBuilder(0)
 
 	var _message flatbuffers.UOffsetT
-	if !c.Message.IsEmpty() {
+	if !has {
 		_dataM := builder.CreateByteString(c.Message.Data)
 		content.MessageStart(builder)
 		content.MessageAddLast(builder, c.Message.Last)
@@ -221,7 +229,7 @@ func (c *Content) FinishBytes() []byte {
 	_from := builder.CreateString(c.From)
 	content.ContentStart(builder)
 	content.ContentAddExt(builder, _extsVec)
-	if !c.Message.IsEmpty() {
+	if !has {
 		content.ContentAddMessage(builder, _message)
 	}
 	content.ContentAddFrom(builder, _from)
@@ -229,19 +237,6 @@ func (c *Content) FinishBytes() []byte {
 	content.ContentAddType(builder, c.Type)
 	builder.Finish(content.ContentEnd(builder))
 	return builder.FinishedBytes()
-}
-
-// NewContentMessage ...
-// @Description:
-// @param []byte
-// @return *Message
-func NewContentMessage(data []byte) *Message {
-	msg := Message{
-		Version: CurrentDataVersion,
-		Length:  len(data),
-		Data:    data,
-	}
-	return &msg
 }
 
 // NewContentWithMessage ...
