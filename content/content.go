@@ -13,24 +13,15 @@ import (
 	"github.com/tikafog/of/version"
 )
 
-const CurrentDataVersion = 1
+const CurrentDataVersion = 2
 
-var (
-// ErrUnsupportedExtType ...
-//ErrUnsupportedExtType = errors.New("unsupported ext type")
-// ErrMustBePointer ...
-//ErrMustBePointer = errors.New("the interface parameter must be a pointer type")
+const (
+	// ErrUnsupportedExtType ...
+	//ErrUnsupportedExtType = errors.New("unsupported ext type")
+	// ErrMustBePointer ...
+	//ErrMustBePointer = errors.New("the interface parameter must be a pointer type")
+	ErrWrongVersionType = "wrong version type"
 )
-
-//Message ...
-//@Description:
-type Message struct {
-	Last    int64  `json:"last,omitempty"`
-	Index   int64  `json:"index,omitempty"`
-	Version int    `json:"version,omitempty"` // current info version
-	Length  int    `json:"length,omitempty"`
-	Data    []byte `json:"data,omitempty"`
-}
 
 // ExtType ...
 type ExtType = content.ExtType
@@ -49,9 +40,30 @@ type Type = content.Type
 // Content Content
 type Content struct {
 	Version string       `json:"version,omitempty"`
-	Type    content.Type `json:"type,omitempty"`
-	Message Message      `json:"message,omitempty"`
+	From    string       `json:"from,omitempty"`
+	Message *Message     `json:"message,omitempty"`
 	Exts    []Ext        `json:"ext,omitempty"`
+	Type    content.Type `json:"type,omitempty"`
+}
+
+func (c *Content) SetExts(exts ...Ext) *Content {
+	c.Exts = exts
+	return c
+}
+
+func (c *Content) SetMessage(m *Message) *Content {
+	c.Message = m
+	return c
+}
+
+func (c *Content) SetType(p content.Type) *Content {
+	c.Type = p
+	return c
+}
+
+func (c *Content) SetFrom(s string) *Content {
+	c.From = s
+	return c
 }
 
 // ParseJSONContent ...
@@ -65,6 +77,9 @@ func ParseJSONContent(bytes []byte) (*Content, error) {
 	if err != nil {
 		return nil, err
 	}
+	if string(c.Version) != version.VersionOne {
+		return nil, Error(ErrWrongVersionType)
+	}
 	return &c, err
 }
 
@@ -73,6 +88,9 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 	err := json.NewDecoder(reader).Decode(&c)
 	if err != nil {
 		return nil, err
+	}
+	if string(c.Version) != version.VersionOne {
+		return nil, Error(ErrWrongVersionType)
 	}
 	return &c, err
 }
@@ -85,44 +103,44 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 func ParseContent(bytes []byte) (retC *Content, err error) {
 	defer func() {
 		if rerr := recover(); rerr != nil {
-			//		log.Errorw("parse content panic", "err", rerr)
 			err = fmt.Errorf("parse content error: %v", rerr)
 		}
 	}()
 	c := content.GetRootAsContent(bytes, 0)
+	if string(c.Version()) != version.VersionTwo {
+		return nil, Error(ErrWrongVersionType)
+	}
 	return rootToContent(c), err
 }
 
-func rootToContent(c *content.Content) *Content {
-	var message content.Message
-	//var node content.Node
-	ext := make([]content.Ext, c.ExtLength())
-	c.Message(&message)
-	//c.Node(&node)
-	for i := 0; i < c.ExtLength(); i++ {
-		c.Ext(&ext[i], i)
-	}
-	var cexts []Ext
-	for i := range ext {
-		cexts = append(cexts, Ext{
-			ExtType: ext[i].Type(),
-			Length:  len(ext[i].Data()),
-			Data:    ext[i].Data(),
-		})
+func rootToContent(cc *content.Content) *Content {
+	//var node oc.Node
+	message := cc.Message(nil)
+	ext := make([]content.Ext, cc.ExtLength())
+	var exts []Ext
+	for i := 0; i < cc.ExtLength(); i++ {
+		if cc.Ext(&ext[i], i) {
+			exts = append(exts, Ext{
+				ExtType: ext[i].Type(),
+				Length:  len(ext[i].Data()),
+				Data:    ext[i].Data(),
+			})
+		}
 	}
 
-	return &Content{
-		Version: string(c.Version()),
-		Type:    c.Type(),
-		Message: Message{
+	oc := new(Content)
+	oc.Version = string(cc.Version())
+	if message != nil {
+		oc.Message = &Message{
 			Last:    message.Last(),
 			Index:   0,
 			Version: int(message.Version()),
 			Length:  len(message.Data()),
 			Data:    message.Data(),
-		},
-		Exts: cexts,
+		}
 	}
+	oc.Exts = exts
+	return oc
 }
 
 // JSON ...
@@ -130,14 +148,13 @@ func rootToContent(c *content.Content) *Content {
 // @receiver Content
 // @return []byte
 // @return error
-func (c Content) JSON() ([]byte, error) {
+func (c *Content) JSON() ([]byte, error) {
 	c.Version = version.VersionOne
 	return json.Marshal(c)
 }
 
 func (c *Content) Clear() {
-	c.Message = Message{}
-	//c.Node = ExtNode{}
+	c.Message = EmptyMessage
 	c.Exts = []Ext{}
 }
 
@@ -145,28 +162,18 @@ func (c *Content) Clear() {
 // @Description:
 // @receiver Content
 // @return []byte
-func (c Content) FinishBytes() []byte {
+func (c *Content) FinishBytes() []byte {
 	builder := flatbuffers.NewBuilder(0)
-	//_addr := builder.CreateString(c.Node.Addr)
-	//_addrs := builder.CreateByteString(stringArrayToBytes(c.Node.Addrs...))
-	//_pid := builder.CreateString(c.Node.PID)
-	//_cpuid := builder.CreateString(c.Node.CPUID)
-	//_dataN := builder.CreateByteString(c.Node.Data)
-	//content.NodeStart(builder)
-	//content.NodeAddAddr(builder, _addr)
-	//content.NodeAddAddrs(builder, _addrs)
-	//content.NodeAddPid(builder, _pid)
-	//content.NodeAddCpuid(builder, _cpuid)
-	//content.NodeAddData(builder, _dataN)
-	//_node := content.NodeEnd(builder)
 
-	_dataM := builder.CreateByteString(c.Message.Data)
-	content.MessageStart(builder)
-	content.MessageAddLast(builder, c.Message.Last)
-	content.MessageAddVersion(builder, int32(c.Message.Version))
-	content.MessageAddData(builder, _dataM)
-	_message := content.MessageEnd(builder)
-
+	var _message flatbuffers.UOffsetT
+	if !c.Message.IsEmpty() {
+		_dataM := builder.CreateByteString(c.Message.Data)
+		content.MessageStart(builder)
+		content.MessageAddLast(builder, c.Message.Last)
+		content.MessageAddVersion(builder, int32(c.Message.Version))
+		content.MessageAddData(builder, _dataM)
+		_message = content.MessageEnd(builder)
+	}
 	var _exts []flatbuffers.UOffsetT
 	for i := range c.Exts {
 		_dataE := builder.CreateByteString(c.Exts[i].Data)
@@ -184,8 +191,9 @@ func (c Content) FinishBytes() []byte {
 	_version := builder.CreateString(version.VersionTwo)
 	content.ContentStart(builder)
 	content.ContentAddExt(builder, _extsVec)
-	content.ContentAddMessage(builder, _message)
-	//content.ContentAddNode(builder, _node)
+	if !c.Message.IsEmpty() {
+		content.ContentAddMessage(builder, _message)
+	}
 	content.ContentAddVersion(builder, _version)
 	content.ContentAddType(builder, c.Type)
 	builder.Finish(content.ContentEnd(builder))
@@ -195,32 +203,24 @@ func (c Content) FinishBytes() []byte {
 // NewContentMessage ...
 // @Description:
 // @param []byte
-// @param ...func(msg *Message)
-// @return Message
-func NewContentMessage(data []byte, fns ...func(msg *Message)) Message {
+// @return *Message
+func NewContentMessage(data []byte) *Message {
 	msg := Message{
 		Version: CurrentDataVersion,
 		Length:  len(data),
 		Data:    data,
 	}
-	for i := range fns {
-		fns[i](&msg)
-	}
-	return msg
+	return &msg
 }
 
-// NewTypeContent ...
+// NewContentWithType ...
 // @Description:
 // @param content.Type
 // @param ...func(content *Content)
 // @return *Content
-func NewTypeContent(tp content.Type, fns ...func(content *Content)) *Content {
+func NewContentWithType(tp content.Type) *Content {
 	_content := Content{
-		Version: version.VersionOne,
-		Type:    tp,
-	}
-	for i := range fns {
-		fns[i](&_content)
+		Type: tp,
 	}
 	return &_content
 }

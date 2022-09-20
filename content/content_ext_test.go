@@ -1,9 +1,10 @@
 package content
 
 import (
-	"github.com/tikafog/of/buffers/content"
 	"reflect"
 	"testing"
+
+	"github.com/tikafog/of/buffers/content"
 
 	"github.com/bxcodec/faker/v4"
 )
@@ -51,9 +52,8 @@ func TestMakeExt(t *testing.T) {
 				return
 			}
 			tt.want = tt.args.v
-			c := NewTypeContent(content.TypeCore, func(content *Content) {
-				content.Exts = append(content.Exts, got)
-			})
+			c := NewContentWithType(content.TypeCore)
+			c.SetExts(got)
 			json, err := c.JSON()
 			checkErr(err)
 
