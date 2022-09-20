@@ -53,7 +53,7 @@ func TestMakeExt(t *testing.T) {
 			}
 			tt.want = tt.args.v
 			c := NewContentWithType(content.TypeCore)
-			c.SetExts(got)
+			c.SetExts(got).SetMessage(&Message{})
 			json, err := c.JSON()
 			checkErr(err)
 
@@ -64,9 +64,22 @@ func TestMakeExt(t *testing.T) {
 				err := ParseExt(ext, &extNode)
 				checkErr(err)
 				if !reflect.DeepEqual(extNode, tt.want) {
-					t.Errorf("MakeExt() got = %+v, want %+v", extNode, tt.want)
+					t.Errorf("MakeExt1() got = %+v, want %+v", extNode, tt.want)
 				}
 			}
+			bytes := c.FinishBytes()
+			retC, err := ParseContent(bytes)
+			if err != nil {
+				t.Errorf("%+v\n", err)
+			}
+			for _, ext := range retC.Exts {
+				err := ParseExt(ext, &extNode)
+				checkErr(err)
+				if !reflect.DeepEqual(extNode, tt.want) {
+					t.Errorf("MakeExt2() got = %+v, want %+v", extNode, tt.want)
+				}
+			}
+
 			t.Logf("%+v\n", extNode)
 		})
 	}

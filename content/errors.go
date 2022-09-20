@@ -4,8 +4,19 @@ type contentErr struct {
 	v string
 }
 
-func (c *contentErr) Error() string {
-	return c.v
+func (e *contentErr) Error() string {
+	return e.v
+}
+
+func (e *contentErr) Is(target error) bool {
+	if e == target {
+		return true
+	}
+	msg, ok := target.(*contentErr)
+	if ok {
+		return e.v == msg.Error()
+	}
+	return false
 }
 
 func Error(s string) error {

@@ -20,7 +20,11 @@ const (
 	//ErrUnsupportedExtType = errors.New("unsupported ext type")
 	// ErrMustBePointer ...
 	//ErrMustBePointer = errors.New("the interface parameter must be a pointer type")
-	ErrWrongVersionType = "wrong version type"
+	WrongVersionType = "wrong version type"
+)
+
+var (
+	ErrWrongVersionType = Error(WrongVersionType)
 )
 
 // ExtType ...
@@ -78,7 +82,7 @@ func ParseJSONContent(bytes []byte) (*Content, error) {
 		return nil, err
 	}
 	if string(c.Version) != version.VersionOne {
-		return nil, Error(ErrWrongVersionType)
+		return nil, ErrWrongVersionType
 	}
 	return &c, err
 }
@@ -90,7 +94,7 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 		return nil, err
 	}
 	if string(c.Version) != version.VersionOne {
-		return nil, Error(ErrWrongVersionType)
+		return nil, ErrWrongVersionType
 	}
 	return &c, err
 }
@@ -103,12 +107,16 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 func ParseContent(bytes []byte) (retC *Content, err error) {
 	defer func() {
 		if rerr := recover(); rerr != nil {
+			if rerr == ErrWrongVersionType {
+				err = ErrWrongVersionType
+				return
+			}
 			err = fmt.Errorf("parse content error: %v", rerr)
 		}
 	}()
 	c := content.GetRootAsContent(bytes, 0)
 	if string(c.Version()) != version.VersionTwo {
-		return nil, Error(ErrWrongVersionType)
+		return nil, ErrWrongVersionType
 	}
 	return rootToContent(c), err
 }
