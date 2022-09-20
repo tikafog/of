@@ -28,8 +28,8 @@ var (
 // ExtType ...
 type ExtType = content.ExtType
 
-//Ext ...
-//@Description:
+// Ext ...
+// @Description:
 type Ext struct {
 	ExtType content.ExtType `json:"ext_type,omitempty"`
 	Length  int             `json:"length,omitempty"`
@@ -103,6 +103,16 @@ func (c *Content) JSON() ([]byte, error) {
 	return json.Marshal(c)
 }
 
+// JSON ...
+// @Description:
+// @receiver Content
+// @return []byte
+// @return error
+func (c *Content) MustJSON() []byte {
+	data, _ := c.JSON()
+	return data
+}
+
 func (c *Content) Clear() {
 	c.Message = EmptyMessage
 	c.Exts = []Ext{}
@@ -113,6 +123,15 @@ func (c *Content) Clear() {
 // @receiver Content
 // @return []byte
 func (c *Content) FinishBytes() []byte {
+	return c.Bytes()
+}
+
+// FinishBytes ...
+// @Description:
+// @receiver Content
+// @return []byte
+func (c *Content) Bytes() []byte {
+	c.Version = version.VersionTwo
 	return contentToBytes(c, c.Message.IsEmpty())
 }
 
@@ -143,7 +162,7 @@ func contentToBytes(c *Content, has bool) []byte {
 	}
 	_extsVec := builder.EndVector(len(_exts))
 
-	_version := builder.CreateString(version.VersionTwo)
+	_version := builder.CreateString(c.Version)
 	_from := builder.CreateString(c.From)
 	content.ContentStart(builder)
 	content.ContentAddExt(builder, _extsVec)
