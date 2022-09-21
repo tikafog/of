@@ -1,24 +1,30 @@
 package content
 
-type contentErr struct {
-	v string
-}
+import (
+	"github.com/tikafog/of/errors"
+)
 
-func (e *contentErr) Error() string {
-	return e.v
-}
+const ErrIndex = 0x0002
 
-func (e *contentErr) Is(target error) bool {
-	if e == target {
-		return true
-	}
-	msg, ok := target.(*contentErr)
-	if ok {
-		return e.v == msg.Error()
-	}
-	return false
+const (
+	ErrContent          = ErrIndex<<16 | iota
+	ErrWrongVersionType = ErrIndex<<16 | iota
+	ErrWrongExtType     = ErrIndex<<16 | iota
+	ErrWrongMessageType = ErrIndex<<16 | iota
+	ErrWrongContentType = ErrIndex<<16 | iota
+)
+
+func init() {
+	errors.RegisterErrIndexValue(ErrWrongVersionType, "wrong version type")
+	errors.RegisterErrIndexValue(ErrWrongExtType, "wrong ext type")
+	errors.RegisterErrIndexValue(ErrWrongMessageType, "wrong message type")
+	errors.RegisterErrIndexValue(ErrWrongContentType, "wrong content type")
 }
 
 func Error(s string) error {
-	return &contentErr{v: s}
+	return errors.ModuleError(ErrIndex, errors.New(s))
+}
+
+func Errorf(format string, args ...interface{}) error {
+	return errors.ModuleError(ErrIndex, errors.Errorf(format, args...))
 }

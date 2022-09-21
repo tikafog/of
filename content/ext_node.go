@@ -26,6 +26,7 @@ type ExtNode struct {
 	Length   int       `json:"length,omitempty"`
 	Data     []byte    `json:"data,omitempty"`
 	NodeType string    `json:"node_type,omitempty"`
+	TimeUnix int64     `json:"time_unix,omitempty"`
 }
 
 // ExtType ...
@@ -53,4 +54,4 @@ func (c *ExtNode) UnmarshalData(data []byte) error {
 	return json.Unmarshal(data, c)
 }
 
-var _ ExtConvertable = (*ExtNode)(nil)
+var _ ExtConverter = (*ExtNode)(nil)

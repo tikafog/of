@@ -1,35 +1,57 @@
 package content
 
 import (
-	"errors"
-	"fmt"
-
 	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/errors"
 )
 
-// ExtConvertable ...
+// ExtConverter ...
 // @Description:
-type ExtConvertable interface {
+type ExtConverter interface {
 	ExtType() content.ExtType
 	MarshalData() ([]byte, error)
 	UnmarshalData(data []byte) error
 }
 
-// ErrWrongExtType ...
-var ErrWrongExtType = errors.New("wrong extension type")
+// ExtType ...
+type ExtType = content.ExtType
+
+// Ext ...
+// @Description:
+type Ext struct {
+	ExtType content.ExtType `json:"ext_type,omitempty"`
+	Length  int             `json:"length,omitempty"`
+	Data    []byte          `json:"data,omitempty"`
+}
 
 // ParseExt ...
 // @Description:
 // @param Ext
 // @param interface{}
 // @return error
-func ParseExt(ext Ext, v interface{}) error {
-	vv, b := v.(ExtConvertable)
+func ParseExt(ext Ext, v ExtConverter) error {
+	if ext.ExtType != v.ExtType() {
+		return errors.Errorf("extension type %v is different with %v", v.ExtType(), ext.ExtType)
+	}
+
+	if ext.Length == 0 {
+		return nil
+	}
+	return v.UnmarshalData(ext.Data)
+}
+
+// ParseExtConverter ...
+// @Description:
+// @param Ext
+// @param interface{}
+// @return error
+func ParseExtConverter(ext Ext, v interface{}) error {
+	vv, b := v.(ExtConverter)
 	if !b {
-		return ErrWrongExtType
+		return errors.Error(ErrWrongExtType)
 	}
 	if ext.ExtType != vv.ExtType() {
-		return fmt.Errorf("given extension type %v is different with %v", vv.ExtType(), ext.ExtType)
+		return errors.Errorf("extension type %v is different with %v", vv.ExtType(), ext.ExtType)
 	}
 
 	if ext.Length == 0 {
@@ -38,22 +60,39 @@ func ParseExt(ext Ext, v interface{}) error {
 	return vv.UnmarshalData(ext.Data)
 }
 
+// MakeExtConverter ...
+// @Description:
+// @param interface{}
+// @return Ext
+// @return error
+func MakeExtConverter(v interface{}) (Ext, error) {
+	var ext Ext
+	var err error
+	vv, b := v.(ExtConverter)
+	if !b {
+		return ext, errors.Error(ErrWrongExtType)
+	}
+	ext.ExtType = vv.ExtType()
+	ext.Data, err = vv.MarshalData()
+	if err != nil {
+		return ext, errors.WrapString(err, "marshall data failed")
+	}
+	ext.Length = len(ext.Data)
+	return ext, nil
+}
+
 // MakeExt ...
 // @Description:
 // @param interface{}
 // @return Ext
 // @return error
-func MakeExt(v interface{}) (Ext, error) {
+func MakeExt(v ExtConverter) (Ext, error) {
 	var ext Ext
 	var err error
-	vv, b := v.(ExtConvertable)
-	if !b {
-		return ext, ErrWrongExtType
-	}
-	ext.ExtType = vv.ExtType()
-	ext.Data, err = vv.MarshalData()
+	ext.ExtType = v.ExtType()
+	ext.Data, err = v.MarshalData()
 	if err != nil {
-		return ext, err
+		return ext, errors.WrapString(err, "marshall data failed")
 	}
 	ext.Length = len(ext.Data)
 	return ext, nil

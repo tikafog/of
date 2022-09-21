@@ -14,27 +14,16 @@ import (
 const CurrentDataVersion = 2
 
 const (
-	// ErrUnsupportedExtType ...
-	//ErrUnsupportedExtType = errors.New("unsupported ext type")
-	// ErrMustBePointer ...
-	//ErrMustBePointer = errors.New("the interface parameter must be a pointer type")
-	WrongVersionType = "wrong version type"
+// ErrUnsupportedExtType ...
+//ErrUnsupportedExtType = errors.New("unsupported ext type")
+// ErrMustBePointer ...
+//ErrMustBePointer = errors.New("the interface parameter must be a pointer type")
+//WrongVersionType = "wrong version type"
 )
 
-var (
-	ErrWrongVersionType = Error(WrongVersionType)
-)
-
-// ExtType ...
-type ExtType = content.ExtType
-
-// Ext ...
-// @Description:
-type Ext struct {
-	ExtType content.ExtType `json:"ext_type,omitempty"`
-	Length  int             `json:"length,omitempty"`
-	Data    []byte          `json:"data,omitempty"`
-}
+//var (
+//	ErrWrongVersionType = Error(WrongVersionType)
+//)
 
 // Type ...
 type Type = content.Type
@@ -108,13 +97,16 @@ func (c *Content) JSON() ([]byte, error) {
 	return json.Marshal(c)
 }
 
-// JSON ...
+// MustJSON ...
 // @Description:
 // @receiver Content
 // @return []byte
 // @return error
 func (c *Content) MustJSON() []byte {
 	data, _ := c.JSON()
+	//if err != nil {
+	//	panic(err)
+	//}
 	return data
 }
 
@@ -127,11 +119,12 @@ func (c *Content) Clear() {
 // @Description:
 // @receiver Content
 // @return []byte
+// Decrypted use Bytes instead
 func (c *Content) FinishBytes() []byte {
 	return c.Bytes()
 }
 
-// FinishBytes ...
+// Bytes ...
 // @Description:
 // @receiver Content
 // @return []byte

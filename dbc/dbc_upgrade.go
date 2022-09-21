@@ -48,11 +48,11 @@ func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) e
 			migrate.WithForeignKeys(false),
 		)
 		if err != nil {
-			return fmt.Errorf("failed creating schema resources: %v", err)
+			return Errorf("failed creating schema resources: %v", err)
 		}
 		_, err = cli.Version.Create().Save(ctx)
 		if err != nil {
-			return fmt.Errorf("create version failed:%v", err)
+			return Errorf("create version failed:%v", err)
 		}
 		return nil
 	}

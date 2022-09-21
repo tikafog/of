@@ -2,7 +2,6 @@ package dbc
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -50,11 +49,11 @@ func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool)
 			migrate.WithForeignKeys(false),
 		)
 		if err != nil {
-			return fmt.Errorf("failed creating schema resources: %v", err)
+			return Errorf("failed creating schema resources: %v", err)
 		}
 		_, err = cli.Version.Create().Save(ctx)
 		if err != nil {
-			return fmt.Errorf("create version failed:%v", err)
+			return Errorf("create version failed:%v", err)
 		}
 		return nil
 	}
@@ -71,12 +70,12 @@ func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool)
 			migrate.WithForeignKeys(false),
 		)
 		if serr != nil {
-			return fmt.Errorf("failed creating schema resources: %v", serr)
+			return Errorf("failed creating schema resources: %v", serr)
 		}
 		if bootnode.IsNotFound(err) {
 			_, err = cli.Version.Create().Save(ctx)
 			if err != nil {
-				return fmt.Errorf("create version failed:%v", err)
+				return Errorf("create version failed:%v", err)
 			}
 			return nil
 		}
@@ -90,11 +89,11 @@ func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool)
 			migrate.WithForeignKeys(false),
 		)
 		if err != nil {
-			return fmt.Errorf("failed creating schema resources: %v", err)
+			return Errorf("failed creating schema resources: %v", err)
 		}
 		_, err = cli.Version.Update().SetCurrent(schema.CurrentVersion).Save(ctx)
 		if err != nil {
-			return fmt.Errorf("update version failed:%v", err)
+			return Errorf("update version failed:%v", err)
 		}
 		return nil
 	}
@@ -110,7 +109,7 @@ func openBootNodeDatabase(path string) (*bootnode.Client, error) {
 
 	client, err := bootnode.Open("sqlite3", path, options...)
 	if err != nil {
-		return nil, fmt.Errorf("failed opening connection to database: %v", err)
+		return nil, Errorf("failed opening connection to database: %v", err)
 	}
 
 	return client, nil

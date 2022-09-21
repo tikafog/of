@@ -9,17 +9,18 @@ import (
 // ExtPin ...
 // @Description:
 type ExtPin struct {
-	Status string `json:"status,omitempty"`
-	Step   string `json:"step,omitempty"`
-	Rid    string `json:"rid,omitempty"`
-	Error  string `json:"error,omitempty"`
+	Status   string `json:"status,omitempty"`
+	Step     string `json:"step,omitempty"`
+	Rid      string `json:"rid,omitempty"`
+	Error    string `json:"error,omitempty"`
+	TimeUnix int64  `json:"time_unix,omitempty"`
 }
 
 // ExtType ...
 // @Description:
 // @receiver ContentReport
 // @return content.ExtType
-func (c ExtPin) ExtType() content.ExtType {
+func (c *ExtPin) ExtType() content.ExtType {
 	return content.ExtTypePin
 }
 
@@ -27,7 +28,7 @@ func (c ExtPin) ExtType() content.ExtType {
 // @Description:
 // @receiver ContentReport
 // @return data
-func (c ExtPin) MarshalData() ([]byte, error) {
+func (c *ExtPin) MarshalData() ([]byte, error) {
 	return json.Marshal(c)
 }
 
@@ -40,4 +41,4 @@ func (c *ExtPin) UnmarshalData(data []byte) error {
 	return json.Unmarshal(data, c)
 }
 
-var _ ExtConvertable = (*ExtPin)(nil)
+var _ ExtConverter = (*ExtPin)(nil)

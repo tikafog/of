@@ -1,8 +1,6 @@
 package dbc
 
 import (
-	"errors"
-
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/dbc/bootnode"
 	"github.com/tikafog/of/dbc/kernel"
@@ -45,7 +43,7 @@ func openClient[C Client](path string, op *Option) (C, error) {
 		name = of.NameMedia
 		it, err = openMedia[*media.Client](name, path, op)
 	default:
-		return nil, errors.New("unsupported client type")
+		return nil, Error("unsupported client type")
 	}
 	return it.(C), err
 }
@@ -89,7 +87,7 @@ func openClient[C Client](path string, op *Option) (C, error) {
 //	case of.NameMedia:
 //		it, err = openMedia[*media.Client](c.name, c.path, op)
 //	default:
-//		return nil, fmt.Errorf("client[%s] not found", c.name)
+//		return nil, Errorf("client[%s] not found", c.name)
 //	}
 //	return it.(T), err
 //	//v, exist := c.funcs[c.name]

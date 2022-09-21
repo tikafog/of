@@ -2,10 +2,10 @@ package content
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 
 	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/errors"
 	"github.com/tikafog/of/version"
 )
 
@@ -21,7 +21,7 @@ func ParseJSONContent(bytes []byte) (*Content, error) {
 		return nil, err
 	}
 	if string(c.Version) != version.VersionOne {
-		return nil, ErrWrongVersionType
+		return nil, errors.Error(ErrWrongVersionType)
 	}
 	return &c, err
 }
@@ -33,7 +33,7 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 		return nil, err
 	}
 	if string(c.Version) != version.VersionOne {
-		return nil, ErrWrongVersionType
+		return nil, errors.Error(ErrWrongVersionType)
 	}
 	return &c, err
 }
@@ -46,16 +46,16 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 func ParseContent(bytes []byte) (retC *Content, err error) {
 	defer func() {
 		if rerr := recover(); rerr != nil {
-			if rerr == ErrWrongVersionType {
-				err = ErrWrongVersionType
-				return
-			}
-			err = fmt.Errorf("parse content error: %v", rerr)
+			//if e, ok := rerr.(error); ok && errors.IndexIs(ErrWrongVersionType, e) {
+			//	err = errors.Error(ErrWrongVersionType)
+			//	return
+			//}
+			err = Errorf("parse content error: %v", rerr)
 		}
 	}()
 	c := content.GetRootAsContent(bytes, 0)
 	if string(c.Version()) != version.VersionTwo {
-		return nil, ErrWrongVersionType
+		return nil, errors.Error(ErrWrongVersionType)
 	}
 	return parseContent(c), err
 }
