@@ -8,11 +8,14 @@ import (
 type ErrIndex uint32
 
 const (
+	MaxModuleSupported = 0xFF
+
 	ErrIndexCorePrefix    = 0x0001
 	ErrIndexContentPrefix = 0x0002
 	ErrIndexDBCPrefix     = 0x0003
 
 	ErrModuleIsAlreadyRegistered = 1
+	ErrModuleSupportOverMax      = 2
 )
 
 const (
@@ -25,6 +28,7 @@ const (
 
 func init() {
 	RegisterErrIndexValue(ErrModuleIsAlreadyRegistered, "module is already registered")
+	RegisterErrIndexValue(ErrModuleSupportOverMax, "module support over max")
 	RegisterErrIndexValue(ErrCoreIsNil, "core is nil")
 	RegisterErrIndexValue(ErrFatherNotFound, "father not found")
 	RegisterErrIndexValue(ErrNoDataFound, "no data found")
@@ -32,6 +36,7 @@ func init() {
 	RegisterErrIndexValue(ErrSkipOldData, "skip old data")
 }
 
+var _LastModuleIndex uint32 = ErrIndexDBCPrefix
 var _ErrIndexValue = map[ErrIndex]string{}
 var _ErrValueIndex = map[string]ErrIndex{}
 
@@ -63,17 +68,19 @@ func (e ErrIndex) String() string {
 }
 
 var _ErrIndexModules = map[uint32]string{
+	0:                     "Unknown",
 	ErrIndexCorePrefix:    "Core",
 	ErrIndexContentPrefix: "Content",
 	ErrIndexDBCPrefix:     "DBC",
 }
 
-func RegisterModule(index uint32, str string) error {
-	if _, ok := _ErrIndexModules[index]; ok {
-		return IndexError(ErrModuleIsAlreadyRegistered)
+func RegisterModule(str string) uint32 {
+	_LastModuleIndex += 1
+	if _LastModuleIndex >= MaxModuleSupported {
+		panic(ErrorIndex(ErrModuleSupportOverMax))
 	}
-	_ErrIndexModules[index] = str
-	return nil
+	_ErrIndexModules[_LastModuleIndex] = str
+	return _LastModuleIndex
 }
 
 // Module ...
