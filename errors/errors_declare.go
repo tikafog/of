@@ -11,6 +11,8 @@ const (
 	ErrIndexCorePrefix    = 0x0001
 	ErrIndexContentPrefix = 0x0002
 	ErrIndexDBCPrefix     = 0x0003
+
+	ErrModuleIsAlreadyRegistered = 1
 )
 
 const (
@@ -22,6 +24,7 @@ const (
 )
 
 func init() {
+	RegisterErrIndexValue(ErrModuleIsAlreadyRegistered, "module is already registered")
 	RegisterErrIndexValue(ErrCoreIsNil, "core is nil")
 	RegisterErrIndexValue(ErrFatherNotFound, "father not found")
 	RegisterErrIndexValue(ErrNoDataFound, "no data found")
@@ -63,6 +66,14 @@ var _ErrIndexModules = map[uint32]string{
 	ErrIndexCorePrefix:    "Core",
 	ErrIndexContentPrefix: "Content",
 	ErrIndexDBCPrefix:     "DBC",
+}
+
+func RegisterModule(index uint32, str string) error {
+	if _, ok := _ErrIndexModules[index]; ok {
+		return IndexError(ErrModuleIsAlreadyRegistered)
+	}
+	_ErrIndexModules[index] = str
+	return nil
 }
 
 // Module ...
