@@ -49,7 +49,20 @@ func (m *Message) Revise() *Message {
 // NewContentMessage
 // @param []byte
 // @return *Message
+//Decrypted use NewMessage instead
 func NewContentMessage(data []byte) *Message {
+	msg := Message{
+		Version: CurrentDataVersion,
+		Length:  len(data),
+		Data:    data,
+	}
+	return &msg
+}
+
+// NewMessage
+// @param []byte
+// @return *Message
+func NewMessage(data []byte) *Message {
 	msg := Message{
 		Version: CurrentDataVersion,
 		Length:  len(data),
