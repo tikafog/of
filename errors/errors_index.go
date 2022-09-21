@@ -5,7 +5,7 @@ type indexErr struct {
 }
 
 func (e *indexErr) Error() string {
-	return e.String()
+	return e.i.String()
 }
 
 func (e *indexErr) String() string {
