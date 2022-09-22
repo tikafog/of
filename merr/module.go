@@ -17,6 +17,7 @@ type ModuleError interface {
 	Is(err, target error) bool
 	Unwrap(err error) error
 	As(err error, target any) bool
+	Wrap(err error, s string) error
 }
 
 type moduleError struct {
@@ -45,6 +46,24 @@ func (m *moduleError) Errors() int {
 func (m *moduleError) New(str string) error {
 	_, err := m.NewIndexError(str)
 	return err
+}
+
+func (m *moduleError) Wrap(err error, s string) error {
+	_, err = m.WrapIndexError(err, s)
+	return err
+}
+
+func (m *moduleError) WrapIndex(err error, s string) Index {
+	idx, _ := m.WrapIndexError(err, s)
+	return idx
+}
+
+func (m *moduleError) WrapIndexError(err error, s string) (Index, error) {
+	m.count += 1
+	idx := makeErrIndex(m.Index(), m.count)
+	werr := WrapString(err, s)
+	m.errors = append(m.errors, werr)
+	return idx, werr
 }
 
 func (m *moduleError) NewIndex(str string) Index {

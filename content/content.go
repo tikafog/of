@@ -104,8 +104,8 @@ func (c *Content) JSON() ([]byte, error) {
 // @return error
 func (c *Content) MustJSON() []byte {
 	data, _ := c.JSON()
-	//if err != nil {
-	//	panic(err)
+	//if errors != nil {
+	//	panic(errors)
 	//}
 	return data
 }

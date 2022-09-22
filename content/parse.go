@@ -5,6 +5,7 @@ import (
 	"io"
 
 	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/merr"
 	"github.com/tikafog/of/version"
 )
 
@@ -41,12 +42,12 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 //@Description: parse version 2 flatbuffer data
 //@param []byte
 //@return retC
-//@return err
+//@return errors
 func ParseContent(bytes []byte) (retC *Content, err error) {
 	defer func() {
 		if rerr := recover(); rerr != nil {
 			//if e, ok := rerr.(error); ok && errors.IndexIs(ErrWrongVersionType, e) {
-			//	err = errors.Error(ErrWrongVersionType)
+			//	errors = errors.Error(ErrWrongVersionType)
 			//	return
 			//}
 			err = Errorf("parse content error: %v", rerr)

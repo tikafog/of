@@ -13,8 +13,8 @@ func randomExtNode() ExtNode {
 	var ext ExtNode
 	err := faker.FakeData(&ext)
 	checkErr(err)
-	//makeExt, err := MakeExt(&ext)
-	//checkErr(err)
+	//makeExt, errors := MakeExt(&ext)
+	//checkErr(errors)
 	//return makeExt
 	return ext
 }
