@@ -6,11 +6,11 @@ type indexErr struct {
 }
 
 func (e *indexErr) Error() string {
-	return e.i.Module().IndexString(e.i)
+	return e.String()
 }
 
 func (e *indexErr) String() string {
-	return e.Error()
+	return e.i.Module().IndexString(e.i)
 }
 
 func (e *indexErr) Index() Index {

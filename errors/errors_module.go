@@ -27,13 +27,6 @@ type moduleError struct {
 }
 
 func (m *moduleError) IndexString(index Index) string {
-	//if v, ok := m.errors[m.getErrorIndex(index)].(*errorErr); ok {
-	//	return v.str
-	//}
-	return m.errors[m.getErrorIndex(index)].Error()
-}
-
-func (m *moduleError) ErrorString(index Index) string {
 	return m.IndexError(index).Error()
 }
 

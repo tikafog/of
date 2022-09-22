@@ -10,7 +10,7 @@ func (e *stringErr) Error() string {
 }
 
 func (e *stringErr) String() string {
-	return e.Error()
+	return e.s
 }
 
 func (e *stringErr) Message() string {
@@ -32,16 +32,16 @@ func (e *stringErr) Is(target error) bool {
 	return false
 }
 
-func WrapString(e error, str string) error {
-	if e == nil {
-		return wrapError(0, str)
+func WrapString(err error, str string) error {
+	if err == nil {
+		return &stringErr{s: str}
 	}
-	return wrapErrorWithErr(e, 0, str)
+	return &stringErr{s: str, err: err}
 }
 
 func WrapStringN(err error, str string) error {
 	if err == nil {
 		return nil
 	}
-	return WrapString(err, str)
+	return &stringErr{s: str, err: err}
 }
