@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/tikafog/of"
+	"github.com/tikafog/of/merr"
 	"github.com/tikafog/of/utils"
 
 	"github.com/tikafog/of/dbc/kernel"
@@ -48,7 +49,7 @@ func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) err
 			migrate.WithForeignKeys(false),
 		)
 		if err != nil {
-			return Errorf("failed creating schema resources: %v", err)
+			return merr.Errorf("failed creating schema resources: %v", err)
 		}
 		_, err = cli.Version.Create().Save(ctx)
 		if err != nil {
