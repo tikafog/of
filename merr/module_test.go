@@ -2,6 +2,7 @@ package merr
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -31,6 +32,7 @@ func TestNewModule(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := RegisterModule(tt.args.str)
 			err := got.Wrap(tt.args.err, tt.args.errStr)
+			fmt.Printf("%x", err.Index())
 			if !reflect.DeepEqual(err.Error(), tt.want) {
 				t.Errorf("NewModule() = %v, want %v", err.Error(), tt.want)
 			}

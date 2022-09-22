@@ -86,7 +86,7 @@ func (m *moduleError) Errorf(format string, args ...any) Index {
 
 func (m *moduleError) getErrorIndex(index Index) uint32 {
 	idx := (uint32(index)) ^ m.idx<<16
-	if idx >= m.count {
+	if idx > m.count {
 		return 0
 	}
 	return idx
