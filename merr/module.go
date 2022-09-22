@@ -16,6 +16,7 @@ type ModuleError interface {
 	IndexError(index Index) error
 	Is(err, target error) bool
 	Has(err error) bool
+	Find(err error) (Index, bool)
 	Unwrap(err error) error
 	As(err error, target any) bool
 }
@@ -25,6 +26,13 @@ type moduleError struct {
 	name   string
 	count  uint32
 	errors []error
+}
+
+func (m *moduleError) Find(err error) (Index, bool) {
+	if v, ok := err.(Index); ok && m.getErrorIndex(v) != 0 {
+		return v, true
+	}
+	return 0, false
 }
 
 func (m *moduleError) WrapIndex(err error, index Index) Index {

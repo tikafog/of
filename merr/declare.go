@@ -18,8 +18,8 @@ var (
 )
 
 var (
-	ErrModuleIsAlreadyRegistered = NewIndex("module is already registered")
-	ErrModuleSupportOverMax      = NewIndex("module support over max")
+	ErrModuleIsAlreadyRegistered = New("module is already registered")
+	ErrModuleSupportOverMax      = New("module support over max")
 )
 
 var UnknownError = IndexError(0)
@@ -72,6 +72,11 @@ func registerModuleWithIndex(name string, idx uint32) ModuleError {
 
 func RegisterModule(name string) ModuleError {
 	return registerModuleWithIndex(name, getModuleIndex())
+}
+
+// Index ...
+func (e Index) Index() Index {
+	return e
 }
 
 // Name ...
