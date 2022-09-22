@@ -29,14 +29,14 @@ func As(err error, target any) bool {
 	return errors.As(err, target)
 }
 
-func wrapError(i Index, str string) error {
+func WrapError(i Index, str string) error {
 	return &errorErr{
 		i:   i,
 		str: str,
 	}
 }
 
-func wrapErrorf(i Index, format string, args ...interface{}) error {
+func WrapErrorf(i Index, format string, args ...interface{}) error {
 	return &errorErr{
 		i:   i,
 		str: fmt.Sprintf(format, args...),
@@ -44,7 +44,7 @@ func wrapErrorf(i Index, format string, args ...interface{}) error {
 	}
 }
 
-func wrapErrorWithErr(parent error, i Index, str string) error {
+func WrapErrorE(parent error, i Index, str string) error {
 	return &errorErr{
 		i:   i,
 		str: str,

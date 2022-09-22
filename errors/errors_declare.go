@@ -18,14 +18,14 @@ var (
 )
 
 var (
-	ErrModuleIsAlreadyRegistered = RegisterError("module is already registered")
-	ErrModuleSupportOverMax      = RegisterError("module support over max")
+	ErrModuleIsAlreadyRegistered = NewIndex("module is already registered")
+	ErrModuleSupportOverMax      = NewIndex("module support over max")
 )
 
 var UnknownError = IndexError(0)
 var UnknownModule = registerModuleWithIndex("unknow", 0)
 
-func RegisterError(s string) Index {
+func NewIndex(s string) Index {
 	return UnknownModule.NewIndex(s)
 }
 
