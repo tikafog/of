@@ -1,5 +1,9 @@
 package merr
 
+import (
+	"fmt"
+)
+
 type indexErr struct {
 	i   Index
 	err error
@@ -11,7 +15,7 @@ func (e *indexErr) Error() string {
 
 func (e *indexErr) String() string {
 	if e.err != nil {
-		return e.i.String() + ": " + e.err.Error()
+		return fmt.Sprintf("%v: %v", e.i, e.err)
 	}
 	return e.i.String()
 }

@@ -25,10 +25,6 @@ var (
 var UnknownError = IndexError(0)
 var UnknownModule = registerModuleWithIndex("unknow", 0)
 
-func NewIndex(s string) Index {
-	return UnknownModule.NewIndex(s)
-}
-
 func getModuleIndex() uint32 {
 	return atomic.AddUint32(&moduleIndex, 1)
 }
@@ -71,7 +67,6 @@ func registerModuleWithIndex(name string, idx uint32) ModuleError {
 	m := newModuleWithIndex(name, idx)
 	moduleErrors[name] = m
 	moduleIndexes[m.Index()] = m.Name()
-	fmt.Println("registered module:", name, "index:", m.Index())
 	return moduleErrors[name]
 }
 

@@ -8,16 +8,14 @@ type ModuleError interface {
 	Name() string
 	Index() uint32
 	Errors() int
-	NewIndex(str string) Index
+	New(str string) Index
+	Errorf(format string, args ...any) Index
+	Wrap(err error, s string) Index
 	IndexString(index Index) string
 	IndexError(index Index) error
-
-	New(str string) error
-	Errorf(format string, args ...interface{}) error
 	Is(err, target error) bool
 	Unwrap(err error) error
 	As(err error, target any) bool
-	Wrap(err error, s string) error
 }
 
 type moduleError struct {
@@ -44,57 +42,32 @@ func (m *moduleError) Errors() int {
 	return len(m.errors)
 }
 
-func (m *moduleError) New(str string) error {
-	_, err := m.NewIndexError(str)
-	return err
-}
-
-func (m *moduleError) Wrap(err error, s string) error {
-	_, err = m.WrapIndexError(err, s)
-	return err
-}
-
-func (m *moduleError) WrapIndex(err error, s string) Index {
-	idx, _ := m.WrapIndexError(err, s)
-	return idx
-}
-
-func (m *moduleError) WrapIndexError(err error, s string) (Index, error) {
-	m.count += 1
-	idx := makeErrIndex(m.Index(), m.count)
-	werr := WrapString(err, s)
-	m.errors = append(m.errors, werr)
-	return idx, idx
-}
-
-func (m *moduleError) NewIndex(str string) Index {
-	idx, _ := m.NewIndexError(str)
-	return idx
-}
-
-func (m *moduleError) NewIndexError(str string) (Index, error) {
+func (m *moduleError) New(str string) Index {
 	m.count += 1
 	idx := makeErrIndex(m.Index(), m.count)
 	err := New(str)
 	m.errors = append(m.errors, err)
-	return idx, idx
+	return idx
 }
 
-func (m *moduleError) Errorf(format string, args ...interface{}) error {
-	_, err := m.NewIndexErrorf(format, args...)
-	return err
+func (m *moduleError) Wrap(err error, s string) Index {
+	m.count += 1
+	idx := makeErrIndex(m.Index(), m.count)
+	werr := WrapString(err, s)
+	m.errors = append(m.errors, werr)
+	return idx
 }
 
-func (m *moduleError) NewIndexErrorf(format string, args ...interface{}) (Index, error) {
+func (m *moduleError) Errorf(format string, args ...any) Index {
 	m.count += 1
 	idx := makeErrIndex(m.Index(), m.count)
 	err := Errorf(format, args...)
 	m.errors = append(m.errors, err)
-	return idx, idx
+	return idx
 }
 
 func (m *moduleError) getErrorIndex(index Index) uint32 {
-	idx := (uint32(index) - 1) ^ IndexModule(m.Index())
+	idx := (uint32(index) - 1) ^ m.idx<<16
 	if idx >= m.count {
 		return 0
 	}

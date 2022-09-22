@@ -5,12 +5,12 @@ import (
 	"fmt"
 )
 
-func New(str string) error {
-	return errors.New(str)
+func New(str string) Index {
+	return UnknownModule.New(str)
 }
 
 func Errorf(format string, args ...interface{}) error {
-	return fmt.Errorf(format, args...)
+	return UnknownModule.Errorf(format, args...)
 }
 
 func UnwrapError(err error) error {
