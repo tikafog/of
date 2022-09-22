@@ -47,6 +47,18 @@ func makeErrIndex(prefix uint32, index uint32) Index {
 	return Index((prefix << 16) | index)
 }
 
+// IndexError
+// @param Index
+// @return error
+// Decrypted use ErrorIndex instead
+func IndexError(i Index) error {
+	return &indexErr{i: i}
+}
+
+func ErrorIndex(i Index) error {
+	return &indexErr{i: i}
+}
+
 func WrapIndex(e error, i Index) error {
 	if e == nil {
 		return &indexErr{i: i}

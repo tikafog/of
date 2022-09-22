@@ -45,6 +45,14 @@ func TestMakeErrIndex(t *testing.T) {
 			},
 			want: "Module[test2]: test2.error: 1",
 		},
+		{
+			name: "",
+			args: args{
+				prefix: 0,
+				index:  0,
+			},
+			want: "unknown error",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

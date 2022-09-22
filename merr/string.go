@@ -39,6 +39,18 @@ func (e *stringErr) Is(target error) bool {
 	return false
 }
 
+// StringError
+// @param string
+// @return error
+// Decrypted use ErrorString instead
+func StringError(s string) error {
+	return &stringErr{s: s}
+}
+
+func ErrorString(s string) error {
+	return &stringErr{s: s}
+}
+
 func WrapString(err error, str string) error {
 	if err == nil {
 		return &stringErr{s: str}

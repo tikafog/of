@@ -18,12 +18,20 @@ var (
 )
 
 var (
-	ErrModuleIsAlreadyRegistered = New("module is already registered")
-	ErrModuleSupportOverMax      = New("module support over max")
+	//ErrModuleIsAlreadyRegistered = IndexNew("module is already registered")
+	//ErrModuleSupportOverMax      = IndexNew("module support over max")
+	UnknownError = IndexError(0)
 )
 
-var UnknownError = IndexError(0)
-var UnknownModule = registerModuleWithIndex("unknow", 0)
+var UnknownModule = registerModuleWithIndex("unknown", 0)
+
+func IndexNew(str string) Index {
+	return UnknownModule.New(str)
+}
+
+func IndexErrorf(format string, args ...interface{}) error {
+	return UnknownModule.Errorf(format, args...)
+}
 
 func getModuleIndex() uint32 {
 	return atomic.AddUint32(&moduleIndex, 1)
@@ -31,7 +39,9 @@ func getModuleIndex() uint32 {
 
 // String gets the string value of Index
 func (e Index) String() string {
-	//err := Module(e.Name()).IndexString(e)
+	if e == 0 {
+		return "unknown error"
+	}
 	err := Module(e.Name()).IndexError(e)
 	return fmt.Sprintf("Module[%v]: %v", e.Name(), err.Error())
 	//return

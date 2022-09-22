@@ -1,5 +1,9 @@
 package merr
 
+import (
+	"fmt"
+)
+
 type errorErr struct {
 	i   Index
 	str string
@@ -29,7 +33,10 @@ type errMessage interface {
 }
 
 func (e *errorErr) Error() string {
-	return e.i.String() + ":" + e.str
+	if e.err != nil {
+		return fmt.Sprintf("%v: %v: %v", e.i, e.str, e.err)
+	}
+	return fmt.Sprintf("%v: %v", e.i, e.str)
 }
 
 func (e *errorErr) String() string {
@@ -79,30 +86,6 @@ func (e *errorErr) Is(target error) bool {
 
 func Error(i Index) error {
 	return &indexErr{i: i}
-}
-
-// IndexError
-// @param Index
-// @return error
-// Decrypted use ErrorIndex instead
-func IndexError(i Index) error {
-	return &indexErr{i: i}
-}
-
-func ErrorIndex(i Index) error {
-	return &indexErr{i: i}
-}
-
-// StringError
-// @param string
-// @return error
-// Decrypted use ErrorString instead
-func StringError(s string) error {
-	return &stringErr{s: s}
-}
-
-func ErrorString(s string) error {
-	return &stringErr{s: s}
 }
 
 func MessageIs(str string, err error) bool {
