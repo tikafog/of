@@ -29,15 +29,24 @@ func As(err error, target any) bool {
 	return errors.As(err, target)
 }
 
-func wrapError(i ErrIndex, str string) error {
+func wrapError(i Index, str string) error {
 	return &errorErr{
-		idx: i,
+		i:   i,
 		str: str,
 	}
 }
-func wrapErrorWithErr(parent error, i ErrIndex, str string) error {
+
+func wrapErrorf(i Index, format string, args ...interface{}) error {
 	return &errorErr{
-		idx: i,
+		i:   i,
+		str: fmt.Sprintf(format, args...),
+		err: errors.New(format),
+	}
+}
+
+func wrapErrorWithErr(parent error, i Index, str string) error {
+	return &errorErr{
+		i:   i,
 		str: str,
 		err: parent,
 	}

@@ -2,92 +2,91 @@ package errors
 
 import (
 	"fmt"
+	"strings"
+	"sync"
+	"sync/atomic"
 )
 
-//ErrIndex is used for make error index
-type ErrIndex uint32
+//Index is used for make error index
+type Index uint32
 
-const (
-	MaxModuleSupported = 0xFF
-
-	ErrIndexCorePrefix    = 0x0001
-	ErrIndexContentPrefix = 0x0002
-	ErrIndexDBCPrefix     = 0x0003
-
-	ErrModuleIsAlreadyRegistered = 1
-	ErrModuleSupportOverMax      = 2
+var (
+	modulesMu     sync.RWMutex
+	moduleIndex   uint32
+	moduleErrors  = make(map[string]ModuleError)
+	moduleIndexes = make(map[uint32]string)
 )
 
-const (
-	ErrCoreIsNil      ErrIndex = ErrIndexCorePrefix<<16 | iota
-	ErrFatherNotFound ErrIndex = ErrIndexCorePrefix<<16 | iota
-	ErrNoDataFound    ErrIndex = ErrIndexCorePrefix<<16 | iota
-	ErrChannelClosed  ErrIndex = ErrIndexCorePrefix<<16 | iota
-	ErrSkipOldData    ErrIndex = ErrIndexCorePrefix<<16 | iota
+var (
+	ErrModuleIsAlreadyRegistered = RegisterError("module is already registered")
+	ErrModuleSupportOverMax      = RegisterError("module support over max")
 )
 
-func init() {
-	RegisterErrIndexValue(ErrModuleIsAlreadyRegistered, "module is already registered")
-	RegisterErrIndexValue(ErrModuleSupportOverMax, "module support over max")
-	RegisterErrIndexValue(ErrCoreIsNil, "core is nil")
-	RegisterErrIndexValue(ErrFatherNotFound, "father not found")
-	RegisterErrIndexValue(ErrNoDataFound, "no data found")
-	RegisterErrIndexValue(ErrChannelClosed, "channel closed")
-	RegisterErrIndexValue(ErrSkipOldData, "skip old data")
+var UnknownError = IndexError(0)
+var UnknownModule = registerModuleWithIndex("unknow", 0)
+
+func RegisterError(s string) Index {
+	return UnknownModule.NewIndex(s)
 }
 
-var _LastModuleIndex uint32 = ErrIndexDBCPrefix
-var _ErrIndexValue = map[ErrIndex]string{}
-var _ErrValueIndex = map[string]ErrIndex{}
-
-var ErrUnknown = &errorErr{idx: 0, err: nil, str: "unknown error"}
-
-func RegisterErrIndexValue(index ErrIndex, str string) {
-	_ErrIndexValue[index] = str
-	_ErrValueIndex[str] = index
+func getModuleIndex() uint32 {
+	return atomic.AddUint32(&moduleIndex, 1)
 }
 
-func MakeErrIndex(prefix uint32, index uint32) ErrIndex {
-	return ErrIndex((prefix << 16) | index)
+// String gets the string value of Index
+func (e Index) String() string {
+	err := Module(e.Name()).IndexError(e)
+	return fmt.Sprintf("Module[%v]:%v", e.Name(), err.Error())
 }
 
-// ParseErrIndex attempts to convert a string to a ErrIndex.
-func ParseErrIndex(name string) (ErrIndex, error) {
-	if x, ok := _ErrValueIndex[name]; ok {
-		return x, nil
+func Module(name string) ModuleError {
+	modulesMu.RLock()
+	e, ok := moduleErrors[name]
+	modulesMu.RUnlock()
+	if ok {
+		return e
 	}
-	return ErrIndex(0), fmt.Errorf("%s is not a valid Err", name)
+	return UnknownModule
 }
 
-// String gets the string value of ErrIndex
-func (e ErrIndex) String() string {
-	if x, ok := _ErrIndexValue[e]; ok {
-		return fmt.Sprintf("Module[%v]:%v", e.Module(), x)
-	}
-	return fmt.Sprintf("Module[%v]:0x%x", e.Module(), uint32(e))
-}
-
-var _ErrIndexModules = map[uint32]string{
-	0:                     "Unknown",
-	ErrIndexCorePrefix:    "Core",
-	ErrIndexContentPrefix: "Content",
-	ErrIndexDBCPrefix:     "DBC",
-}
-
-func RegisterModule(str string) uint32 {
-	_LastModuleIndex += 1
-	if _LastModuleIndex >= MaxModuleSupported {
-		panic(ErrorIndex(ErrModuleSupportOverMax))
-	}
-	_ErrIndexModules[_LastModuleIndex] = str
-	return _LastModuleIndex
-}
-
-// Module ...
-func (e ErrIndex) Module() string {
-	v, ok := _ErrIndexModules[uint32(e>>16)]
+func ModuleName(index uint32) string {
+	modulesMu.RLock()
+	v, ok := moduleIndexes[index]
+	modulesMu.RUnlock()
 	if ok {
 		return v
 	}
-	return "Unknown"
+	return "unknown"
+}
+
+func registerModuleWithIndex(name string, idx uint32) ModuleError {
+	name = strings.ToLower(name)
+	modulesMu.Lock()
+	modulesMu.Unlock()
+	if e, ok := moduleErrors[name]; ok {
+		return e
+	}
+	m := newModuleWithIndex(name, idx)
+	moduleErrors[name] = m
+	moduleIndexes[m.Index()] = m.Name()
+	fmt.Println("registered module:", name, "index:", m.Index())
+	return moduleErrors[name]
+}
+
+func RegisterModule(name string) ModuleError {
+	return registerModuleWithIndex(name, getModuleIndex())
+}
+
+// Name ...
+func (e Index) Name() string {
+	return ModuleName(e.ModuleIndex())
+}
+
+// ModuleIndex ...
+func (e Index) ModuleIndex() uint32 {
+	return uint32(e) >> 16
+}
+
+func (e Index) Module() ModuleError {
+	return Module(e.Name())
 }

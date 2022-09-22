@@ -1,23 +1,28 @@
 package errors
 
 type indexErr struct {
-	i ErrIndex
+	i   Index
+	err error
 }
 
 func (e *indexErr) Error() string {
-	return e.i.String()
+	return e.i.Module().IndexString(e.i)
 }
 
 func (e *indexErr) String() string {
 	return e.Error()
 }
 
-func (e *indexErr) Index() ErrIndex {
+func (e *indexErr) Index() Index {
 	return e.i
 }
 
 func (e *indexErr) Message() string {
 	return e.String()
+}
+
+func (e *indexErr) Unwrap() error {
+	return e.err
 }
 
 func (e *indexErr) Is(target error) bool {
@@ -31,16 +36,20 @@ func (e *indexErr) Is(target error) bool {
 	return false
 }
 
-func WrapIndex(e error, i ErrIndex) error {
-	if e == nil {
-		return wrapError(i, i.String())
-	}
-	return wrapErrorWithErr(e, i, i.String())
+func makeErrIndex(prefix uint32, index uint32) Index {
+	return Index((prefix << 16) | index)
 }
 
-func WrapIndexN(e error, i ErrIndex) error {
+func WrapIndex(e error, i Index) error {
+	if e == nil {
+		return &indexErr{i: i}
+	}
+	return &indexErr{i: i, err: e}
+}
+
+func WrapIndexN(e error, i Index) error {
 	if e == nil {
 		return nil
 	}
-	return WrapIndex(e, i)
+	return &indexErr{i: i, err: e}
 }

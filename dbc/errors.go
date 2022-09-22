@@ -4,12 +4,12 @@ import (
 	"github.com/tikafog/of/errors"
 )
 
-const ErrIndex = 0x0003
+var err = errors.RegisterModule("DBC")
 
 func Error(s string) error {
-	return errors.ModuleError(ErrIndex, errors.New(s))
+	return err.New(s)
 }
 
 func Errorf(format string, args ...interface{}) error {
-	return errors.ModuleError(ErrIndex, errors.Errorf(format, args...))
+	return err.Errorf(format, args...)
 }

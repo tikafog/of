@@ -81,7 +81,7 @@ func TestErrorMessageIs(t *testing.T) {
 
 func TestErrorIndexIs(t *testing.T) {
 	type args struct {
-		i   ErrIndex
+		i   Index
 		err error
 	}
 	tests := []struct {

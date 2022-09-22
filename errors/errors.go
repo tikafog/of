@@ -1,13 +1,9 @@
 package errors
 
-import (
-	"fmt"
-)
-
 type errorErr struct {
-	idx ErrIndex
-	err error
+	i   Index
 	str string
+	err error
 }
 
 type innerError interface {
@@ -21,7 +17,7 @@ type innerError interface {
 }
 
 type errIndex interface {
-	Index() ErrIndex
+	Index() Index
 }
 
 type errHas interface {
@@ -32,18 +28,8 @@ type errMessage interface {
 	Message() string
 }
 
-func Error(i ErrIndex) error {
-	return &indexErr{i: i}
-}
-
 func (e *errorErr) Error() string {
-	if e.idx != 0 {
-		return fmt.Sprintf("[of] %v: %v", e.idx, e.err)
-	}
-	if e.str != "" {
-		return fmt.Sprintf("[of] %v: %v", e.str, e.err)
-	}
-	return fmt.Sprintf("[of] %v", e.err)
+	return e.i.String() + ":" + e.str
 }
 
 func (e *errorErr) String() string {
@@ -54,8 +40,8 @@ func (e *errorErr) Unwrap() error {
 	return e.err
 }
 
-func (e *errorErr) Index() ErrIndex {
-	return e.idx
+func (e *errorErr) Index() Index {
+	return e.i
 }
 
 func (e *errorErr) Message() string {
@@ -81,7 +67,7 @@ func (e *errorErr) Is(target error) bool {
 		return true
 	}
 	idx, ok := target.(errIndex)
-	if ok && e.idx == idx.Index() {
+	if ok && e.i == idx.Index() {
 		return true
 	}
 	msg, ok := target.(errMessage)
@@ -91,15 +77,19 @@ func (e *errorErr) Is(target error) bool {
 	return false
 }
 
-// IndexError
-// @param ErrIndex
-// @return error
-// Decrypted use ErrorIndex instead
-func IndexError(i ErrIndex) error {
+func Error(i Index) error {
 	return &indexErr{i: i}
 }
 
-func ErrorIndex(i ErrIndex) error {
+// IndexError
+// @param Index
+// @return error
+// Decrypted use ErrorIndex instead
+func IndexError(i Index) error {
+	return &indexErr{i: i}
+}
+
+func ErrorIndex(i Index) error {
 	return &indexErr{i: i}
 }
 
@@ -126,7 +116,7 @@ func MessageIs(str string, err error) bool {
 	return str == e.Message()
 }
 
-func IndexIs(i ErrIndex, err error) bool {
+func IndexIs(i Index, err error) bool {
 	if err == nil {
 		return false
 	}
@@ -134,5 +124,5 @@ func IndexIs(i ErrIndex, err error) bool {
 	if !ok {
 		return false
 	}
-	return ErrIndex(i) == e.Index()
+	return Index(i) == e.Index()
 }

@@ -1,8 +1,22 @@
 package errors
 
 import (
+	"fmt"
 	"testing"
 )
+
+var test1 = RegisterModule("test1")
+var test2 = RegisterModule("test2")
+
+func init() {
+	for i := 0; i < 100; i++ {
+		test1.New(fmt.Sprintf("test1.error: %d", i))
+	}
+	for i := 0; i < 100; i++ {
+		test2.New(fmt.Sprintf("test2.error: %d", i))
+	}
+
+}
 
 func TestMakeErrIndex(t *testing.T) {
 	type args struct {
@@ -12,22 +26,30 @@ func TestMakeErrIndex(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want ErrIndex
+		want string
 	}{
 		// TODO: Add test cases.
 		{
 			name: "",
 			args: args{
-				prefix: ErrIndexCorePrefix,
+				prefix: 0x01,
 				index:  1,
 			},
-			want: ErrFatherNotFound,
+			want: "Module[test1]:test1.error: 0",
+		},
+		{
+			name: "",
+			args: args{
+				prefix: 0x02,
+				index:  2,
+			},
+			want: "Module[test2]:test2.error: 1",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := MakeErrIndex(tt.args.prefix, tt.args.index); got != tt.want {
-				t.Errorf("MakeErrIndex() = %v, want %v", got, tt.want)
+			if got := makeErrIndex(tt.args.prefix, tt.args.index); got.String() != tt.want {
+				t.Errorf("makeErrIndex() = %v, want %v", got, tt.want)
 			}
 		})
 	}

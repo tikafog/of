@@ -1,7 +1,8 @@
 package errors
 
 type stringErr struct {
-	s string
+	s   string
+	err error
 }
 
 func (e *stringErr) Error() string {
@@ -14,6 +15,10 @@ func (e *stringErr) String() string {
 
 func (e *stringErr) Message() string {
 	return e.String()
+}
+
+func (e *stringErr) Unwrap() error {
+	return e.err
 }
 
 func (e *stringErr) Is(target error) bool {
