@@ -1,5 +1,9 @@
 package merr
 
+import (
+	"fmt"
+)
+
 type stringErr struct {
 	s   string
 	err error
@@ -10,6 +14,9 @@ func (e *stringErr) Error() string {
 }
 
 func (e *stringErr) String() string {
+	if e.err != nil {
+		return fmt.Sprintf("%v: %v", e.s, e.err)
+	}
 	return e.s
 }
 

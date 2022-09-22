@@ -10,7 +10,10 @@ func (e *indexErr) Error() string {
 }
 
 func (e *indexErr) String() string {
-	return e.i.Module().IndexString(e.i)
+	if e.err != nil {
+		return e.i.String() + ": " + e.err.Error()
+	}
+	return e.i.String()
 }
 
 func (e *indexErr) Index() Index {

@@ -2,6 +2,7 @@ package merr
 
 import (
 	"errors"
+	"fmt"
 )
 
 type ModuleError interface {
@@ -28,6 +29,7 @@ type moduleError struct {
 }
 
 func (m *moduleError) IndexString(index Index) string {
+	//fmt.Sprintf("Module[%v]:%v", index.Name(), err.Error())
 	return m.IndexError(index).Error()
 }
 
@@ -63,7 +65,7 @@ func (m *moduleError) WrapIndexError(err error, s string) (Index, error) {
 	idx := makeErrIndex(m.Index(), m.count)
 	werr := WrapString(err, s)
 	m.errors = append(m.errors, werr)
-	return idx, werr
+	return idx, IndexError(idx)
 }
 
 func (m *moduleError) NewIndex(str string) Index {
@@ -76,7 +78,7 @@ func (m *moduleError) NewIndexError(str string) (Index, error) {
 	idx := makeErrIndex(m.Index(), m.count)
 	err := New(str)
 	m.errors = append(m.errors, err)
-	return idx, err
+	return idx, IndexError(idx)
 }
 
 func (m *moduleError) Errorf(format string, args ...interface{}) error {
@@ -89,11 +91,12 @@ func (m *moduleError) NewIndexErrorf(format string, args ...interface{}) (Index,
 	idx := makeErrIndex(m.Index(), m.count)
 	err := Errorf(format, args...)
 	m.errors = append(m.errors, err)
-	return idx, err
+	return idx, IndexError(idx)
 }
 
 func (m *moduleError) getErrorIndex(index Index) uint32 {
-	idx := (uint32(index) - 1) ^ m.Index()
+	idx := (uint32(index) - 1) ^ IndexModule(m.Index())
+	fmt.Println("errindex: ", idx)
 	if idx >= m.count {
 		return 0
 	}

@@ -35,8 +35,10 @@ func getModuleIndex() uint32 {
 
 // String gets the string value of Index
 func (e Index) String() string {
+	//err := Module(e.Name()).IndexString(e)
 	err := Module(e.Name()).IndexError(e)
-	return fmt.Sprintf("Module[%v]:%v", e.Name(), err.Error())
+	return fmt.Sprintf("Module[%v]: %v", e.Name(), err.Error())
+	//return
 }
 
 func Module(name string) ModuleError {
@@ -85,6 +87,15 @@ func (e Index) Name() string {
 // ModuleIndex ...
 func (e Index) ModuleIndex() uint32 {
 	return uint32(e) >> 16
+}
+
+func (e Index) Error() string {
+	return e.String()
+}
+
+// IndexModule ...
+func IndexModule(e uint32) uint32 {
+	return e << 16
 }
 
 func (e Index) Module() ModuleError {

@@ -35,7 +35,7 @@ func TestMakeErrIndex(t *testing.T) {
 				prefix: 0x01,
 				index:  1,
 			},
-			want: "Module[test1]:test1.error: 0",
+			want: "Module[test1]: test1.error: 0",
 		},
 		{
 			name: "",
@@ -43,13 +43,18 @@ func TestMakeErrIndex(t *testing.T) {
 				prefix: 0x02,
 				index:  2,
 			},
-			want: "Module[test2]:test2.error: 1",
+			want: "Module[test2]: test2.error: 1",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := makeErrIndex(tt.args.prefix, tt.args.index); got.String() != tt.want {
+			got := makeErrIndex(tt.args.prefix, tt.args.index)
+			if got.String() != tt.want {
 				t.Errorf("makeErrIndex() = %v, want %v", got, tt.want)
+			}
+			e := IndexError(got)
+			if e.Error() != tt.want {
+				t.Errorf("IndexError() = %v, want %v", got, tt.want)
 			}
 		})
 	}
