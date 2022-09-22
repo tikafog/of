@@ -11,9 +11,11 @@ type ModuleError interface {
 	New(str string) Index
 	Errorf(format string, args ...any) Index
 	Wrap(err error, s string) Index
+	WrapIndex(err error, index Index) Index
 	IndexString(index Index) string
 	IndexError(index Index) error
 	Is(err, target error) bool
+	Has(err error) bool
 	Unwrap(err error) error
 	As(err error, target any) bool
 }
@@ -23,6 +25,14 @@ type moduleError struct {
 	name   string
 	count  uint32
 	errors []error
+}
+
+func (m *moduleError) WrapIndex(err error, index Index) Index {
+	m.count += 1
+	idx := makeErrIndex(m.Index(), m.count)
+	werr := WrapIndex(err, index)
+	m.errors = append(m.errors, werr)
+	return idx
 }
 
 func (m *moduleError) IndexString(index Index) string {
@@ -88,6 +98,15 @@ func (m *moduleError) Unwrap(err error) error {
 
 func (m *moduleError) As(err error, target any) bool {
 	return errors.As(err, target)
+}
+
+func (m *moduleError) Has(err error) bool {
+	for _, merr := range m.errors {
+		if Is(err, merr) {
+			return true
+		}
+	}
+	return false
 }
 
 func newModuleWithIndex(str string, idx uint32) ModuleError {
