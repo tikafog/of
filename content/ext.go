@@ -2,7 +2,6 @@ package content
 
 import (
 	"github.com/tikafog/of/buffers/content"
-	"github.com/tikafog/of/errors"
 )
 
 // ExtConverter ...
@@ -31,7 +30,7 @@ type Ext struct {
 // @return error
 func ParseExt(ext Ext, v ExtConverter) error {
 	if ext.ExtType != v.ExtType() {
-		return errors.Errorf("extension type %v is different with %v", v.ExtType(), ext.ExtType)
+		return merr.Errorf("extension type %v is different with %v", v.ExtType(), ext.ExtType)
 	}
 
 	if ext.Length == 0 {
@@ -48,10 +47,10 @@ func ParseExt(ext Ext, v ExtConverter) error {
 func ParseExtConverter(ext Ext, v interface{}) error {
 	vv, b := v.(ExtConverter)
 	if !b {
-		return errors.Error(ErrWrongExtType)
+		return merr.Error(ErrWrongExtType)
 	}
 	if ext.ExtType != vv.ExtType() {
-		return errors.Errorf("extension type %v is different with %v", vv.ExtType(), ext.ExtType)
+		return merr.Errorf("extension type %v is different with %v", vv.ExtType(), ext.ExtType)
 	}
 
 	if ext.Length == 0 {
@@ -70,12 +69,12 @@ func MakeExtConverter(v interface{}) (Ext, error) {
 	var err error
 	vv, b := v.(ExtConverter)
 	if !b {
-		return ext, errors.Error(ErrWrongExtType)
+		return ext, merr.Error(ErrWrongExtType)
 	}
 	ext.ExtType = vv.ExtType()
 	ext.Data, err = vv.MarshalData()
 	if err != nil {
-		return ext, errors.WrapString(err, "marshall data failed")
+		return ext, merr.WrapString(err, "marshall data failed")
 	}
 	ext.Length = len(ext.Data)
 	return ext, nil
@@ -92,7 +91,7 @@ func MakeExt(v ExtConverter) (Ext, error) {
 	ext.ExtType = v.ExtType()
 	ext.Data, err = v.MarshalData()
 	if err != nil {
-		return ext, errors.WrapString(err, "marshall data failed")
+		return ext, merr.WrapString(err, "marshall data failed")
 	}
 	ext.Length = len(ext.Data)
 	return ext, nil

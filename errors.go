@@ -1,11 +1,7 @@
 package of
 
-import (
-	"github.com/tikafog/of/errors"
-)
-
 var (
-	err = errors.RegisterModule("Core")
+	err = merr.RegisterModule("Core")
 )
 
 var (

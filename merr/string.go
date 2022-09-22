@@ -1,4 +1,4 @@
-package errors
+package merr
 
 type stringErr struct {
 	s   string

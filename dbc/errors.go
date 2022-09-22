@@ -1,10 +1,6 @@
 package dbc
 
-import (
-	"github.com/tikafog/of/errors"
-)
-
-var err = errors.RegisterModule("DBC")
+var err = merr.RegisterModule("DBC")
 
 func Error(s string) error {
 	return err.New(s)

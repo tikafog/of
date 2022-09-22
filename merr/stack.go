@@ -1,4 +1,4 @@
-package errors
+package merr
 
 import (
 	"fmt"
@@ -38,7 +38,7 @@ func (e *stackError) Is(target error) bool {
 }
 
 func (e *stackError) Error() string {
-	return fmt.Sprintf("[of] %v: %s", e.str, e.stack)
+	return fmt.Sprintf("%v: %s", e.str, e.stack)
 }
 
 func StackError(err string) error {

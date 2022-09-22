@@ -1,10 +1,6 @@
 package content
 
-import (
-	"github.com/tikafog/of/errors"
-)
-
-var err = errors.RegisterModule("Content")
+var err = merr.RegisterModule("Content")
 
 var (
 	ErrWrongVersionType = err.NewIndex("wrong version type")

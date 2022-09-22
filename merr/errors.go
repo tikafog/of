@@ -1,4 +1,4 @@
-package errors
+package merr
 
 type errorErr struct {
 	i   Index
