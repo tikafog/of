@@ -91,7 +91,7 @@ func MakeExt(v ExtConverter) (Ext, error) {
 	ext.ExtType = v.ExtType()
 	ext.Data, err = v.MarshalData()
 	if err != nil {
-		return ext, errors.WrapString(err, "marshall data failed")
+		return ext, errors.Wrap(err, "marshall data failed")
 	}
 	ext.Length = len(ext.Data)
 	return ext, nil

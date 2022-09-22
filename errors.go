@@ -1,15 +1,19 @@
 package of
 
-var (
-	err = merr.RegisterModule("Core")
+import (
+	"github.com/tikafog/of/merr"
 )
 
 var (
-	ErrCoreIsNil      = err.NewIndex("core is nil")
-	ErrFatherNotFound = err.NewIndex("father not found")
-	ErrNoDataFound    = err.NewIndex("no data found")
-	ErrChannelClosed  = err.NewIndex("channel closed")
-	ErrSkipOldData    = err.NewIndex("skip old data")
+	errors = merr.RegisterModule("Core")
+)
+
+var (
+	ErrCoreIsNil      = errors.NewIndex("core is nil")
+	ErrFatherNotFound = errors.NewIndex("father not found")
+	ErrNoDataFound    = errors.NewIndex("no data found")
+	ErrChannelClosed  = errors.NewIndex("channel closed")
+	ErrSkipOldData    = errors.NewIndex("skip old data")
 )
 
 func init() {
@@ -26,9 +30,9 @@ func init() {
 }
 
 func Error(s string) error {
-	return err.New(s)
+	return errors.New(s)
 }
 
 func Errorf(format string, args ...interface{}) error {
-	return err.Errorf(format, args...)
+	return errors.Errorf(format, args...)
 }
