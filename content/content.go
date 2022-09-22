@@ -37,21 +37,37 @@ type Content struct {
 	Type    content.Type `json:"type,omitempty"`
 }
 
+// SetExts
+// @receiver *Content
+// @param ...Ext
+// @return *Content
 func (c *Content) SetExts(exts ...Ext) *Content {
 	c.Exts = exts
 	return c
 }
 
+// AddExts
+// @receiver *Content
+// @param ...Ext
+// @return *Content
 func (c *Content) AddExts(exts ...Ext) *Content {
 	c.Exts = append(c.Exts, exts...)
 	return c
 }
 
+// SetMessage
+// @receiver *Content
+// @param *Message
+// @return *Content
 func (c *Content) SetMessage(m *Message) *Content {
 	c.Message = m
 	return c
 }
 
+// NewMessage
+// @receiver *Content
+// @param []byte
+// @return *Content
 func (c *Content) NewMessage(data []byte) *Content {
 	if data != nil {
 		c.Message = NewContentMessage(data)
@@ -59,6 +75,12 @@ func (c *Content) NewMessage(data []byte) *Content {
 	return c
 }
 
+// NewMessageDetail
+// @receiver *Content
+// @param []byte
+// @param int64
+// @param int64
+// @return *Content
 func (c *Content) NewMessageDetail(data []byte, index, last int64) *Content {
 	if data != nil {
 		c.Message = NewContentMessageWithDetail(data, index, last)
@@ -67,21 +89,38 @@ func (c *Content) NewMessageDetail(data []byte, index, last int64) *Content {
 	return c
 }
 
+// NewMessageLast
+// @receiver *Content
+// @param int64
+// @return *Content
 func (c *Content) NewMessageLast(last int64) *Content {
 	c.Message = NewContentMessageLast(last)
 	return c
 }
 
+// NewMessageAndLast
+// @receiver *Content
+// @param []byte
+// @param int64
+// @return *Content
 func (c *Content) NewMessageAndLast(data []byte, last int64) *Content {
 	c.Message = NewContentMessageLast(last)
 	return c
 }
 
+// SetType
+// @receiver *Content
+// @param content.Type
+// @return *Content
 func (c *Content) SetType(p content.Type) *Content {
 	c.Type = p
 	return c
 }
 
+// SetFrom
+// @receiver *Content
+// @param string
+// @return *Content
 func (c *Content) SetFrom(s string) *Content {
 	c.From = s
 	return c
@@ -110,6 +149,8 @@ func (c *Content) MustJSON() []byte {
 	return data
 }
 
+// Clear
+// @receiver *Content
 func (c *Content) Clear() {
 	c.Message = EmptyMessage
 	c.Exts = []Ext{}
@@ -185,6 +226,10 @@ func NewContentWithMessage(p content.Type, message *Message) *Content {
 	}
 }
 
+// NewContentWithExts
+// @param content.Type
+// @param ...Ext
+// @return *Content
 func NewContentWithExts(p content.Type, exts ...Ext) *Content {
 	return &Content{
 		Type: p,
