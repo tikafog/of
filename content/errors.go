@@ -7,10 +7,10 @@ import (
 var errors = merr.RegisterModule("Content")
 
 var (
-	ErrWrongVersionType = errors.NewIndex("wrong version type")
-	ErrWrongExtType     = errors.NewIndex("wrong ext type")
-	ErrWrongMessageType = errors.NewIndex("wrong message type")
-	ErrWrongContentType = errors.NewIndex("wrong content type")
+	ErrWrongVersionType = errors.New("wrong version type")
+	ErrWrongExtType     = errors.New("wrong ext type")
+	ErrWrongMessageType = errors.New("wrong message type")
+	ErrWrongContentType = errors.New("wrong content type")
 )
 
 func Error(s string) error {

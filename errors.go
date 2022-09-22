@@ -9,11 +9,11 @@ var (
 )
 
 var (
-	ErrCoreIsNil      = errors.NewIndex("core is nil")
-	ErrFatherNotFound = errors.NewIndex("father not found")
-	ErrNoDataFound    = errors.NewIndex("no data found")
-	ErrChannelClosed  = errors.NewIndex("channel closed")
-	ErrSkipOldData    = errors.NewIndex("skip old data")
+	ErrCoreIsNil      = errors.New("core is nil")
+	ErrFatherNotFound = errors.New("father not found")
+	ErrNoDataFound    = errors.New("no data found")
+	ErrChannelClosed  = errors.New("channel closed")
+	ErrSkipOldData    = errors.New("skip old data")
 )
 
 func init() {

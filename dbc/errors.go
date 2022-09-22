@@ -1,11 +1,11 @@
 package dbc
 
-var err = merr.RegisterModule("DBC")
+//var errors = merr.RegisterModule("DBC")
 
-func Error(s string) error {
-	return err.New(s)
-}
-
-func Errorf(format string, args ...interface{}) error {
-	return err.Errorf(format, args...)
-}
+//func Error(s string) error {
+//	return errors.New(s)
+//}
+//
+//func Errorf(format string, args ...interface{}) error {
+//	return errors.Errorf(format, args...)
+//}
