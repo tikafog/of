@@ -151,6 +151,20 @@ func (c *Content) JSONV2() ([]byte, error) {
 	return json.Marshal(c)
 }
 
+// MustJSONV2 ...
+// @Description:
+// @receiver Content
+// @return []byte
+// @return error
+func (c *Content) MustJSONV2() []byte {
+	c.Version = version.VersionOne
+	if c.Message != nil {
+		c.MessageRaw = utils.Must(json.Marshal(c.Message))
+	}
+
+	return utils.Must(json.Marshal(c))
+}
+
 // MustJSON ...
 // @Description:
 // @receiver Content
