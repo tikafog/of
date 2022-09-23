@@ -23,9 +23,16 @@ func ParseJSONContent(bytes []byte) (*Content, error) {
 	if string(c.Version) != version.VersionOne {
 		return nil, merr.Error(ErrWrongVersionType)
 	}
+	if c.Message != nil && c.Message.Version != MessageV3Version {
+		c.Message.Data, err = ParseMessageV1Data(c.Message.Data)
+	}
 	return &c, err
 }
 
+// ParseJSONContentFromReader
+// @param io.Reader
+// @return *Content
+// @return error
 func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 	var c Content
 	err := json.NewDecoder(reader).Decode(&c)
@@ -34,6 +41,9 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 	}
 	if string(c.Version) != version.VersionOne {
 		return nil, merr.Error(ErrWrongVersionType)
+	}
+	if c.Message != nil && c.Message.Version != MessageV3Version {
+		c.Message.Data, err = ParseMessageV1Data(c.Message.Data)
 	}
 	return &c, err
 }

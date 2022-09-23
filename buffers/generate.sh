@@ -1,3 +1,3 @@
 #!/bin/bash
 
-flatc -g -b ./exchange.fbs ./content.fbs ./message.fbs
+flatc -g -b ./exchange.fbs ./content.fbs ./message.fbs ./instruct.fbs

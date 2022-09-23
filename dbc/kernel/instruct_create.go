@@ -133,10 +133,10 @@ func (ic *InstructCreate) defaults() {
 // check runs all checks and user-defined validators on the builder.
 func (ic *InstructCreate) check() error {
 	if _, ok := ic.mutation.CurrentUnix(); !ok {
-		return &ValidationError{Name: "current_unix", err: errors.New(`kernel: missing required field "Instruct.current_unix"`)}
+		return &ValidationError{Name: "current_unix", err: errors.New(`kernel: missing required field "metaInstruct.current_unix"`)}
 	}
 	if _, ok := ic.mutation.UpdatedUnix(); !ok {
-		return &ValidationError{Name: "updated_unix", err: errors.New(`kernel: missing required field "Instruct.updated_unix"`)}
+		return &ValidationError{Name: "updated_unix", err: errors.New(`kernel: missing required field "metaInstruct.updated_unix"`)}
 	}
 	return nil
 }
@@ -188,7 +188,7 @@ func (ic *InstructCreate) createSpec() (*Instruct, *sqlgraph.CreateSpec) {
 // OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
 // of the `INSERT` statement. For example:
 //
-//	client.Instruct.Create().
+//	client.metaInstruct.Create().
 //		SetCurrentUnix(v).
 //		OnConflict(
 //			// Update the row with the new values
@@ -212,7 +212,7 @@ func (ic *InstructCreate) OnConflict(opts ...sql.ConflictOption) *InstructUpsert
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.Instruct.Create().
+//	client.metaInstruct.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 //
@@ -275,7 +275,7 @@ func (u *InstructUpsert) AddUpdatedUnix(v int64) *InstructUpsert {
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
-//	client.Instruct.Create().
+//	client.metaInstruct.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //		).
@@ -289,7 +289,7 @@ func (u *InstructUpsertOne) UpdateNewValues() *InstructUpsertOne {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//  client.Instruct.Create().
+//  client.metaInstruct.Create().
 //      OnConflict(sql.ResolveWithIgnore()).
 //      Exec(ctx)
 //
@@ -478,7 +478,7 @@ func (icb *InstructCreateBulk) ExecX(ctx context.Context) {
 // OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
 // of the `INSERT` statement. For example:
 //
-//	client.Instruct.CreateBulk(builders...).
+//	client.metaInstruct.CreateBulk(builders...).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -501,7 +501,7 @@ func (icb *InstructCreateBulk) OnConflict(opts ...sql.ConflictOption) *InstructU
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.Instruct.Create().
+//	client.metaInstruct.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 //
@@ -521,7 +521,7 @@ type InstructUpsertBulk struct {
 // UpdateNewValues updates the mutable fields using the new values that
 // were set on create. Using this option is equivalent to using:
 //
-//	client.Instruct.Create().
+//	client.metaInstruct.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //		).
@@ -535,7 +535,7 @@ func (u *InstructUpsertBulk) UpdateNewValues() *InstructUpsertBulk {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.Instruct.Create().
+//	client.metaInstruct.Create().
 //		OnConflict(sql.ResolveWithIgnore()).
 //		Exec(ctx)
 //

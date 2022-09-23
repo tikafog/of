@@ -6,7 +6,7 @@ enum Type : uint {
             User,
             Bootstrap,
             Information,
-            Instruct,
+            DecryptedInstruct,
             Update,
             Announce,
             TopList,

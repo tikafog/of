@@ -11,8 +11,6 @@ import (
 	"github.com/tikafog/of/version"
 )
 
-const CurrentDataVersion = 2
-
 const (
 // ErrUnsupportedExtType ...
 //ErrUnsupportedExtType = errors.New("unsupported ext type")
@@ -143,9 +141,6 @@ func (c *Content) JSON() ([]byte, error) {
 // @return error
 func (c *Content) MustJSON() []byte {
 	data, _ := c.JSON()
-	//if errors != nil {
-	//	panic(errors)
-	//}
 	return data
 }
 

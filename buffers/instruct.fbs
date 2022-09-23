@@ -1,0 +1,16 @@
+namespace instruct;
+
+enum Type : uint { 	
+            None = 0,
+            Resource,
+            Correct,
+            ReportState,
+            Max }
+
+table Instruct {
+  version:string;
+  type:Type;
+  data:string;
+}
+
+root_type Instruct;
