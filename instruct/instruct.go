@@ -34,21 +34,21 @@ type Type = instruct.Type
 //}
 
 type metaParser interface {
-	parseMeta(m *metaInstruct) error
+	parseMetaInstruct(m *metaInstruct) error
 }
 
 type metaInstruct struct {
 	Version string          `json:"version,omitempty"`
+	Length  int             `json:"length,omitempty"`
 	Data    json.RawMessage `json:"data,omitempty"`
 	Type    Type            `json:"type,omitempty"`
 }
 
 // Instruct ...
 type Instruct[T any] struct {
-	meta    *metaInstruct
-	Version string `json:"version,omitempty"`
-	Data    *T     `json:"data,omitempty"`
-	Type    Type   `json:"type,omitempty"`
+	meta *metaInstruct
+	Data *T   `json:"data,omitempty"`
+	Type Type `json:"type,omitempty"`
 }
 
 // Bytes ...
@@ -60,30 +60,22 @@ func (t *metaInstruct) Bytes() []byte {
 	return instructToBytes(t)
 }
 
-func (t *Instruct[T]) decodeInstruct(inst *instruct.Instruct) error {
-	if inst == nil || len(inst.Data()) == 0 {
-		return nil
-	}
-	t.Version = string(inst.Version())
-	t.Type = inst.Type()
-	t.Data = new(T)
-	return json.Unmarshal(inst.Data(), &t.Data)
+func (t *metaInstruct) SetVersion(version string) *metaInstruct {
+	t.Version = version
+	return t
 }
 
-func (t *Instruct[T]) encodeInstruct() []byte {
-	return instructToBytes(&metaInstruct{
-		Version: version.VersionTwo,
-		Data:    utils.Must(t.MarshalData()),
-		Type:    t.Type,
-	})
+func (t *metaInstruct) JSON() ([]byte, error) {
+	t.Version = version.VersionOne
+	return json.Marshal(t)
 }
 
 // MarshalData ...
 // @Description:
 // @receiver ContentReport
 // @return data
-func (t *Instruct[T]) MarshalData() ([]byte, error) {
-	return json.Marshal(t)
+func (i *Instruct[T]) MarshalData() ([]byte, error) {
+	return json.Marshal(i)
 }
 
 // UnmarshalData ...
@@ -91,26 +83,27 @@ func (t *Instruct[T]) MarshalData() ([]byte, error) {
 // @receiver *Instruct
 // @param []byte
 // @return error
-func (t *Instruct[T]) UnmarshalData(data []byte) error {
-	return json.Unmarshal(data, t)
+func (i *Instruct[T]) UnmarshalData(data []byte) error {
+	return json.Unmarshal(data, i)
 }
 
 // SetData
 // @receiver *Instruct[T]
 // @param []byte
 // @return *Instruct[T]
-func (t *Instruct[T]) SetData(data *T) *Instruct[T] {
-	t.Data = data
-	return t
+func (i *Instruct[T]) SetData(data *T) *Instruct[T] {
+	i.Data = data
+	return i
 }
 
 // SetType
 // @receiver *Instruct[T]
 // @param instruct.Type
 // @return *Instruct[T]
-func (t *Instruct[T]) SetType(p instruct.Type) *Instruct[T] {
-	t.Type = p
-	return t
+func (i *Instruct[T]) SetType(p instruct.Type) *Instruct[T] {
+	i.Type = p
+	//i.meta.Type = i.Type
+	return i
 }
 
 // JSON ...
@@ -118,55 +111,36 @@ func (t *Instruct[T]) SetType(p instruct.Type) *Instruct[T] {
 // @receiver Instruct[T]
 // @return []byte
 // @return error
-func (t *Instruct[T]) JSON() ([]byte, error) {
-	t.Version = version.VersionOne
-	return json.Marshal(t)
-}
-
-// MustJSON ...
-// @Description:
-// @receiver Instruct[T]
-// @return []byte
-// @return error
-func (t *Instruct[T]) MustJSON() []byte {
-	data, _ := t.JSON()
-	//if errors != nil {
-	//	panic(errors)
-	//}
-	return data
-}
-
-// FinishBytes ...
-// @Description:
-// @receiver Instruct[T]
-// @return []byte
-// Decrypted use Bytes instead
-func (t *Instruct[T]) FinishBytes() []byte {
-	return t.Bytes()
+func (i *Instruct[T]) JSON() []byte {
+	return utils.Must(i.metaInstruct().JSON())
 }
 
 // Bytes ...
 // @Description:
 // @receiver Instruct[T]
 // @return []byte
-func (t *Instruct[T]) Bytes() []byte {
-	t.Version = version.VersionTwo
-	return instructToBytes(&metaInstruct{
-		Version: version.VersionTwo,
-		Type:    t.Type,
-		Data:    utils.Must(json.Marshal(t.Data)),
-	})
+func (i *Instruct[T]) Bytes() []byte {
+	return i.metaInstruct().Bytes()
 }
 
-func (t *Instruct[T]) parseMeta(m *metaInstruct) error {
-	t.meta = m
-	t.Type = m.Type
-	t.Version = m.Version
-	if len(m.Data) != 0 && t.Data == nil {
-		t.Data = new(T)
-		return json.Unmarshal(m.Data, t.Data)
+func (i *Instruct[T]) parseMetaInstruct(m *metaInstruct) error {
+	i.meta = m
+	i.Type = m.Type
+	if m.Length != 0 && i.Data == nil {
+		i.Data = new(T)
+		return json.Unmarshal(m.Data, i.Data)
 	}
 	return nil
+}
+
+func (i *Instruct[T]) metaInstruct() *metaInstruct {
+	if i.meta == nil {
+		i.meta = new(metaInstruct)
+		i.meta.Type = i.Type
+		i.meta.Data = utils.Must(json.Marshal(i.Data))
+		i.meta.Length = len(i.meta.Data)
+	}
+	return i.meta
 }
 
 func instructToBytes(c *metaInstruct) []byte {
