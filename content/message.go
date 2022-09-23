@@ -1,21 +1,21 @@
 package content
 
-import (
-	"encoding/json"
-)
-
 const CurrentDataVersion = MessageV2Version
 
 type Message = MessageV2
 
+type metaMessageVersion struct {
+	Version int `json:"version,omitempty"` // current info version
+}
+
 //metaMessage ...
 //@Description:
 type metaMessage struct {
-	Last    int64           `json:"last,omitempty"`
-	Index   int64           `json:"index,omitempty"`
-	Version int             `json:"version,omitempty"` // current info version
-	Length  int             `json:"length,omitempty"`
-	Data    json.RawMessage `json:"data,omitempty"`
+	Last    int64  `json:"last,omitempty"`
+	Index   int64  `json:"index,omitempty"`
+	Version int    `json:"version,omitempty"` // current info version
+	Length  int    `json:"length,omitempty"`
+	Data    []byte `json:"data,omitempty"`
 }
 
 // NewContentMessage
@@ -82,6 +82,26 @@ func NewContentMessageLast(last int64) *Message {
 		Last:    last,
 	}
 	return &msg
+}
+
+func messageV1ToCurrentMessage(v *MessageV1) *Message {
+	return &Message{
+		Last:    v.Last,
+		Index:   v.Index,
+		Version: CurrentDataVersion,
+		Length:  v.Length,
+		Data:    v.Data,
+	}
+}
+
+func messageV2ToCurrentMessage(v *MessageV2) *Message {
+	return &Message{
+		Last:    v.Last,
+		Index:   v.Index,
+		Version: CurrentDataVersion,
+		Length:  v.Length,
+		Data:    v.Data,
+	}
 }
 
 // EmptyMessage ...

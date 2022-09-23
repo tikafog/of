@@ -47,6 +47,18 @@ func (m *MessageV1) Revise() *MessageV1 {
 	return m
 }
 
+func (m *MessageV1) JSON() ([]byte, error) {
+	return json.Marshal(m)
+}
+
+func (m *MessageV1) v1() *MessageV1 {
+	return m
+}
+
+func (m *MessageV1) current() *Message {
+	return messageV1ToCurrentMessage(m)
+}
+
 // NewContentMessageV1
 // @param []byte
 // @return *MessageV1
@@ -117,7 +129,5 @@ func NewContentMessageV1Last(last int64) *MessageV1 {
 // @return []*T
 // @return error
 func ParseMessageV1Data(raw json.RawMessage) ([]byte, error) {
-	t := new([]byte)
-	err := json.Unmarshal(raw, t)
-	return *t, err
+	return raw, nil
 }

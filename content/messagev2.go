@@ -2,6 +2,7 @@ package content
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 const MessageV2Version = 2
@@ -9,11 +10,11 @@ const MessageV2Version = 2
 //MessageV2 ...
 //@Description:
 type MessageV2 struct {
-	Last    int64  `json:"last,omitempty"`
-	Index   int64  `json:"index,omitempty"`
-	Version int    `json:"version,omitempty"` // current info version
-	Length  int    `json:"length,omitempty"`
-	Data    []byte `json:"data,omitempty"`
+	Last    int64           `json:"last,omitempty"`
+	Index   int64           `json:"index,omitempty"`
+	Version int             `json:"version,omitempty"` // current info version
+	Length  int             `json:"length,omitempty"`
+	Data    json.RawMessage `json:"data,omitempty"`
 }
 
 func (m *MessageV2) IsEmpty() bool {
@@ -30,7 +31,7 @@ func (m *MessageV2) SetVersion(version int) *MessageV2 {
 	return m
 }
 
-func (m *MessageV2) SetDataLength(data []byte) *MessageV2 {
+func (m *MessageV2) SetDataLength(data json.RawMessage) *MessageV2 {
 	m.Data = data
 	m.Length = len(data)
 	return m
@@ -39,6 +40,17 @@ func (m *MessageV2) SetDataLength(data []byte) *MessageV2 {
 func (m *MessageV2) SetLast(last int64) *MessageV2 {
 	m.Last = last
 	return m
+}
+
+func (m *MessageV2) v1() *MessageV1 {
+	v1 := new(MessageV1)
+	v1.Last = m.Last
+	v1.Index = m.Index
+	v1.Version = MessageV1Version
+	v1.Data = m.Data
+	fmt.Println("data:", string(v1.Data))
+	v1.Length = len(v1.Data)
+	return v1
 }
 
 func (m *MessageV2) Revise() *MessageV2 {
@@ -52,11 +64,15 @@ func (m *MessageV2) Revise() *MessageV2 {
 	return m
 }
 
+func (m *MessageV2) current() *Message {
+	return messageV2ToCurrentMessage(m)
+}
+
 // NewContentMessageV2
 // @param []byte
 // @return *MessageV2
 //Decrypted use NewMessageV2 instead
-func NewContentMessageV2(data []byte) *MessageV2 {
+func NewContentMessageV2(data json.RawMessage) *MessageV2 {
 	msg := MessageV2{
 		Version: MessageV2Version,
 		Length:  len(data),
@@ -68,7 +84,7 @@ func NewContentMessageV2(data []byte) *MessageV2 {
 // NewMessageV2
 // @param []byte
 // @return *MessageV2
-func NewMessageV2(data []byte) *MessageV2 {
+func NewMessageV2(data json.RawMessage) *MessageV2 {
 	msg := MessageV2{
 		Version: MessageV2Version,
 		Length:  len(data),
@@ -82,7 +98,7 @@ func NewMessageV2(data []byte) *MessageV2 {
 // @param int64
 // @param int64
 // @return *MessageV2
-func NewContentMessageV2WithDetail(data []byte, index int64, last int64) *MessageV2 {
+func NewContentMessageV2WithDetail(data json.RawMessage, index int64, last int64) *MessageV2 {
 	msg := MessageV2{
 		Last:    last,
 		Version: MessageV2Version,
@@ -96,7 +112,7 @@ func NewContentMessageV2WithDetail(data []byte, index int64, last int64) *Messag
 // @param []byte
 // @param int64
 // @return *MessageV2
-func NewContentMessageV2AndLast(data []byte, last int64) *MessageV2 {
+func NewContentMessageV2AndLast(data json.RawMessage, last int64) *MessageV2 {
 	msg := MessageV2{
 		Version: MessageV2Version,
 		Length:  len(data),

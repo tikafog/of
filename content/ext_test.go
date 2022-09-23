@@ -53,7 +53,7 @@ func TestMakeExt(t *testing.T) {
 			}
 			tt.want = tt.args.v
 			c := NewContentWithType(content.TypeCore)
-			c.SetExts(got).SetMessage(&MessageV2{})
+			c.SetExts(got).SetMessage(&Message{})
 			json, err := c.JSON()
 			checkErr(err)
 

@@ -2,10 +2,12 @@ package content
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 
 	"github.com/tikafog/of/buffers/content"
 	"github.com/tikafog/of/merr"
+	"github.com/tikafog/of/utils"
 	"github.com/tikafog/of/version"
 )
 
@@ -23,9 +25,8 @@ func ParseJSONContent(bytes []byte) (*Content, error) {
 	if string(c.Version) != version.VersionOne {
 		return nil, merr.Error(ErrWrongVersionType)
 	}
-	if c.Message != nil && c.Message.Version != MessageV3Version {
-		c.Message.Data, err = ParseMessageV2Data(c.Message.Data)
-	}
+
+	c.Message, err = parseRawMessage(c.MessageRaw)
 	return &c, err
 }
 
@@ -42,17 +43,37 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 	if string(c.Version) != version.VersionOne {
 		return nil, merr.Error(ErrWrongVersionType)
 	}
-	if c.Message != nil {
-		switch c.Message.Version {
-		case MessageV1Version:
-			c.Message.Data, err = ParseMessageV1Data(c.Message.Data)
-		case MessageV2Version:
-			c.Message.Data, err = ParseMessageV2Data(c.Message.Data)
-		default:
-			//c.Message.Data, err = ParseMessageV3Data(c.Message.Data)
-		}
-	}
+	c.Message, err = parseRawMessage(c.MessageRaw)
 	return &c, err
+}
+
+func parseRawMessage(raw json.RawMessage) (*Message, error) {
+	var msg *Message
+	if len(raw) != 0 {
+		var mv metaMessageVersion
+		if err := json.Unmarshal(raw, &mv); err != nil {
+			return nil, err
+		}
+		switch mv.Version {
+		case MessageV1Version:
+			var v1 MessageV1
+			if err := json.Unmarshal(raw, &v1); err != nil {
+				return nil, err
+			}
+			msg = v1.current()
+			fmt.Printf("MessageV1:%+v\n", string(utils.Must(json.Marshal(v1))))
+		case MessageV2Version:
+			var v2 MessageV2
+			if err := json.Unmarshal(raw, &v2); err != nil {
+				return nil, err
+			}
+			msg = v2.current()
+			fmt.Printf("MessageV2:%+v\n", string(utils.Must(json.Marshal(v2))))
+		}
+		msg.Version = CurrentDataVersion
+		return msg, nil
+	}
+	return nil, nil
 }
 
 //ParseContent ...

@@ -8,6 +8,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
 	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/utils"
 	"github.com/tikafog/of/version"
 )
 
@@ -28,11 +29,12 @@ type Type = content.Type
 
 // Content Content
 type Content struct {
-	Version string       `json:"version,omitempty"`
-	From    string       `json:"from,omitempty"`
-	Message *Message     `json:"message,omitempty"`
-	Exts    []Ext        `json:"ext,omitempty"`
-	Type    content.Type `json:"type,omitempty"`
+	Version    string          `json:"version,omitempty"`
+	From       string          `json:"from,omitempty"`
+	Message    *Message        `json:"-"`
+	MessageRaw json.RawMessage `json:"message,omitempty"`
+	Exts       []Ext           `json:"ext,omitempty"`
+	Type       content.Type    `json:"type,omitempty"`
 }
 
 // SetExts
@@ -83,7 +85,6 @@ func (c *Content) NewMessageDetail(data []byte, index, last int64) *Content {
 	if data != nil {
 		c.Message = NewContentMessageWithDetail(data, index, last)
 	}
-
 	return c
 }
 
@@ -131,6 +132,22 @@ func (c *Content) SetFrom(s string) *Content {
 // @return error
 func (c *Content) JSON() ([]byte, error) {
 	c.Version = version.VersionOne
+	if c.Message != nil {
+		c.MessageRaw = utils.Must(json.Marshal(c.Message.v1()))
+	}
+	return json.Marshal(c)
+}
+
+// JSONV2 ...
+// @Description:
+// @receiver Content
+// @return []byte
+// @return error
+func (c *Content) JSONV2() ([]byte, error) {
+	c.Version = version.VersionOne
+	if c.Message != nil {
+		c.MessageRaw = utils.Must(json.Marshal(c.Message))
+	}
 	return json.Marshal(c)
 }
 
