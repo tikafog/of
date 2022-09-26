@@ -2,12 +2,10 @@ package content
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 
 	"github.com/tikafog/of/buffers/content"
 	"github.com/tikafog/of/merr"
-	"github.com/tikafog/of/utils"
 	"github.com/tikafog/of/version"
 )
 
@@ -63,14 +61,12 @@ func parseRawMessage(raw json.RawMessage) (*Message, error) {
 				return nil, err
 			}
 			msg = v1.current()
-			fmt.Printf("MessageV1:%+v\n", string(utils.Must(json.Marshal(v1))))
 		case MessageV2Version:
 			var v2 MessageV2
 			if err := json.Unmarshal(raw, &v2); err != nil {
 				return nil, err
 			}
 			msg = v2.current()
-			fmt.Printf("MessageV2:%+v\n", string(utils.Must(json.Marshal(v2))))
 		}
 		msg.Version = CurrentDataVersion
 		return msg, nil
