@@ -2,7 +2,6 @@ package content
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 const MessageV2Version = 2
@@ -48,7 +47,6 @@ func (m *MessageV2) v1() *MessageV1 {
 	v1.Index = m.Index
 	v1.Version = MessageV1Version
 	v1.Data = m.Data
-	fmt.Println("data:", string(v1.Data))
 	v1.Length = len(v1.Data)
 	return v1
 }
