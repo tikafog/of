@@ -41,13 +41,13 @@ func TestNewInstruct(t *testing.T) {
 			got.SetData(tt.args.data.(*Resource))
 
 			var ri Instruct[Resource]
-			err := json.Unmarshal(utils.Must(got.JSON()), &ri)
+			err := json.Unmarshal(got.JSON(), &ri)
 			if err != nil {
 				t.Fatal(err)
 				return
 			}
 			t.Logf("Decode1: %+v", ri.Data)
-			i, err := ParseJSONInstruct(utils.Must(got.JSON()))
+			i, err := ParseJSONInstruct(got.JSON())
 			if err != nil {
 				t.Fatal(err)
 				return
@@ -83,5 +83,3 @@ func TestNewInstruct(t *testing.T) {
 		})
 	}
 }
-
-//func cast[T](any)
