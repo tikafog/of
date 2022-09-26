@@ -16,10 +16,7 @@ type option struct {
 	dbc           *dbc.DBC
 	tools         of.Tools
 	event         of.Event
-}
-
-func (o *option) Event() of.Event {
-	return o.event
+	api           of.API
 }
 
 type InitializeOption interface {
@@ -28,6 +25,7 @@ type InitializeOption interface {
 	DBC() *dbc.DBC
 	Tools() of.Tools
 	Event() of.Event
+	API() of.API
 }
 
 type Option interface {
@@ -77,6 +75,13 @@ func StoragePath(sp string) SetFunc {
 	}
 }
 
+func API(api of.API) SetFunc {
+	return func(o *option) Option {
+		o.api = api
+		return o
+	}
+}
+
 func FatherHandler(fn func(father of.ID)) SetFunc {
 	return func(o *option) Option {
 		o.fatherHandler = fn
@@ -110,6 +115,14 @@ func (o *option) Apply(fns ...SetFunc) {
 	for _, fn := range fns {
 		fn(o)
 	}
+}
+
+func (o *option) API() of.API {
+	return o.api
+}
+
+func (o *option) Event() of.Event {
+	return o.event
 }
 
 func (o *option) FatherHandler() func(father of.ID) {
