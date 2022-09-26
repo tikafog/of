@@ -17,17 +17,18 @@ import (
 // @return *Content
 // @return error
 func ParseJSONContent(bytes []byte) (*Content, error) {
-	var c Content
-	err := json.Unmarshal(bytes, &c)
+	var meta metaContent
+	err := json.Unmarshal(bytes, &meta)
 	if err != nil {
 		return nil, err
 	}
-	if string(c.Version) != version.VersionOne {
+	if string(meta.Version) != version.VersionOne {
 		return nil, merr.Error(ErrWrongVersionType)
 	}
 
-	c.Message, err = parseRawMessage(c.MessageRaw)
-	return &c, err
+	var content Content
+	content.Message, err = parseRawMessage(meta.Message)
+	return &content, err
 }
 
 // ParseJSONContentFromReader
@@ -35,16 +36,17 @@ func ParseJSONContent(bytes []byte) (*Content, error) {
 // @return *Content
 // @return error
 func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
-	var c Content
-	err := json.NewDecoder(reader).Decode(&c)
+	var meta metaContent
+	err := json.NewDecoder(reader).Decode(&meta)
 	if err != nil {
 		return nil, err
 	}
-	if string(c.Version) != version.VersionOne {
+	if string(meta.Version) != version.VersionOne {
 		return nil, merr.Error(ErrWrongVersionType)
 	}
-	c.Message, err = parseRawMessage(c.MessageRaw)
-	return &c, err
+	var content Content
+	content.Message, err = parseRawMessage(meta.Message)
+	return &content, err
 }
 
 func parseRawMessage(raw json.RawMessage) (*Message, error) {

@@ -37,7 +37,7 @@ func TestNewContentWithType(t *testing.T) {
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewContentWithType() = %v, want %v", got, tt.want)
 			}
-			t.Logf("jsonv:%+v", string(utils.Must(got.JSON())))
+			t.Logf("jsonv:%+v", string(got.JSON()))
 			oldc := []byte(`{"version":"0.0.1","message":{"version":1,"length":6,"data":"bm9kYXRh"}}`)
 			jsonContent1, err := ParseJSONContent(oldc)
 			if err != nil {
@@ -46,7 +46,7 @@ func TestNewContentWithType(t *testing.T) {
 			}
 			//var bytes []byte
 			//_ = json.Unmarshal(jsonContent.Message.Data, &bytes)
-			t.Logf("json1:%+v", string(utils.Must(jsonContent1.JSON())))
+			t.Logf("json1:%+v", string(jsonContent1.JSON()))
 			if jsonContent1.Message != nil {
 				t.Logf("%+v", string(jsonContent1.Message.Data))
 			}
@@ -58,7 +58,7 @@ func TestNewContentWithType(t *testing.T) {
 				t.Fatal(err2)
 				return
 			}
-			t.Logf("json2:%+v", string(utils.Must(jsonContent2.JSON())))
+			t.Logf("json2:%+v", string(jsonContent2.JSON()))
 			if jsonContent2.Message != nil {
 				t.Logf("%+v", string(jsonContent2.Message.Data))
 			}
@@ -68,7 +68,7 @@ func TestNewContentWithType(t *testing.T) {
 				t.Fatal(err3)
 				return
 			}
-			t.Logf("json3:%+v", string(utils.Must(jsonContent3.JSON())))
+			t.Logf("json3:%+v", string(jsonContent3.JSON()))
 			if jsonContent3.Message != nil {
 				t.Logf("%+v", string(jsonContent3.Message.Data))
 			}
@@ -79,7 +79,7 @@ func TestNewContentWithType(t *testing.T) {
 				t.Fatal(err4)
 				return
 			}
-			t.Logf("json4:%+v", string(utils.Must(jsonContent4.JSON())))
+			t.Logf("json4:%+v", string(jsonContent4.JSON()))
 			if jsonContent4.Message != nil {
 				t.Logf("%+v", string(jsonContent4.Message.Data))
 			}

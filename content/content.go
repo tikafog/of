@@ -27,14 +27,21 @@ const (
 // Type ...
 type Type = content.Type
 
+type metaContent struct {
+	Version string          `json:"version,omitempty"`
+	From    string          `json:"from,omitempty"`
+	Message json.RawMessage `json:"message,omitempty"`
+	Exts    []Ext           `json:"ext,omitempty"`
+	Type    content.Type    `json:"type,omitempty"`
+}
+
 // Content Content
 type Content struct {
-	Version    string          `json:"version,omitempty"`
-	From       string          `json:"from,omitempty"`
-	Message    *Message        `json:"-"`
-	MessageRaw json.RawMessage `json:"message,omitempty"`
-	Exts       []Ext           `json:"ext,omitempty"`
-	Type       content.Type    `json:"type,omitempty"`
+	meta    *metaContent
+	From    string
+	Message *Message
+	Exts    []Ext
+	Type    content.Type
 }
 
 // SetExts
@@ -130,12 +137,18 @@ func (c *Content) SetFrom(s string) *Content {
 // @receiver Content
 // @return []byte
 // @return error
-func (c *Content) JSON() ([]byte, error) {
-	c.Version = version.VersionOne
-	if c.Message != nil {
-		c.MessageRaw = utils.Must(json.Marshal(c.Message.v1()))
+func (c *Content) JSON() []byte {
+	if c.meta == nil {
+		c.meta = &metaContent{
+			Version: "",
+			From:    c.From,
+			Message: utils.Must(json.Marshal(c.Message.v1())),
+			Exts:    c.Exts,
+			Type:    c.Type,
+		}
 	}
-	return json.Marshal(c)
+	c.meta.Version = version.VersionOne
+	return utils.Must(json.Marshal(c.meta))
 }
 
 // JSONV2 ...
@@ -143,36 +156,18 @@ func (c *Content) JSON() ([]byte, error) {
 // @receiver Content
 // @return []byte
 // @return error
-func (c *Content) JSONV2() ([]byte, error) {
-	c.Version = version.VersionOne
-	if c.Message != nil {
-		c.MessageRaw = utils.Must(json.Marshal(c.Message))
+func (c *Content) JSONV2() []byte {
+	if c.meta == nil {
+		c.meta = &metaContent{
+			Version: "",
+			From:    c.From,
+			Message: utils.Must(json.Marshal(c.Message)),
+			Exts:    c.Exts,
+			Type:    c.Type,
+		}
 	}
-	return json.Marshal(c)
-}
-
-// MustJSONV2 ...
-// @Description:
-// @receiver Content
-// @return []byte
-// @return error
-func (c *Content) MustJSONV2() []byte {
-	c.Version = version.VersionOne
-	if c.Message != nil {
-		c.MessageRaw = utils.Must(json.Marshal(c.Message))
-	}
-
-	return utils.Must(json.Marshal(c))
-}
-
-// MustJSON ...
-// @Description:
-// @receiver Content
-// @return []byte
-// @return error
-func (c *Content) MustJSON() []byte {
-	data, _ := c.JSON()
-	return data
+	c.meta.Version = version.VersionOne
+	return utils.Must(json.Marshal(c.meta))
 }
 
 // Clear
@@ -196,7 +191,16 @@ func (c *Content) FinishBytes() []byte {
 // @receiver Content
 // @return []byte
 func (c *Content) Bytes() []byte {
-	c.Version = version.VersionTwo
+	//if c.meta == nil {
+	//	c.meta = &metaContent{
+	//		Version: "",
+	//		From:    c.From,
+	//		Message: utils.Must(json.Marshal(c.Message)),
+	//		Exts:    c.Exts,
+	//		Type:    c.Type,
+	//	}
+	//}
+	//c.meta.Version = version.VersionTwo
 	return contentToBytes(c, c.Message.IsEmpty())
 }
 
@@ -227,7 +231,7 @@ func contentToBytes(c *Content, has bool) []byte {
 	}
 	_extsVec := builder.EndVector(len(_exts))
 
-	_version := builder.CreateString(c.Version)
+	_version := builder.CreateString(version.VersionTwo)
 	_from := builder.CreateString(c.From)
 	content.ContentStart(builder)
 	content.ContentAddExt(builder, _extsVec)
@@ -288,8 +292,7 @@ func NewContent(p content.Type) *Content {
 // Decrypted: to be used NewContent
 func NewTypeContent(tp content.Type, fns ...func(content *Content)) *Content {
 	_content := Content{
-		Version: version.VersionOne,
-		Type:    tp,
+		Type: tp,
 	}
 	for i := range fns {
 		fns[i](&_content)

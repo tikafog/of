@@ -19,7 +19,7 @@ func TestParseContent(t *testing.T) {
 		{
 			name: "",
 			args: args{
-				bytes: NewContent(0).MustJSON(),
+				bytes: NewContent(0).JSON(),
 			},
 			wantRetC: nil,
 			wantErr:  false,
