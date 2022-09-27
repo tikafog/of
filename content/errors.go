@@ -4,7 +4,7 @@ import (
 	"github.com/tikafog/of/merr"
 )
 
-var errors = merr.RegisterModule("Content")
+var errors = merr.RegisterModule("content")
 
 var (
 	ErrWrongVersionType = errors.New("wrong version type")

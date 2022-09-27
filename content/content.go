@@ -44,6 +44,15 @@ type Content struct {
 	Type    content.Type
 }
 
+func (m metaContent) content() *Content {
+	return &Content{
+		meta: &m,
+		From: m.From,
+		Exts: m.Exts,
+		Type: m.Type,
+	}
+}
+
 // SetExts
 // @receiver *Content
 // @param ...Ext

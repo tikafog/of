@@ -24,9 +24,9 @@ func ParseJSONContent(bytes []byte) (*Content, error) {
 		return nil, merr.Error(ErrWrongVersionType)
 	}
 
-	var content Content
-	content.Message, err = parseRawMessage(meta.Message)
-	return &content, err
+	ctnt := meta.content()
+	ctnt.Message, err = parseRawMessage(meta.Message)
+	return ctnt, err
 }
 
 // ParseJSONContentFromReader
@@ -42,9 +42,10 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 	if string(meta.Version) != version.VersionOne {
 		return nil, merr.Error(ErrWrongVersionType)
 	}
-	var content Content
-	content.Message, err = parseRawMessage(meta.Message)
-	return &content, err
+
+	ctnt := meta.content()
+	ctnt.Message, err = parseRawMessage(meta.Message)
+	return ctnt, err
 }
 
 func parseRawMessage(raw json.RawMessage) (*Message, error) {
