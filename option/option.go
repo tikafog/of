@@ -8,15 +8,15 @@ import (
 type SetFunc func(o *option) Option
 
 type option struct {
-	id            of.ID
-	repo          string
-	sp            string
-	fatherHandler func(father of.ID)
-	link          any
-	dbc           *dbc.DBC
-	tools         of.Tools
-	event         of.Event
-	api           of.API
+	id   of.ID
+	repo string
+	sp   string
+	//fatherHandler func(father of.ID)
+	link  any
+	dbc   *dbc.DBC
+	tools of.Tools
+	//event         of.Event
+	//api           of.API
 }
 
 type InitializeOption interface {
@@ -24,15 +24,15 @@ type InitializeOption interface {
 	StoragePath() string
 	DBC() *dbc.DBC
 	Tools() of.Tools
-	Event() of.Event
-	API() of.API
+	//Event() of.Event
+	//API() of.API
 }
 
 type Option interface {
 	InitializeOption
 	ID() of.ID
 	Link() any
-	FatherHandler() func(father of.ID)
+	//FatherHandler() func(father of.ID)
 }
 
 type ApplyOption interface {
@@ -54,12 +54,12 @@ func DBC(dbc *dbc.DBC) SetFunc {
 	}
 }
 
-func Event(event of.Event) SetFunc {
-	return func(o *option) Option {
-		o.event = event
-		return o
-	}
-}
+//func Event(event of.Event) SetFunc {
+//	return func(o *option) Option {
+//		o.event = event
+//		return o
+//	}
+//}
 
 func Repo(repo string) SetFunc {
 	return func(o *option) Option {
@@ -75,19 +75,19 @@ func StoragePath(sp string) SetFunc {
 	}
 }
 
-func API(api of.API) SetFunc {
-	return func(o *option) Option {
-		o.api = api
-		return o
-	}
-}
+//func API(api of.API) SetFunc {
+//	return func(o *option) Option {
+//		o.api = api
+//		return o
+//	}
+//}
 
-func FatherHandler(fn func(father of.ID)) SetFunc {
-	return func(o *option) Option {
-		o.fatherHandler = fn
-		return o
-	}
-}
+//func FatherHandler(fn func(father of.ID)) SetFunc {
+//	return func(o *option) Option {
+//		o.fatherHandler = fn
+//		return o
+//	}
+//}
 
 func ID(id of.ID) SetFunc {
 	return func(o *option) Option {
@@ -117,17 +117,17 @@ func (o *option) Apply(fns ...SetFunc) {
 	}
 }
 
-func (o *option) API() of.API {
-	return o.api
-}
+//func (o *option) API() of.API {
+//	return o.api
+//}
+//
+//func (o *option) Event() of.Event {
+//	return o.event
+//}
 
-func (o *option) Event() of.Event {
-	return o.event
-}
-
-func (o *option) FatherHandler() func(father of.ID) {
-	return o.fatherHandler
-}
+//func (o *option) FatherHandler() func(father of.ID) {
+//	return o.fatherHandler
+//}
 
 func (o *option) Repo() string {
 	return o.repo

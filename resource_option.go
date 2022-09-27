@@ -3,10 +3,13 @@ package of
 type ResourceOption func(*ResourceSetting)
 
 type ResourceSetting struct {
-	Type ResourceType
-	//Path string
+	Type         ResourceType
+	IgnoreHidden bool
 }
 
+// SetResourceType ...
+// @param ResourceType
+// @return ResourceOption
 func SetResourceType(ResourceType ResourceType) ResourceOption {
 	return func(option *ResourceSetting) {
 		option.Type = ResourceType
