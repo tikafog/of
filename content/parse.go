@@ -67,11 +67,33 @@ func parseRawMessage(raw json.RawMessage) (*Message, error) {
 				return nil, err
 			}
 			msg = v2.current()
+		default:
+			return nil, ErrWrongMessageType
 		}
 		msg.Version = CurrentDataVersion
 		return msg, nil
 	}
 	return nil, nil
+}
+
+// ParserJSONContentWithV3
+// @param []byte
+// @return *Content
+// @return error
+func ParserJSONContentWithV3[T any](bytes []byte) (*ContentV3, error) {
+	var meta metaContent
+	err := json.Unmarshal(bytes, &meta)
+	if err != nil {
+		return nil, err
+	}
+	if string(meta.Version) != version.VersionOne {
+		return nil, ErrWrongVersionType
+	}
+
+	ctnt := meta.contentV3()
+	//todo: parse message
+	//ctnt.Message, err = parseRawMessageV3(meta.Message)
+	return ctnt, err
 }
 
 //ParseContent ...

@@ -53,6 +53,16 @@ func (m metaContent) content() *Content {
 	}
 }
 
+func (m metaContent) contentV3() *ContentV3 {
+	return &ContentV3{
+		meta:    &m,
+		From:    m.From,
+		Message: m.Message,
+		Exts:    m.Exts,
+		Type:    m.Type,
+	}
+}
+
 // SetExts
 // @receiver *Content
 // @param ...Ext
@@ -220,21 +230,26 @@ func (c *Content) FinishBytes() []byte {
 	return c.Bytes()
 }
 
+func (c Content) metaCopy() metaContent {
+	if c.meta == nil {
+		c.meta = &metaContent{
+			Version: "",
+			From:    c.From,
+			Exts:    c.Exts,
+			Type:    c.Type,
+		}
+		if c.Message != nil {
+			c.meta.Message = utils.Must(json.Marshal(c.Message.v1()))
+		}
+	}
+	return *c.meta
+}
+
 // Bytes ...
 // @Description:
 // @receiver Content
 // @return []byte
 func (c *Content) Bytes() []byte {
-	//if c.meta == nil {
-	//	c.meta = &metaContent{
-	//		Version: "",
-	//		From:    c.From,
-	//		Message: utils.Must(json.Marshal(c.Message)),
-	//		Exts:    c.Exts,
-	//		Type:    c.Type,
-	//	}
-	//}
-	//c.meta.Version = version.VersionTwo
 	return contentToBytes(c, c.Message.IsEmpty())
 }
 
