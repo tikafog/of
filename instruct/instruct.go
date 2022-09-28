@@ -10,28 +10,8 @@ import (
 	"github.com/tikafog/of/version"
 )
 
-const CurrentDataVersion = 2
-
-const (
-// ErrUnsupportedExtType ...
-//ErrUnsupportedExtType = errors.New("unsupported ext type")
-// ErrMustBePointer ...
-//ErrMustBePointer = errors.New("the interface parameter must be a pointer type")
-//WrongVersionType = "wrong version type"
-)
-
-//var (
-//	ErrWrongVersionType = Error(WrongVersionType)
-//)
-
 // Type ...
 type Type = instruct.Type
-
-//type Instruct[T] struct {
-//	Version string          `json:"version,omitempty"`
-//	Data    json.RawMessage `json:"data,omitempty"`
-//	Type    Type            `json:"type,omitempty"`
-//}
 
 type metaParser interface {
 	parseMetaInstruct(m *metaInstruct) error
@@ -163,17 +143,25 @@ func NewInstruct[T any]() *Instruct[T] {
 	switch any(*new(T)).(type) {
 	case ResourceData:
 		inst.Type = instruct.TypeResource
+	case CorrectData:
+		inst.Type = instruct.TypeCorrect
+	case ReportData:
+		inst.Type = instruct.TypeReport
 	}
 	return inst
 }
 
-// NewInstruct ...
+// getInstructType ...
 // @param instruct.Type
 // @return *Instruct[T]
 func getInstructType(p Type) any {
 	switch p {
 	case instruct.TypeResource:
 		return ResourceData{}
+	case instruct.TypeCorrect:
+		return CorrectData{}
+	case instruct.TypeReport:
+		return ReportData{}
 	default:
 		panic(ErrWrongInstructType)
 	}

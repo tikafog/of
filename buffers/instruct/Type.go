@@ -7,27 +7,27 @@ import "strconv"
 type Type uint32
 
 const (
-	TypeNone        Type = 0
-	TypeResource    Type = 1
-	TypeCorrect     Type = 2
-	TypeReportState Type = 3
-	TypeMax         Type = 4
+	TypeNone     Type = 0
+	TypeResource Type = 1
+	TypeCorrect  Type = 2
+	TypeReport   Type = 3
+	TypeMax      Type = 4
 )
 
 var EnumNamesType = map[Type]string{
-	TypeNone:        "None",
-	TypeResource:    "Resource",
-	TypeCorrect:     "Correct",
-	TypeReportState: "ReportState",
-	TypeMax:         "Max",
+	TypeNone:     "None",
+	TypeResource: "Resource",
+	TypeCorrect:  "Correct",
+	TypeReport:   "Report",
+	TypeMax:      "Max",
 }
 
 var EnumValuesType = map[string]Type{
-	"None":        TypeNone,
-	"Resource":    TypeResource,
-	"Correct":     TypeCorrect,
-	"ReportState": TypeReportState,
-	"Max":         TypeMax,
+	"None":     TypeNone,
+	"Resource": TypeResource,
+	"Correct":  TypeCorrect,
+	"Report":   TypeReport,
+	"Max":      TypeMax,
 }
 
 func (v Type) String() string {

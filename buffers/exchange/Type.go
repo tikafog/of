@@ -21,7 +21,7 @@ var EnumNamesType = map[Type]string{
 	TypeException: "Exception",
 	TypeRegister:  "Register",
 	TypeUpdate:    "Update",
-	TypeContent:   "content",
+	TypeContent:   "Content",
 	TypeReport:    "Report",
 	TypeMax:       "Max",
 }
@@ -31,7 +31,7 @@ var EnumValuesType = map[string]Type{
 	"Exception": TypeException,
 	"Register":  TypeRegister,
 	"Update":    TypeUpdate,
-	"content":   TypeContent,
+	"Content":   TypeContent,
 	"Report":    TypeReport,
 	"Max":       TypeMax,
 }

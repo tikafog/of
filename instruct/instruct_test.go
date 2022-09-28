@@ -34,52 +34,112 @@ func TestNewInstruct(t *testing.T) {
 			},
 			want: nil,
 		},
+		{
+			name: "",
+			args: args{
+				p: instruct.TypeResource,
+				data: &ReportData{
+					VersionData: VersionData{5},
+					Type:        0,
+					Last:        5,
+				},
+			},
+			want: nil,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := NewInstruct[ResourceData]()
-			got.SetData(tt.args.data.(*ResourceData))
+			switch tt.args.data.(type) {
+			case *ResourceData:
+				got := NewInstruct[ResourceData]()
+				got.SetData(tt.args.data.(*ResourceData))
 
-			var ri Instruct[ResourceData]
-			err := json.Unmarshal(got.JSON(), &ri)
-			if err != nil {
-				t.Fatal(err)
-				return
-			}
-			t.Logf("Decode1: %+v", ri.Data)
-			i, err := ParseJSONInstruct(got.JSON())
-			if err != nil {
-				t.Fatal(err)
-				return
-			}
-			switch v := i.(type) {
-			case *Instruct[ResourceData]:
-				t.Logf("Decode2: %+v", v.Data)
-			default:
-				t.Fatal("type", reflect.TypeOf(i))
-			}
-			data := utils.Must(json.Marshal(i))
+				var ri Instruct[ResourceData]
+				err := json.Unmarshal(got.JSON(), &ri)
+				if err != nil {
+					t.Fatal(err)
+					return
+				}
+				t.Logf("Decode1: %+v", ri.Data)
+				i, err := ParseJSONInstruct(got.JSON())
+				if err != nil {
+					t.Fatal(err)
+					return
+				}
+				switch v := i.(type) {
+				case *Instruct[ResourceData]:
+					t.Logf("Decode2: %+v", v.Data)
+				default:
+					t.Fatal("type", reflect.TypeOf(i))
+				}
+				data := utils.Must(json.Marshal(i))
 
-			var ri2 Instruct[ResourceData]
-			_ = json.Unmarshal(data, &ri2)
-			t.Logf("Decode3: %+v", ri2.Data)
+				var ri2 Instruct[ResourceData]
+				_ = json.Unmarshal(data, &ri2)
+				t.Logf("Decode3: %+v", ri2.Data)
 
-			var inst metaInstruct
-			_ = json.Unmarshal(data, &inst)
-			buf := inst.Bytes()
+				var inst metaInstruct
+				_ = json.Unmarshal(data, &inst)
+				buf := inst.Bytes()
 
-			c, err := ParseInstruct(buf)
-			if err != nil {
-				t.Fatal(c)
+				c, err := ParseInstruct(buf)
+				if err != nil {
+					t.Fatal(c)
+				}
+
+				ri3, ok := (c).(*Instruct[ResourceData])
+				if !ok {
+					p := reflect.TypeOf(c)
+					t.Logf("Decode4: Type: (%v)", p)
+				}
+				//ri3, _ := ParseInstruct[ResourceData](c)
+				t.Logf("Decode4: %+v", ri3.Data)
+			case *ReportData:
+				got := NewInstruct[ReportData]()
+				got.SetData(tt.args.data.(*ReportData))
+
+				var ri Instruct[ReportData]
+				err := json.Unmarshal(got.JSON(), &ri)
+				if err != nil {
+					t.Fatal(err)
+					return
+				}
+				t.Logf("Decode1: %+v", ri.Data)
+				i, err := ParseJSONInstruct(got.JSON())
+				if err != nil {
+					t.Fatal(err)
+					return
+				}
+				switch v := i.(type) {
+				case *Instruct[ReportData]:
+					t.Logf("Decode2: %+v", v.Data)
+				default:
+					t.Fatal("type", reflect.TypeOf(i))
+				}
+				data := utils.Must(json.Marshal(i))
+
+				var ri2 Instruct[ReportData]
+				_ = json.Unmarshal(data, &ri2)
+				t.Logf("Decode3: %+v", ri2.Data)
+
+				var inst metaInstruct
+				_ = json.Unmarshal(data, &inst)
+				buf := inst.Bytes()
+
+				c, err := ParseInstruct(buf)
+				if err != nil {
+					t.Fatal(c)
+				}
+
+				ri3, ok := (c).(*Instruct[ReportData])
+				if !ok {
+					p := reflect.TypeOf(c)
+					t.Logf("Decode4: Type: (%v)", p)
+				}
+				//ri3, _ := ParseInstruct[ResourceData](c)
+				t.Logf("Decode4: %+v", ri3.Data)
 			}
 
-			ri3, ok := (c).(*Instruct[ResourceData])
-			if !ok {
-				p := reflect.TypeOf(c)
-				t.Logf("Decode4: Type: (%v)", p)
-			}
-			//ri3, _ := ParseInstruct[ResourceData](c)
-			t.Logf("Decode4: %+v", ri3.Data)
 		})
 	}
 }
