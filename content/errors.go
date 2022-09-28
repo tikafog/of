@@ -1,16 +1,16 @@
 package content
 
 import (
-	"github.com/tikafog/of/merr"
+	"github.com/tikafog/errors"
 )
 
-var errors = merr.RegisterModule("content")
+var merr = errors.RegisterModule("content")
 
 var (
-	ErrWrongVersionType = errors.New("wrong version type")
-	ErrWrongExtType     = errors.New("wrong ext type")
-	ErrWrongMessageType = errors.New("wrong message type")
-	ErrWrongContentType = errors.New("wrong content type")
+	ErrWrongVersionType = merr.New("wrong version type")
+	ErrWrongExtType     = merr.New("wrong ext type")
+	ErrWrongMessageType = merr.New("wrong message type")
+	ErrWrongContentType = merr.New("wrong content type")
 )
 
 func Error(s string) error {

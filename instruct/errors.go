@@ -1,16 +1,16 @@
 package instruct
 
 import (
-	"github.com/tikafog/of/merr"
+	"github.com/tikafog/errors"
 )
 
-var errors = merr.RegisterModule("metaInstruct")
+var merr = errors.RegisterModule("metaInstruct")
 
 var (
-	ErrWrongVersionType  = errors.New("wrong version type")
-	ErrWrongExtType      = errors.New("wrong ext type")
-	ErrWrongMessageType  = errors.New("wrong message type")
-	ErrWrongInstructType = errors.New("wrong instruct type")
+	ErrWrongVersionType  = merr.New("wrong version type")
+	ErrWrongExtType      = merr.New("wrong ext type")
+	ErrWrongMessageType  = merr.New("wrong message type")
+	ErrWrongInstructType = merr.New("wrong instruct type")
 )
 
 func Error(s string) error {

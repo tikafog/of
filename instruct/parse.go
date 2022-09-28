@@ -5,7 +5,6 @@ import (
 	"io"
 
 	"github.com/tikafog/of/buffers/instruct"
-	"github.com/tikafog/of/merr"
 	"github.com/tikafog/of/version"
 )
 
@@ -33,7 +32,7 @@ func ParseJSONInstructFromReader(reader io.Reader) (any, error) {
 		return nil, err
 	}
 	if string(meta.Version) != version.VersionOne {
-		return nil, merr.Error(ErrWrongVersionType)
+		return nil, ErrWrongVersionType
 	}
 	return parseMetaInstruct(&meta)
 }
@@ -51,7 +50,7 @@ func ParseInstruct(bytes []byte) (retC any, err error) {
 	}()
 	c := instruct.GetRootAsInstruct(bytes, 0)
 	if string(c.Version()) != version.VersionTwo {
-		return nil, merr.Error(ErrWrongVersionType)
+		return nil, ErrWrongVersionType
 	}
 	meta := instructToMetaInstruct(c)
 	return parseMetaInstruct(meta)

@@ -1,19 +1,19 @@
 package of
 
 import (
-	"github.com/tikafog/of/merr"
+	"github.com/tikafog/errors"
 )
 
 var (
-	errors = merr.RegisterModule("Core")
+	merr = errors.RegisterModule("Core")
 )
 
 var (
-	ErrCoreIsNil      = errors.New("core is nil")
-	ErrFatherNotFound = errors.New("father not found")
-	ErrNoDataFound    = errors.New("no data found")
-	ErrChannelClosed  = errors.New("channel closed")
-	ErrSkipOldData    = errors.New("skip old data")
+	ErrCoreIsNil      = merr.New("core is nil")
+	ErrFatherNotFound = merr.New("father not found")
+	ErrNoDataFound    = merr.New("no data found")
+	ErrChannelClosed  = merr.New("channel closed")
+	ErrSkipOldData    = merr.New("skip old data")
 )
 
 func init() {

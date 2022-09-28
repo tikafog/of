@@ -3,8 +3,9 @@ package boot
 import (
 	"context"
 
+	"github.com/tikafog/errors"
+
 	"github.com/tikafog/of"
-	"github.com/tikafog/of/merr"
 	"github.com/tikafog/of/option"
 )
 
@@ -12,7 +13,7 @@ type emptyModule struct {
 	name of.Name
 }
 
-var ErrEmptyModule = merr.New("empty module")
+var ErrEmptyModule = errors.New("empty module")
 
 func NewEmptyModule(name of.Name) of.Module {
 	return newEmptyLoader(name)
