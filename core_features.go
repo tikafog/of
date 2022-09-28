@@ -6,4 +6,5 @@ type CoreFeature interface {
 	Event() Event
 	Node() Node
 	Resource() Resource
+	Bootstrap() Bootstrap
 }
