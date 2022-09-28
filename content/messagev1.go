@@ -55,6 +55,16 @@ func (m *MessageV1) v1() *MessageV1 {
 	return m
 }
 
+func (m *MessageV1) v2() *MessageV2 {
+	v2 := new(MessageV2)
+	v2.Last = m.Last
+	v2.Index = m.Index
+	v2.Version = MessageV2Version
+	v2.Data = m.Data
+	v2.Length = len(v2.Data)
+	return v2
+}
+
 func (m *MessageV1) current() *Message {
 	return messageV1ToCurrentMessage(m)
 }

@@ -51,6 +51,10 @@ func (m *MessageV2) v1() *MessageV1 {
 	return v1
 }
 
+func (m *MessageV2) v2() *MessageV2 {
+	return m
+}
+
 func (m *MessageV2) Revise() *MessageV2 {
 	if m.IsEmpty() {
 		return m

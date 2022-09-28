@@ -173,7 +173,7 @@ func (c *Content) JSONV2() []byte {
 	if c.meta == nil {
 		var message []byte
 		if c.Message != nil {
-			message = utils.Must(json.Marshal(c.Message))
+			message = utils.Must(json.Marshal(c.Message.v2()))
 		}
 		c.meta = &metaContent{
 			Version: "",

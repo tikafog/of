@@ -11,7 +11,6 @@ const MessageV3Version = 3
 //MessageV3 ...
 //@Description:
 type MessageV3[T any] struct {
-	meta  *metaMessage
 	Last  int64 `json:"last,omitempty"`
 	Index int64 `json:"index,omitempty"`
 	Data  []*T  `json:"data,omitempty"`
@@ -42,16 +41,24 @@ func (m *MessageV3[T]) Revise() *MessageV3[T] {
 	return m
 }
 
-func (m *MessageV3[T]) metaMessage() *metaMessage {
-	if m.meta == nil {
-		m.meta = new(metaMessage)
-		m.meta.Index = m.Index
-		m.meta.Last = m.Last
-		m.meta.Version = MessageV3Version
-		m.meta.Data = utils.Must(json.Marshal(m.Data))
-		m.meta.Length = len(m.meta.Data)
-	}
-	return m.meta
+func (m *MessageV3[T]) v1() *MessageV1 {
+	v1 := new(MessageV1)
+	v1.Index = m.Index
+	v1.Last = m.Last
+	v1.Version = MessageV1Version
+	v1.Data = utils.Must(json.Marshal(m.Data))
+	v1.Length = len(v1.Data)
+	return v1
+}
+
+func (m *MessageV3[T]) v2() *MessageV2 {
+	v2 := new(MessageV2)
+	v2.Index = m.Index
+	v2.Last = m.Last
+	v2.Version = MessageV2Version
+	v2.Data = utils.Must(json.Marshal(m.Data))
+	v2.Length = len(v2.Data)
+	return v2
 }
 
 // NewContentMessageV3

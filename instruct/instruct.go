@@ -161,7 +161,7 @@ func instructToBytes(c *metaInstruct) []byte {
 func NewInstruct[T any]() *Instruct[T] {
 	inst := new(Instruct[T])
 	switch any(*new(T)).(type) {
-	case Resource:
+	case ResourceData:
 		inst.Type = instruct.TypeResource
 	}
 	return inst
@@ -173,7 +173,7 @@ func NewInstruct[T any]() *Instruct[T] {
 func getInstructType(p Type) any {
 	switch p {
 	case instruct.TypeResource:
-		return Resource{}
+		return ResourceData{}
 	default:
 		panic(ErrWrongInstructType)
 	}

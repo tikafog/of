@@ -24,7 +24,7 @@ func TestNewInstruct(t *testing.T) {
 			name: "",
 			args: args{
 				p: instruct.TypeResource,
-				data: &Resource{
+				data: &ResourceData{
 					List: []string{
 						"a", "b", "c",
 					},
@@ -37,10 +37,10 @@ func TestNewInstruct(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := NewInstruct[Resource]()
-			got.SetData(tt.args.data.(*Resource))
+			got := NewInstruct[ResourceData]()
+			got.SetData(tt.args.data.(*ResourceData))
 
-			var ri Instruct[Resource]
+			var ri Instruct[ResourceData]
 			err := json.Unmarshal(got.JSON(), &ri)
 			if err != nil {
 				t.Fatal(err)
@@ -53,14 +53,14 @@ func TestNewInstruct(t *testing.T) {
 				return
 			}
 			switch v := i.(type) {
-			case *Instruct[Resource]:
+			case *Instruct[ResourceData]:
 				t.Logf("Decode2: %+v", v.Data)
 			default:
 				t.Fatal("type", reflect.TypeOf(i))
 			}
 			data := utils.Must(json.Marshal(i))
 
-			var ri2 Instruct[Resource]
+			var ri2 Instruct[ResourceData]
 			_ = json.Unmarshal(data, &ri2)
 			t.Logf("Decode3: %+v", ri2.Data)
 
@@ -73,12 +73,12 @@ func TestNewInstruct(t *testing.T) {
 				t.Fatal(c)
 			}
 
-			ri3, ok := (c).(*Instruct[Resource])
+			ri3, ok := (c).(*Instruct[ResourceData])
 			if !ok {
 				p := reflect.TypeOf(c)
 				t.Logf("Decode4: Type: (%v)", p)
 			}
-			//ri3, _ := ParseInstruct[Resource](c)
+			//ri3, _ := ParseInstruct[ResourceData](c)
 			t.Logf("Decode4: %+v", ri3.Data)
 		})
 	}
