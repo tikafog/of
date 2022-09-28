@@ -10,6 +10,10 @@ type Event interface {
 	Register(from Name, event string, fn TypeEventFunc) error
 }
 
+type EventRegister interface {
+	Register(Event) error
+}
+
 type EventRequest struct {
 	Receiver Name
 	Type     string
