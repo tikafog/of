@@ -187,6 +187,23 @@ func (c *Content) JSONV2() []byte {
 	return utils.Must(json.Marshal(c.meta))
 }
 
+func (c *Content) JSONV3() []byte {
+	if c.meta == nil {
+		var message []byte
+		if c.Message != nil {
+			message = utils.Must(json.Marshal(c.Message))
+		}
+		c.meta = &metaContent{
+			From:    c.From,
+			Message: message,
+			Exts:    c.Exts,
+			Type:    c.Type,
+		}
+	}
+	c.meta.Version = version.VersionOne
+	return utils.Must(json.Marshal(c.meta))
+}
+
 // Clear
 // @receiver *Content
 func (c *Content) Clear() {
