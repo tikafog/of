@@ -119,7 +119,7 @@ func (c *Content) NewMessageLast(last int64) *Content {
 // @param int64
 // @return *Content
 func (c *Content) NewMessageAndLast(data []byte, last int64) *Content {
-	c.Message = NewContentMessageLast(last)
+	c.Message = NewContentMessageAndLast(data, last)
 	return c
 }
 
