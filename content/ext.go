@@ -1,6 +1,8 @@
 package content
 
 import (
+	"github.com/tikafog/errors"
+
 	"github.com/tikafog/of/buffers/content"
 )
 
@@ -73,11 +75,8 @@ func MakeExtConverter(v interface{}) (Ext, error) {
 	}
 	ext.ExtType = vv.ExtType()
 	ext.Data, err = vv.MarshalData()
-	if err != nil {
-		return ext, errors.Wrap(err, "marshall data failed")
-	}
 	ext.Length = len(ext.Data)
-	return ext, nil
+	return ext, errors.WrapStringN(err, "make data failed")
 }
 
 // MakeExt ...
@@ -90,9 +89,6 @@ func MakeExt(v ExtConverter) (Ext, error) {
 	var err error
 	ext.ExtType = v.ExtType()
 	ext.Data, err = v.MarshalData()
-	if err != nil {
-		return ext, errors.Wrap(err, "marshall data failed")
-	}
 	ext.Length = len(ext.Data)
-	return ext, nil
+	return ext, errors.WrapStringN(err, "make data failed")
 }
