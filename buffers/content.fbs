@@ -29,6 +29,7 @@ enum ExtType : uint {
               Play,
               Feedback,
               Pin,
+              Correct,
               Max }
 
 table Ext {

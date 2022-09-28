@@ -20,19 +20,13 @@ const (
 	StepRemove = "remove"
 )
 
-//const (
-//	LabelNone        = "none"
-//	LabelUpdate      = "update"
-//	LabelInformation = "informationv1"
-//)
-
-// Pin holds the schema definition for the Pin entity.
-type Pin struct {
+// Resource holds the schema definition for the Resource entity.
+type Resource struct {
 	ent.Schema
 }
 
-// Fields of the Pin.
-func (Pin) Fields() []ent.Field {
+// Fields of the Resource.
+func (Resource) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("rid").Unique(), //pin hash
 		field.String("status").Default("waiting"),
@@ -44,7 +38,7 @@ func (Pin) Fields() []ent.Field {
 	}
 }
 
-func (Pin) Indexes() []ent.Index {
+func (Resource) Indexes() []ent.Index {
 	return []ent.Index{
 		// non-unique index.
 		index.Fields("rid"),

@@ -10,7 +10,7 @@ type Version struct {
 	ent.Schema
 }
 
-const CurrentVersion = 1
+const CurrentVersion = 2
 
 // Fields of the Version.
 func (Version) Fields() []ent.Field {
