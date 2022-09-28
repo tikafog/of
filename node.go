@@ -6,6 +6,8 @@ import (
 
 type Node interface {
 	Connection
+	Streamer
+
 	ID() ID
 	IsAdmin() bool
 	Inquire(ctx context.Context, r *InquireRequest) error
