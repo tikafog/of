@@ -12,6 +12,7 @@ type Conn interface {
 }
 
 type Connection interface {
+	Bootstrap(addrs ...string) error
 	Connect(ctx context.Context, bootaddr ...string) error
 	Disconnect(ctx context.Context, bootaddr ...string) error
 	NodeConn(id ID) (Conn, bool)
