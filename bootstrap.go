@@ -9,7 +9,7 @@ import (
 type BootstrapLsOption func(*BootstrapLsSetting)
 
 type BootstrapLsSetting struct {
-	Index int
+	Index int64
 	Limit int
 }
 
@@ -25,7 +25,7 @@ func BootstrapLsLimit(limit int) BootstrapLsOption {
 // BootstrapLsIndex ...
 // @param int
 // @return BootstrapLsOption
-func BootstrapLsIndex(index int) BootstrapLsOption {
+func BootstrapLsIndex(index int64) BootstrapLsOption {
 	return func(option *BootstrapLsSetting) {
 		option.Index = index
 	}
@@ -59,7 +59,7 @@ func BootstrapUpgradeAddr(addrs ...string) BootstrapUpgradeOption {
 // Bootstrap is a bootstrap interface
 type Bootstrap interface {
 	Add(ctx context.Context, addrs ...string) error
-	Ls(ctx context.Context, opts ...BootstrapLsOption) (int, []string, error)
+	Ls(ctx context.Context, opts ...BootstrapLsOption) (int64, []string, error)
 	Upgrade(ctx context.Context, id ID, opts ...BootstrapUpgradeOption) error
 	Remove(ctx context.Context, addr ...string) error
 }
