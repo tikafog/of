@@ -317,10 +317,7 @@ func contentToBytes(c *Content, has bool) []byte {
 // @param *Message
 // @return *Content
 func NewContentWithMessage(p content.Type, message *Message) *Content {
-	return &Content{
-		Type:    p,
-		Message: message,
-	}
+	return NewContent(p).SetMessage(message)
 }
 
 // NewContentWithExts
@@ -328,10 +325,7 @@ func NewContentWithMessage(p content.Type, message *Message) *Content {
 // @param ...Ext
 // @return *Content
 func NewContentWithExts(p content.Type, exts ...Ext) *Content {
-	return &Content{
-		Type: p,
-		Exts: exts,
-	}
+	return NewContent(p).SetExts(exts...)
 }
 
 // NewContentWithType ...
@@ -365,6 +359,14 @@ func NewTypeContent(tp content.Type, fns ...func(content *Content)) *Content {
 		fns[i](&_content)
 	}
 	return &_content
+}
+
+// NewContentFrom
+// @param content.Type
+// @param string
+// @return *Content
+func NewContentFrom(p content.Type, from string) *Content {
+	return NewContent(p).SetFrom(from)
 }
 
 // bytesToStringArray ...
