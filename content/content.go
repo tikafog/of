@@ -156,6 +156,24 @@ func (c *Content) SetFrom(s string) *Content {
 // @receiver Content
 // @return []byte
 // @return error
+func (c *Content) CurrentJSON() []byte {
+	switch CurrentDataVersion {
+	case MessageV1Version:
+		return c.JSON()
+	case MessageV2Version:
+		return c.JSONV2()
+	case MessageV3Version:
+		return c.JSONV3()
+	default:
+		return c.JSONV3()
+	}
+}
+
+// JSON ...
+// @Description:
+// @receiver Content
+// @return []byte
+// @return error
 func (c *Content) JSON() []byte {
 	if c.meta == nil {
 		var message []byte
