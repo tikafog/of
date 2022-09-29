@@ -3,7 +3,6 @@ package dbc
 import (
 	"context"
 	"log"
-	"time"
 
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/utils"
@@ -25,10 +24,7 @@ func openMedia[T *media.Client](name of.Name, path string, o *Option) (T, error)
 	if err != nil {
 		return nil, err
 	}
-	if o.timeout < MinTimeoutSec {
-		o.timeout = MinTimeoutSec
-	}
-	ctx, ccf := context.WithTimeout(context.TODO(), time.Duration(o.timeout)*time.Second)
+	ctx, ccf := context.WithTimeout(context.TODO(), o.Timeout())
 	defer ccf()
 	if err := createOrInitMedia(ctx, cli, exist); err != nil {
 		return nil, err

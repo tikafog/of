@@ -1,17 +1,38 @@
 package dbc
 
-const MinTimeoutSec = 60
+import (
+	"time"
+)
+
+const (
+	MinTimeout = 60 * time.Second
+	MaxTimeout = 1800 * time.Second
+)
 
 type Option struct {
-	timeout int64
+	timeout time.Duration
 	debug   bool
+}
+
+func (o Option) Debug() bool {
+	return o.debug
+}
+
+func (o Option) Timeout() time.Duration {
+	if o.timeout < MinTimeout {
+		return MinTimeout
+	}
+	if o.timeout > MaxTimeout {
+		return MaxTimeout
+	}
+	return o.timeout
 }
 
 type Opts func(opt *Option)
 
 func parseOption(opts []Opts) *Option {
 	o := &Option{
-		timeout: 300,
+		timeout: MinTimeout,
 		debug:   false,
 	}
 	for i := range opts {
@@ -26,7 +47,7 @@ func Debug(b bool) Opts {
 	}
 }
 
-func TimeoutOpt(t int64) Opts {
+func TimeoutOpt(t time.Duration) Opts {
 	return func(opt *Option) {
 		opt.timeout = t
 	}
