@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	MinTimeout = 60 * time.Second
+	MinTimeout = 3 * time.Second
 	MaxTimeout = 1800 * time.Second
 )
 
