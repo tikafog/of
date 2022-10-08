@@ -26,7 +26,7 @@ func ParseJSONContent(bytes []byte) (*Content, error) {
 
 	ctnt := meta.content()
 	ctnt.Message, err = parseRawMessage(meta.Message)
-	logger.Println("print content parsed: ", Wipe(ctnt.JSON()))
+	logger.Println("print json content: ", Wipe(ctnt.JSON()))
 	return ctnt, err
 }
 
@@ -46,7 +46,7 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 
 	ctnt := meta.content()
 	ctnt.Message, err = parseRawMessage(meta.Message)
-	logger.Println("print content parsed: ", Wipe(ctnt.JSON()))
+	logger.Println("print json content: ", Wipe(ctnt.JSON()))
 	return ctnt, err
 }
 
