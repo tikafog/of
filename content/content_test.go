@@ -11,6 +11,7 @@ import (
 )
 
 func TestNewContentWithType(t *testing.T) {
+	Debug()
 	type args struct {
 		tp  content.Type
 		msg *Message
@@ -46,7 +47,7 @@ func TestNewContentWithType(t *testing.T) {
 			}
 			//var bytes []byte
 			//_ = json.Unmarshal(jsonContent.Message.Data, &bytes)
-			t.Logf("json1:%+v", string(jsonContent1.JSON()))
+			//t.Logf("json1:%+v", string(jsonContent1.JSON()))
 			if jsonContent1.Message != nil {
 				t.Logf("data:%+v", string(jsonContent1.Message.Data))
 			}
@@ -87,21 +88,21 @@ func TestNewContentWithType(t *testing.T) {
 					t.Logf("data:%+v", string(jsonContent4.Message.Data))
 				}
 			}
-			t.Logf("json4:%+v", string(jsonContent4.JSON()))
+			//t.Logf("json4:%+v", string(jsonContent4.JSON()))
 			v2oldc4 := jsonContent4.JSONV2()
 			jsonContent5, err5 := ParseJSONContent(v2oldc4)
 			if err5 != nil {
 				t.Fatal(err5)
 				return
 			}
-			t.Logf("json5v1:%+v", string(jsonContent5.JSON()))
-			t.Logf("json5v2:%+v", string(jsonContent5.JSONV2()))
+			//t.Logf("json5v1:%+v", string(jsonContent5.JSON()))
+			//t.Logf("json5v2:%+v", string(jsonContent5.JSONV2()))
 			if jsonContent5.Message != nil {
-				t.Logf("data size:%+v", len(jsonContent5.Message.Data))
+				//t.Logf("data size:%+v", len(jsonContent5.Message.Data))
 				if len(jsonContent5.Message.Data) > 256 {
-					t.Logf("data:%+v", string(jsonContent5.Message.Data[:256]))
+					//t.Logf("data:%+v", string(jsonContent5.Message.Data[:256]))
 				} else {
-					t.Logf("data:%+v", string(jsonContent5.Message.Data))
+					//t.Logf("data:%+v", string(jsonContent5.Message.Data))
 				}
 			}
 
@@ -110,14 +111,14 @@ func TestNewContentWithType(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			t.Logf("content5 :%+v", string(c5.JSON()))
-			t.Logf("content5:%+v", string(c5.JSONV2()))
+			//t.Logf("content5 :%+v", string(c5.JSON()))
+			//t.Logf("content5:%+v", string(c5.JSONV2()))
 			if c5.Message != nil {
-				t.Logf("data size:%+v", len(c5.Message.Data))
+				//t.Logf("data size:%+v", len(c5.Message.Data))
 				if len(c5.Message.Data) > 256 {
-					t.Logf("data:%+v", string(c5.Message.Data[:256]))
+					//t.Logf("data:%+v", string(c5.Message.Data[:256]))
 				} else {
-					t.Logf("data:%+v", string(c5.Message.Data))
+					//t.Logf("data:%+v", string(c5.Message.Data))
 				}
 			}
 		})

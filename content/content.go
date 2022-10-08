@@ -189,6 +189,9 @@ func (c *Content) JSON() []byte {
 		}
 	}
 	c.meta.Version = version.VersionOne
+	if debug {
+		logger.Println("print content meta:", string(utils.Must(json.Marshal(c.meta))))
+	}
 	return utils.Must(json.Marshal(c.meta))
 }
 
@@ -212,6 +215,9 @@ func (c *Content) JSONV2() []byte {
 		}
 	}
 	c.meta.Version = version.VersionOne
+	if debug {
+		logger.Println("print content meta:", string(utils.Must(json.Marshal(c.meta))))
+	}
 	return utils.Must(json.Marshal(c.meta))
 }
 
@@ -229,6 +235,9 @@ func (c *Content) JSONV3() []byte {
 		}
 	}
 	c.meta.Version = version.VersionOne
+	if debug {
+		logger.Println("print content meta:", string(utils.Must(json.Marshal(c.meta))))
+	}
 	return utils.Must(json.Marshal(c.meta))
 }
 
@@ -260,6 +269,9 @@ func (c *Content) metaCopy() metaContent {
 			c.meta.Message = utils.Must(json.Marshal(c.Message.v1()))
 		}
 	}
+	if debug {
+		logger.Println("print content meta:", utils.Must(json.Marshal(c.meta)))
+	}
 	return *c.meta
 }
 
@@ -276,6 +288,10 @@ func contentToBytes(c *Content, empty bool) []byte {
 
 	var _message flatbuffers.UOffsetT
 	if !empty {
+		if debug {
+			logger.Println("message is not empty", "last", c.Message.Last, "index", c.Message.Index)
+		}
+
 		_dataM := builder.CreateByteString(c.Message.Data)
 		content.MessageStart(builder)
 		content.MessageAddLast(builder, c.Message.Last)
@@ -309,6 +325,9 @@ func contentToBytes(c *Content, empty bool) []byte {
 	content.ContentAddVersion(builder, _version)
 	content.ContentAddType(builder, c.Type)
 	builder.Finish(content.ContentEnd(builder))
+	if debug {
+		logger.Println("print content", string(c.JSON()))
+	}
 	return builder.FinishedBytes()
 }
 
