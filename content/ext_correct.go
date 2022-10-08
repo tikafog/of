@@ -6,14 +6,13 @@ import (
 	"github.com/tikafog/of/buffers/content"
 )
 
-//ExtCorrect ...
-//@Description:
+// ExtCorrect ...
+// @Description:
 type ExtCorrect struct {
 	Type      content.Type `json:"type,omitempty"`
 	StartUnix int64        `json:"start_unix,omitempty"`
 	EndUnix   int64        `json:"end_unix,omitempty"`
-	Length    int          `json:"length,omitempty"`
-	Data      []byte       `json:"data,omitempty"`
+	Hash      string       `json:"hash,omitempty"`
 }
 
 // ExtType ...
