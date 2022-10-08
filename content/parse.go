@@ -96,18 +96,14 @@ func ParserJSONContentWithV3[T any](bytes []byte) (*ContentV3, error) {
 	return ctnt, err
 }
 
-//ParseContent ...
-//@Description: parse version 2 flatbuffer data
-//@param []byte
-//@return retC
-//@return errors
+// ParseContent ...
+// @Description: parse version 2 flatbuffer data
+// @param []byte
+// @return retC
+// @return errors
 func ParseContent(bytes []byte) (retC *Content, err error) {
 	defer func() {
 		if rerr := recover(); rerr != nil {
-			//if e, ok := rerr.(error); ok && errors.IndexIs(ErrWrongVersionType, e) {
-			//	errors = errors.Error(ErrWrongVersionType)
-			//	return
-			//}
 			err = Errorf("parse content error: %v", rerr)
 		}
 	}()
