@@ -107,20 +107,34 @@ func TestNewContentWithType(t *testing.T) {
 			}
 
 			bytes := jsonContent5.Bytes()
-			c5, err := ParseContent(bytes)
+			c1, err := ParseContent(bytes)
 			if err != nil {
 				t.Fatal(err)
 			}
-			//t.Logf("content5 :%+v", string(c5.JSON()))
-			//t.Logf("content5:%+v", string(c5.JSONV2()))
-			if c5.Message != nil {
-				//t.Logf("data size:%+v", len(c5.Message.Data))
-				if len(c5.Message.Data) > 256 {
-					//t.Logf("data:%+v", string(c5.Message.Data[:256]))
+			//t.Logf("content5 :%+v", string(c1.JSON()))
+			//t.Logf("content5:%+v", string(c1.JSONV2()))
+			if c1.Message != nil {
+				//t.Logf("data size:%+v", len(c1.Message.Data))
+				if len(c1.Message.Data) > 256 {
+					//t.Logf("data:%+v", string(c1.Message.Data[:256]))
 				} else {
-					//t.Logf("data:%+v", string(c5.Message.Data))
+					//t.Logf("data:%+v", string(c1.Message.Data))
 				}
 			}
+
+			oldcb := []byte(`{"version":"0.0.1","message":{"version":1},"type":6}`)
+			c2, err := ParseJSONContent(oldcb)
+			if err != nil {
+				t.Fatal(err)
+			}
+			t.Logf("data:%+v", Wipe(c2.JSON()))
+			bc2 := c2.Bytes()
+			logger.Println("parse bytes")
+			cb2, err := ParseContent(bc2)
+			if err != nil {
+				t.Fatal(err)
+			}
+			t.Logf("data:%+v", Wipe(cb2.JSON()))
 		})
 	}
 }

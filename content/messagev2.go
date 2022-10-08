@@ -6,8 +6,8 @@ import (
 
 const MessageV2Version = 2
 
-//MessageV2 ...
-//@Description:
+// MessageV2 ...
+// @Description:
 type MessageV2 struct {
 	Last    int64           `json:"last,omitempty"`
 	Index   int64           `json:"index,omitempty"`
@@ -17,7 +17,7 @@ type MessageV2 struct {
 }
 
 func (m *MessageV2) IsEmpty() bool {
-	return m == nil || m.Length == 0
+	return m == nil && m.Last == 0 && m.Index == 0 && m.Length == 0
 }
 
 func (m *MessageV2) SetIndex(index int64) *MessageV2 {
@@ -73,7 +73,7 @@ func (m *MessageV2) current() *Message {
 // NewContentMessageV2
 // @param []byte
 // @return *MessageV2
-//Decrypted use NewMessageV2 instead
+// Decrypted use NewMessageV2 instead
 func NewContentMessageV2(data json.RawMessage) *MessageV2 {
 	msg := MessageV2{
 		Version: MessageV2Version,
