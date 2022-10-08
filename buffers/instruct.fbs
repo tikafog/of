@@ -9,6 +9,7 @@ enum Type : uint {
 
 table Instruct {
   version:string;
+  to:string;
   type:Type;
   data:string;
 }

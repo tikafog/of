@@ -41,8 +41,16 @@ func (rcv *Instruct) Version() []byte {
 	return nil
 }
 
-func (rcv *Instruct) Type() Type {
+func (rcv *Instruct) To() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Instruct) Type() Type {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return Type(rcv._tab.GetUint32(o + rcv._tab.Pos))
 	}
@@ -50,11 +58,11 @@ func (rcv *Instruct) Type() Type {
 }
 
 func (rcv *Instruct) MutateType(n Type) bool {
-	return rcv._tab.MutateUint32Slot(6, uint32(n))
+	return rcv._tab.MutateUint32Slot(8, uint32(n))
 }
 
 func (rcv *Instruct) Data() []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
@@ -62,16 +70,19 @@ func (rcv *Instruct) Data() []byte {
 }
 
 func InstructStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func InstructAddVersion(builder *flatbuffers.Builder, version flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(version), 0)
 }
+func InstructAddTo(builder *flatbuffers.Builder, to flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(to), 0)
+}
 func InstructAddType(builder *flatbuffers.Builder, type_ Type) {
-	builder.PrependUint32Slot(1, uint32(type_), 0)
+	builder.PrependUint32Slot(2, uint32(type_), 0)
 }
 func InstructAddData(builder *flatbuffers.Builder, data flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(data), 0)
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(data), 0)
 }
 func InstructEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
