@@ -248,7 +248,7 @@ func (c *Content) FinishBytes() []byte {
 	return c.Bytes()
 }
 
-func (c Content) metaCopy() metaContent {
+func (c *Content) metaCopy() metaContent {
 	if c.meta == nil {
 		c.meta = &metaContent{
 			Version: "",
