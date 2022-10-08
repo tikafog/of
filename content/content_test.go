@@ -104,6 +104,22 @@ func TestNewContentWithType(t *testing.T) {
 					t.Logf("data:%+v", string(jsonContent5.Message.Data))
 				}
 			}
+
+			bytes := jsonContent5.Bytes()
+			c5, err := ParseContent(bytes)
+			if err != nil {
+				t.Fatal(err)
+			}
+			t.Logf("content5 :%+v", string(c5.JSON()))
+			t.Logf("content5:%+v", string(c5.JSONV2()))
+			if c5.Message != nil {
+				t.Logf("data size:%+v", len(c5.Message.Data))
+				if len(c5.Message.Data) > 256 {
+					t.Logf("data:%+v", string(c5.Message.Data[:256]))
+				} else {
+					t.Logf("data:%+v", string(c5.Message.Data))
+				}
+			}
 		})
 	}
 }
