@@ -190,7 +190,7 @@ func (c *Content) JSON() []byte {
 	}
 	c.meta.Version = version.VersionOne
 	if debug {
-		logger.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
+		log.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
 	}
 	return utils.Must(json.Marshal(c.meta))
 }
@@ -216,7 +216,7 @@ func (c *Content) JSONV2() []byte {
 	}
 	c.meta.Version = version.VersionOne
 	if debug {
-		logger.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
+		log.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
 	}
 	return utils.Must(json.Marshal(c.meta))
 }
@@ -236,7 +236,7 @@ func (c *Content) JSONV3() []byte {
 	}
 	c.meta.Version = version.VersionOne
 	if debug {
-		logger.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
+		log.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
 	}
 	return utils.Must(json.Marshal(c.meta))
 }
@@ -270,7 +270,7 @@ func (c *Content) metaCopy() metaContent {
 		}
 	}
 	if debug {
-		logger.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
+		log.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
 	}
 	return *c.meta
 }
@@ -289,7 +289,7 @@ func contentToBytes(c *Content, empty bool) []byte {
 	var _message flatbuffers.UOffsetT
 	if !empty {
 		if debug {
-			logger.Println("message is not empty", "last", c.Message.Last, "index", c.Message.Index)
+			log.Println("message is not empty", "last", c.Message.Last, "index", c.Message.Index)
 		}
 
 		_dataM := builder.CreateByteString(c.Message.Data)
@@ -326,7 +326,7 @@ func contentToBytes(c *Content, empty bool) []byte {
 	content.ContentAddType(builder, c.Type)
 	builder.Finish(content.ContentEnd(builder))
 	if debug {
-		logger.Println("print content", Wipe(c.JSON()))
+		log.Println("print content", Wipe(c.JSON()))
 	}
 	return builder.FinishedBytes()
 }

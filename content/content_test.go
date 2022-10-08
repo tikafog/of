@@ -129,7 +129,7 @@ func TestNewContentWithType(t *testing.T) {
 			}
 			t.Logf("data:%+v", Wipe(c2.JSON()))
 			bc2 := c2.Bytes()
-			logger.Println("parse bytes")
+			log.Println("parse bytes")
 			cb2, err := ParseContent(bc2)
 			if err != nil {
 				t.Fatal(err)

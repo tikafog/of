@@ -1,4 +1,4 @@
-package content
+package instruct
 
 import (
 	"github.com/tikafog/of/logger"
@@ -9,5 +9,5 @@ var log = logger.Discard()
 var Wipe = logger.Wipe
 
 func Debug() {
-	log = logger.Debug("[Content]")
+	log = logger.Debug("[Instruct]")
 }
