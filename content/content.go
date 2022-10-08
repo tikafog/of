@@ -151,7 +151,7 @@ func (c *Content) SetFrom(s string) *Content {
 	return c
 }
 
-// JSON ...
+// CurrentJSON ...
 // @Description:
 // @receiver Content
 // @return []byte
