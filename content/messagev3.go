@@ -11,13 +11,14 @@ const MessageV3Version = 3
 // MessageV3 ...
 // @Description:
 type MessageV3[T any] struct {
-	Last  int64 `json:"last,omitempty"`
-	Index int64 `json:"index,omitempty"`
-	Data  []*T  `json:"data,omitempty"`
+	Last    int64 `json:"last,omitempty"`
+	Index   int64 `json:"index,omitempty"`
+	Version int   `json:"version,omitempty"` // current info version
+	Data    []*T  `json:"data,omitempty"`
 }
 
 func (m *MessageV3[T]) IsEmpty() bool {
-	return m == nil || (m.Last == 0 && m.Index == 0 && len(m.Data) == 0)
+	return m == nil || (m.Last == 0 && m.Index == 0 && len(m.Data) == 0 && m.Version == 0)
 }
 
 func (m *MessageV3[T]) SetIndex(index int64) *MessageV3[T] {

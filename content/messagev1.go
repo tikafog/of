@@ -17,7 +17,7 @@ type MessageV1 struct {
 }
 
 func (m *MessageV1) IsEmpty() bool {
-	return m == nil || (m.Last == 0 && m.Index == 0 && m.Length == 0)
+	return m == nil || (m.Last == 0 && m.Index == 0 && m.Length == 0 && m.Version == 0)
 }
 
 func (m *MessageV1) SetVersion(version int) *MessageV1 {
