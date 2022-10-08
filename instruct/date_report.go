@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 )
 
-//ReportType ...
-//ENUM(none,state,message,max)
+// ReportType ...
+// ENUM(none,state,message,max)
 type ReportType uint32
 
 type ReportData struct {
-	VersionData
+	DataVersion
 	Type ReportType `json:"type,omitempty"`
 	Last int64      `json:"last,omitempty"`
 }

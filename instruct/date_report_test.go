@@ -7,7 +7,7 @@ import (
 
 func TestReportData_JSON(t *testing.T) {
 	type fields struct {
-		VersionData VersionData
+		VersionData DataVersion
 		Type        ReportType
 		Last        int64
 	}
@@ -19,7 +19,7 @@ func TestReportData_JSON(t *testing.T) {
 		{
 			name: "",
 			fields: fields{
-				VersionData: VersionData{
+				VersionData: DataVersion{
 					Version: 2,
 				},
 				Type: 3,
@@ -31,7 +31,7 @@ func TestReportData_JSON(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			d := ReportData{
-				VersionData: tt.fields.VersionData,
+				DataVersion: tt.fields.VersionData,
 				Type:        tt.fields.Type,
 				Last:        tt.fields.Last,
 			}

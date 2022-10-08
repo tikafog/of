@@ -39,7 +39,7 @@ func TestNewInstruct(t *testing.T) {
 			args: args{
 				p: instruct.TypeResource,
 				data: &ReportData{
-					VersionData: VersionData{5},
+					DataVersion: DataVersion{5},
 					Type:        0,
 					Last:        5,
 				},

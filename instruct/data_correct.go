@@ -7,7 +7,7 @@ import (
 )
 
 type CorrectData struct {
-	VersionData
+	DataVersion
 	Type      content.Type    `json:"type,omitempty"`
 	List      json.RawMessage `json:"list,omitempty"`
 	StartUnix int64           `json:"start_unix,omitempty"`

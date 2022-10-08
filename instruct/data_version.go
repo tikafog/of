@@ -1,7 +1,7 @@
 package instruct
 
-var CurrentDataVersion = VersionData{Version: 1}
+var CurrentDataVersion = DataVersion{Version: 1}
 
-type VersionData struct {
+type DataVersion struct {
 	Version int `json:"version,omitempty"`
 }
