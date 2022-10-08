@@ -17,7 +17,7 @@ type MessageV3[T any] struct {
 }
 
 func (m *MessageV3[T]) IsEmpty() bool {
-	return m == nil && m.Last == 0 && m.Index == 0 && len(m.Data) == 0
+	return m == nil || (m.Last == 0 && m.Index == 0 && len(m.Data) == 0)
 }
 
 func (m *MessageV3[T]) SetIndex(index int64) *MessageV3[T] {

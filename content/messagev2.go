@@ -17,7 +17,7 @@ type MessageV2 struct {
 }
 
 func (m *MessageV2) IsEmpty() bool {
-	return m == nil && m.Last == 0 && m.Index == 0 && m.Length == 0
+	return m == nil || (m.Last == 0 && m.Index == 0 && m.Length == 0)
 }
 
 func (m *MessageV2) SetIndex(index int64) *MessageV2 {
