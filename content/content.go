@@ -190,7 +190,7 @@ func (c *Content) JSON() []byte {
 	}
 	c.meta.Version = version.VersionOne
 	if debug {
-		logger.Println("print content meta:", string(utils.Must(json.Marshal(c.meta))))
+		logger.Println("print content meta:", string(utils.Must(json.Marshal(c.meta))[:256]))
 	}
 	return utils.Must(json.Marshal(c.meta))
 }
@@ -216,7 +216,7 @@ func (c *Content) JSONV2() []byte {
 	}
 	c.meta.Version = version.VersionOne
 	if debug {
-		logger.Println("print content meta:", string(utils.Must(json.Marshal(c.meta))))
+		logger.Println("print content meta:", string(utils.Must(json.Marshal(c.meta))[:256]))
 	}
 	return utils.Must(json.Marshal(c.meta))
 }
@@ -236,7 +236,7 @@ func (c *Content) JSONV3() []byte {
 	}
 	c.meta.Version = version.VersionOne
 	if debug {
-		logger.Println("print content meta:", string(utils.Must(json.Marshal(c.meta))))
+		logger.Println("print content meta:", string(utils.Must(json.Marshal(c.meta))[:256]))
 	}
 	return utils.Must(json.Marshal(c.meta))
 }
@@ -270,7 +270,7 @@ func (c *Content) metaCopy() metaContent {
 		}
 	}
 	if debug {
-		logger.Println("print content meta:", utils.Must(json.Marshal(c.meta)))
+		logger.Println("print content meta:", utils.Must(json.Marshal(c.meta))[:256])
 	}
 	return *c.meta
 }
@@ -326,7 +326,7 @@ func contentToBytes(c *Content, empty bool) []byte {
 	content.ContentAddType(builder, c.Type)
 	builder.Finish(content.ContentEnd(builder))
 	if debug {
-		logger.Println("print content", string(c.JSON()))
+		logger.Println("print content", string(c.JSON()[:256]))
 	}
 	return builder.FinishedBytes()
 }

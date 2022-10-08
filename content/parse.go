@@ -14,7 +14,7 @@ import (
 // @return *Content
 // @return error
 func ParseJSONContent(bytes []byte) (*Content, error) {
-	logger.Println("print content json: ", string(bytes))
+	logger.Println("print content json: ", string(bytes[:256]))
 	var meta metaContent
 	err := json.Unmarshal(bytes, &meta)
 	if err != nil {
@@ -26,7 +26,7 @@ func ParseJSONContent(bytes []byte) (*Content, error) {
 
 	ctnt := meta.content()
 	ctnt.Message, err = parseRawMessage(meta.Message)
-	logger.Println("print content parsed: ", string(ctnt.JSON()))
+	logger.Println("print content parsed: ", string(ctnt.JSON()[:256]))
 	return ctnt, err
 }
 
@@ -46,7 +46,7 @@ func ParseJSONContentFromReader(reader io.Reader) (*Content, error) {
 
 	ctnt := meta.content()
 	ctnt.Message, err = parseRawMessage(meta.Message)
-	logger.Println("print content parsed: ", string(ctnt.JSON()))
+	logger.Println("print content parsed: ", string(ctnt.JSON()[:256]))
 	return ctnt, err
 }
 
@@ -134,6 +134,7 @@ func parseContent(cc *content.Content) *Content {
 
 	oc := NewContent(cc.Type())
 	if message != nil {
+		logger.Println("message is not empty", "last", message.Last(), "index", message.Index(), "size", len(message.Data()))
 		oc.Message = &Message{
 			Last:    message.Last(),
 			Index:   message.Index(),
