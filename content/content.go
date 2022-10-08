@@ -271,11 +271,11 @@ func (c *Content) Bytes() []byte {
 	return contentToBytes(c, c.Message.IsEmpty())
 }
 
-func contentToBytes(c *Content, has bool) []byte {
+func contentToBytes(c *Content, empty bool) []byte {
 	builder := flatbuffers.NewBuilder(0)
 
 	var _message flatbuffers.UOffsetT
-	if !has {
+	if !empty {
 		_dataM := builder.CreateByteString(c.Message.Data)
 		content.MessageStart(builder)
 		content.MessageAddLast(builder, c.Message.Last)
@@ -302,7 +302,7 @@ func contentToBytes(c *Content, has bool) []byte {
 	_from := builder.CreateString(c.From)
 	content.ContentStart(builder)
 	content.ContentAddExt(builder, _extsVec)
-	if !has {
+	if !empty {
 		content.ContentAddMessage(builder, _message)
 	}
 	content.ContentAddFrom(builder, _from)
