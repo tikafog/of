@@ -8,8 +8,8 @@ import (
 
 const MessageV3Version = 3
 
-//MessageV3 ...
-//@Description:
+// MessageV3 ...
+// @Description:
 type MessageV3[T any] struct {
 	Last  int64 `json:"last,omitempty"`
 	Index int64 `json:"index,omitempty"`
@@ -17,7 +17,7 @@ type MessageV3[T any] struct {
 }
 
 func (m *MessageV3[T]) IsEmpty() bool {
-	return m == nil || len(m.Data) == 0
+	return m == nil && m.Last == 0 && m.Index == 0 && len(m.Data) == 0
 }
 
 func (m *MessageV3[T]) SetIndex(index int64) *MessageV3[T] {
@@ -64,7 +64,7 @@ func (m *MessageV3[T]) v2() *MessageV2 {
 // NewContentMessageV3
 // @param []byte
 // @return *MessageV3[T]
-//Decrypted use NewMessageV3[T] instead
+// Decrypted use NewMessageV3[T] instead
 func NewContentMessageV3[T any](data []*T) *MessageV3[T] {
 	msg := MessageV3[T]{
 		Data: data,
