@@ -27,7 +27,6 @@ type metaInstruct struct {
 
 type Data interface {
 	InstructType() Type
-	SetVersion(int)
 }
 
 type Instructor interface {
