@@ -5,6 +5,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/tikafog/of/buffers/instruct"
 	"github.com/tikafog/of/utils"
 )
@@ -39,9 +41,9 @@ func TestNewInstruct(t *testing.T) {
 			args: args{
 				p: instruct.TypeResource,
 				data: &ReportData{
-					DataVersion: DataVersion{5},
-					Type:        0,
-					Last:        5,
+					Version: 5,
+					Type:    0,
+					Last:    5,
 				},
 			},
 			want: nil,
@@ -53,7 +55,7 @@ func TestNewInstruct(t *testing.T) {
 			case *ResourceData:
 				got := NewInstruct[ResourceData]()
 				got.SetData(tt.args.data.(*ResourceData))
-
+				assert.Equal(t, got.Type, instruct.TypeResource)
 				var ri Instruct[ResourceData]
 				err := json.Unmarshal(got.JSON(), &ri)
 				if err != nil {
@@ -97,13 +99,14 @@ func TestNewInstruct(t *testing.T) {
 			case *ReportData:
 				got := NewInstruct[ReportData]()
 				got.SetData(tt.args.data.(*ReportData))
-
+				assert.Equal(t, got.Type, instruct.TypeReport)
 				var ri Instruct[ReportData]
 				err := json.Unmarshal(got.JSON(), &ri)
 				if err != nil {
 					t.Fatal(err)
 					return
 				}
+
 				t.Logf("Decode1: %+v", ri.Data)
 				i, err := ParseJSONInstruct(got.JSON())
 				if err != nil {
@@ -143,3 +146,22 @@ func TestNewInstruct(t *testing.T) {
 		})
 	}
 }
+
+//
+//func TestNewInstruct1(t *testing.T) {
+//	tests := []struct {
+//		name string
+//		want *Instruct[CorrectData]
+//	}{
+//		{
+//			name: "",
+//			want: NewInstruct[CorrectData](),
+//		},
+//	}
+//	for _, tt := range tests {
+//		t.Run(tt.name, func(t *testing.T) {
+//			got := NewInstruct[CorrectData]()
+//			assert.Equal(t, got.Type, tt.want.Type)
+//		})
+//	}
+//}

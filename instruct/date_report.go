@@ -2,6 +2,8 @@ package instruct
 
 import (
 	"encoding/json"
+
+	"github.com/tikafog/of/buffers/instruct"
 )
 
 const CurrentReportVersion = 1
@@ -23,7 +25,13 @@ func NewReportData(p ReportType) *ReportData {
 	}
 }
 
-func (d ReportData) JSON() []byte {
+func (d ReportData) InstructType() Type {
+	return instruct.TypeReport
+}
+
+func (d *ReportData) JSON() []byte {
 	v, _ := json.Marshal(d)
 	return v
 }
+
+var _ Data = (*ReportData)(nil)

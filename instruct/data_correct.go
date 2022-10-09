@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/buffers/instruct"
 )
 
 const CurrentCorrectVersion = 1
@@ -16,16 +17,22 @@ type CorrectData struct {
 	EndUnix   int64           `json:"end_unix,omitempty"`
 }
 
-func (c *CorrectData) SetEndUnix(endUnix int64) {
-	c.EndUnix = endUnix
-}
-
-func (c *CorrectData) SetStartUnix(startUnix int64) {
-	c.StartUnix = startUnix
-}
-
 func NewCorrectData(p content.Type, list json.RawMessage) *CorrectData {
 	return &CorrectData{
 		Version: CurrentCorrectVersion,
 	}
 }
+
+func (d CorrectData) InstructType() Type {
+	return instruct.TypeCorrect
+}
+
+func (d *CorrectData) SetEndUnix(endUnix int64) {
+	d.EndUnix = endUnix
+}
+
+func (d *CorrectData) SetStartUnix(startUnix int64) {
+	d.StartUnix = startUnix
+}
+
+var _ Data = (*CorrectData)(nil)

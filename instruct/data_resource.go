@@ -1,5 +1,9 @@
 package instruct
 
+import (
+	"github.com/tikafog/of/buffers/instruct"
+)
+
 const CurrentResourceVersion = 1
 
 type ResourceData struct {
@@ -14,3 +18,9 @@ func NewResourceData() *ResourceData {
 		Version: CurrentResourceVersion,
 	}
 }
+
+func (d ResourceData) InstructType() Type {
+	return instruct.TypeResource
+}
+
+var _ Data = (*ResourceData)(nil)

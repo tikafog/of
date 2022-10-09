@@ -25,8 +25,17 @@ type metaInstruct struct {
 	Type    Type            `json:"type,omitempty"`
 }
 
+type Data interface {
+	InstructType() Type
+}
+
+type Instructor interface {
+	CorrectData | ResourceData | ReportData
+	Data
+}
+
 // Instruct ...
-type Instruct[T any] struct {
+type Instruct[T Instructor] struct {
 	meta *metaInstruct
 	Data *T   `json:"data,omitempty"`
 	Type Type `json:"type,omitempty"`
@@ -137,18 +146,10 @@ func instructToBytes(c *metaInstruct) []byte {
 }
 
 // NewInstruct ...
-// @param instruct.Type
 // @return *Instruct[T]
-func NewInstruct[T any]() *Instruct[T] {
+func NewInstruct[T Instructor]() *Instruct[T] {
 	inst := new(Instruct[T])
-	switch any(*new(T)).(type) {
-	case ResourceData:
-		inst.Type = instruct.TypeResource
-	case CorrectData:
-		inst.Type = instruct.TypeCorrect
-	case ReportData:
-		inst.Type = instruct.TypeReport
-	}
+	inst.Type = Data.InstructType(*new(T))
 	return inst
 }
 

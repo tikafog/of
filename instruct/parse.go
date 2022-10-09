@@ -37,11 +37,11 @@ func ParseJSONInstructFromReader(reader io.Reader) (any, error) {
 	return parseMetaInstruct(&meta)
 }
 
-//ParseInstruct ...
-//@Description: parse version 2 flatbuffer data
-//@param []byte
-//@return retC
-//@return errors
+// ParseInstruct ...
+// @Description: parse version 2 flatbuffer data
+// @param []byte
+// @return retC
+// @return errors
 func ParseInstruct(bytes []byte) (retC any, err error) {
 	defer func() {
 		if rerr := recover(); rerr != nil {
@@ -56,7 +56,7 @@ func ParseInstruct(bytes []byte) (retC any, err error) {
 	return parseMetaInstruct(meta)
 }
 
-func parseInstructT[T any](meta *metaInstruct) (*Instruct[T], error) {
+func parseInstructT[T Instructor](meta *metaInstruct) (*Instruct[T], error) {
 	var inst Instruct[T]
 	inst.Type = meta.Type
 	//inst.Version = meta.Version
