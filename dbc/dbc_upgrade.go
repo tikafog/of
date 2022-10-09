@@ -12,7 +12,7 @@ import (
 	"github.com/tikafog/of/utils"
 )
 
-func openUpgrade[T *upgrade.Client](name of.Name, path string, o *Option) (T, error) {
+func openUpgrade(name of.Name, path string, o *Option) (*upgrade.Client, error) {
 	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String(), o.debug)
 	if err != nil {
 		return nil, err

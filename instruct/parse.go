@@ -87,11 +87,11 @@ func parseMetaInstruct(meta *metaInstruct) (any, error) {
 	var inst metaParser
 	switch meta.Type {
 	case instruct.TypeResource:
-		inst = new(Instruct[ResourceData])
+		inst = NewInstruct[ResourceData]()
 	case instruct.TypeCorrect:
-		inst = new(Instruct[CorrectData])
+		inst = NewInstruct[CorrectData]()
 	case instruct.TypeReport:
-		inst = new(Instruct[ReportData])
+		inst = NewInstruct[ReportData]()
 	default:
 		return nil, ErrWrongInstructType
 	}

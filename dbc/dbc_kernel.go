@@ -12,7 +12,7 @@ import (
 	"github.com/tikafog/of/dbc/kernel/schema"
 )
 
-func openKernel[T *kernel.Client](name of.Name, path string, o *Option) (T, error) {
+func openKernel(name of.Name, path string, o *Option) (*kernel.Client, error) {
 	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String(), o.debug)
 	if err != nil {
 		return nil, err

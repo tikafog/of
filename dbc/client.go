@@ -8,44 +8,32 @@ import (
 	"github.com/tikafog/of/dbc/upgrade"
 )
 
-//type clientAble interface {
-//	*bootnode.Client | *kernel.Client | *upgrade.Client | *media.Client
-//openBootNode() clientAble
-//}
+// ClientType ...
+// ENUM(bootnode,kernel,upgrade,media,max)
+type ClientType uint32
 
-//type OpenFunc[T clientAble] func(name of.Name, path string, op *Option) (T, error)
-
-//type client[T clientAble] struct {
-//	name of.Name
-//	path string
-//funcs map[of.Name]OpenFunc[T]
-//openBootNode  OpenFunc[T]
-//}
-
-//func (c client[T]) Name() of.Name { return c.name }
-
-func openClient[C Client](path string, op *Option) (C, error) {
-	var c C
-	var it any = c
+func openClient[C any](path string, op *Option) (*Client[C], error) {
+	var it any = new(C)
 	var err error
 	var name of.Name
 	switch it.(type) {
 	case *bootnode.Client:
-		name = of.NameBootNode
-		it, err = openBootNode[*bootnode.Client](name, path, op)
+		it, err = openBootNode(of.NameBootNode, path, op)
 	case *kernel.Client:
 		name = of.NameKernel
-		it, err = openKernel[*kernel.Client](name, path, op)
+		it, err = openKernel(name, path, op)
 	case *upgrade.Client:
 		name = of.NameUpgrade
-		it, err = openUpgrade[*upgrade.Client](name, path, op)
+		it, err = openUpgrade(name, path, op)
 	case *media.Client:
 		name = of.NameMedia
-		it, err = openMedia[*media.Client](name, path, op)
+		it, err = openMedia(name, path, op)
 	default:
 		return nil, Error("unsupported client type")
 	}
-	return it.(C), err
+	return &Client[C]{
+		C: (it).(*C),
+	}, err
 }
 
 //c := client[T]{

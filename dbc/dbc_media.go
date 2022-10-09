@@ -12,7 +12,7 @@ import (
 	"github.com/tikafog/of/dbc/media/schema"
 )
 
-func openMedia[T *media.Client](name of.Name, path string, o *Option) (T, error) {
+func openMedia(name of.Name, path string, o *Option) (*media.Client, error) {
 	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String(), o.debug)
 	if err != nil {
 		return nil, err

@@ -12,7 +12,7 @@ import (
 	"github.com/tikafog/of/dbc/bootnode/schema"
 )
 
-func openBootNode[T *bootnode.Client](name of.Name, path string, o *Option) (T, error) {
+func openBootNode(name of.Name, path string, o *Option) (*bootnode.Client, error) {
 	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String(), o.debug)
 	if err != nil {
 		return nil, err
