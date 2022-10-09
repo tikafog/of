@@ -13,38 +13,37 @@ type DBC struct {
 }
 
 func Open(path string, opts ...Opts) (*DBC, error) {
-	o := parseOption(opts)
-	debug = o.Debug()
-	ignores := o.Ignores()
-	dbc := &DBC{
-		opt: o,
-	}
+	var dbc DBC
+	dbc.opt = parseOption(opts)
+	debug = dbc.opt.Debug()
+	ignores := dbc.opt.Ignores()
+
 	var err error
 	if _, ok := ignores[ClientTypeBootnode]; !ok {
-		dbc.cs[ClientTypeBootnode], err = openClient[bootnode.Client](path, o)
+		dbc.cs[ClientTypeBootnode], err = openClient[bootnode.Client](path, dbc.opt)
 		if err != nil {
 			return nil, merr.Wrap(err, "open bootnode failed")
 		}
 	}
 	if _, ok := ignores[ClientTypeKernel]; !ok {
-		dbc.cs[ClientTypeKernel], err = openClient[kernel.Client](path, o)
+		dbc.cs[ClientTypeKernel], err = openClient[kernel.Client](path, dbc.opt)
 		if err != nil {
 			return nil, merr.Wrap(err, "open kernel failed")
 		}
 	}
 	if _, ok := ignores[ClientTypeUpgrade]; !ok {
-		dbc.cs[ClientTypeUpgrade], err = openClient[upgrade.Client](path, o)
+		dbc.cs[ClientTypeUpgrade], err = openClient[upgrade.Client](path, dbc.opt)
 		if err != nil {
 			return nil, merr.Wrap(err, "open upgrade failed")
 		}
 	}
 	if _, ok := ignores[ClientTypeMedia]; !ok {
-		dbc.cs[ClientTypeMedia], err = openClient[media.Client](path, o)
+		dbc.cs[ClientTypeMedia], err = openClient[media.Client](path, dbc.opt)
 		if err != nil {
 			return nil, merr.Wrap(err, "open media failed")
 		}
 	}
-	return dbc, nil
+	return &dbc, nil
 }
 
 func (d *DBC) BootNode() *Client[bootnode.Client] {
