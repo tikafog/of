@@ -10,7 +10,7 @@ import (
 )
 
 type client interface {
-	any | kernel.Client | bootnode.Client | upgrade.Client | media.Client
+	kernel.Client | bootnode.Client | upgrade.Client | media.Client
 }
 
 type Client[T client] struct {

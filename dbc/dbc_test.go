@@ -13,6 +13,6 @@ func TestDBC(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	x := dbc.Media().InformationV1.Query().AllX(context.Background())
+	x := dbc.Media().C.InformationV1.Query().AllX(context.Background())
 	fmt.Println(x)
 }

@@ -12,7 +12,7 @@ import (
 // ENUM(bootnode,kernel,upgrade,media,max)
 type ClientType uint32
 
-func openClient[C any](path string, op *Option) (*Client[C], error) {
+func openClient[C client](path string, op *Option) (*Client[C], error) {
 	var it any = new(C)
 	var err error
 	var name of.Name
