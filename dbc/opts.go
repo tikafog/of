@@ -12,6 +12,7 @@ const (
 type Option struct {
 	timeout time.Duration
 	debug   bool
+	ignores map[ClientType]struct{}
 }
 
 func (o Option) Debug() bool {
@@ -28,10 +29,15 @@ func (o Option) Timeout() time.Duration {
 	return o.timeout
 }
 
+func (o Option) Ignores() map[ClientType]struct{} {
+	return o.ignores
+}
+
 type Opts func(opt *Option)
 
 func parseOption(opts []Opts) *Option {
 	o := &Option{
+		ignores: make(map[ClientType]struct{}),
 		timeout: MinTimeout,
 		debug:   false,
 	}
@@ -50,5 +56,13 @@ func Debug(b bool) Opts {
 func TimeoutOpt(t time.Duration) Opts {
 	return func(opt *Option) {
 		opt.timeout = t
+	}
+}
+
+func IgnoresOpt(ps ...ClientType) Opts {
+	return func(opt *Option) {
+		for i := range ps {
+			opt.ignores[ps[i]] = struct{}{}
+		}
 	}
 }
