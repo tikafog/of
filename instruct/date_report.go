@@ -4,14 +4,23 @@ import (
 	"encoding/json"
 )
 
+const CurrentReportVersion = 1
+
 // ReportType ...
 // ENUM(none,state,message,max)
 type ReportType uint32
 
 type ReportData struct {
-	DataVersion
-	Type ReportType `json:"type,omitempty"`
-	Last int64      `json:"last,omitempty"`
+	Version int        `json:"version,omitempty"`
+	Type    ReportType `json:"type,omitempty"`
+	Last    int64      `json:"last,omitempty"`
+}
+
+func NewReportData(p ReportType) *ReportData {
+	return &ReportData{
+		Version: CurrentReportVersion,
+		Type:    p,
+	}
 }
 
 func (d ReportData) JSON() []byte {
