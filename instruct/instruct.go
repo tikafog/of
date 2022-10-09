@@ -18,11 +18,12 @@ type metaParser interface {
 }
 
 type metaInstruct struct {
-	Version string          `json:"version,omitempty"`
-	To      string          `json:"to,omitempty"`
-	Length  int             `json:"length,omitempty"`
-	Data    json.RawMessage `json:"data,omitempty"`
-	Type    Type            `json:"type,omitempty"`
+	Version  string          `json:"version,omitempty"`
+	To       string          `json:"to,omitempty"`
+	Length   int             `json:"length,omitempty"`
+	Data     json.RawMessage `json:"data,omitempty"`
+	Type     Type            `json:"type,omitempty"`
+	TimeUnix int64           `json:"time_unix,omitempty"`
 }
 
 type Data interface {
