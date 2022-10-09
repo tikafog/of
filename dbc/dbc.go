@@ -1,34 +1,16 @@
 package dbc
 
 import (
-	"sync"
-
 	"github.com/tikafog/of/dbc/bootnode"
 	"github.com/tikafog/of/dbc/kernel"
 	"github.com/tikafog/of/dbc/media"
 	"github.com/tikafog/of/dbc/upgrade"
 )
 
-type client interface {
-	kernel.Client | bootnode.Client | upgrade.Client | media.Client
-}
-
-type Client[T client] struct {
-	Lock sync.Mutex
-	C    *T
-}
-
 type DBC struct {
 	opt *Option
 	cs  [ClientTypeMax]any
 }
-
-var (
-// BootnodeClient = new(Client[bootnode.Client])
-// KernelClient   = new(Client[kernel.Client])
-// UpgradeClient  = new(Client[upgrade.Client])
-// MediaClient    = new(Client[media.Client])
-)
 
 func Open(path string, opts ...Opts) (*DBC, error) {
 	o := parseOption(opts)

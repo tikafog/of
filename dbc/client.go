@@ -1,6 +1,8 @@
 package dbc
 
 import (
+	"sync"
+
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/dbc/bootnode"
 	"github.com/tikafog/of/dbc/kernel"
@@ -11,6 +13,15 @@ import (
 // ClientType ...
 // ENUM(bootnode,kernel,upgrade,media,max)
 type ClientType uint32
+
+type client interface {
+	kernel.Client | bootnode.Client | upgrade.Client | media.Client
+}
+
+type Client[T client] struct {
+	Lock sync.Mutex
+	C    *T
+}
 
 func openClient[C client](path string, op *Option) (*Client[C], error) {
 	var it any = new(C)
