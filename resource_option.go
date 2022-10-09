@@ -4,6 +4,7 @@ type ResourceOption func(*ResourceSetting)
 
 type ResourceSetting struct {
 	Type         ResourceType
+	ShowProgress bool
 	IgnoreHidden bool
 }
 
@@ -13,6 +14,15 @@ type ResourceSetting struct {
 func SetResourceType(ResourceType ResourceType) ResourceOption {
 	return func(option *ResourceSetting) {
 		option.Type = ResourceType
+	}
+}
+
+// SetResourceShowProgress ...
+// @param bool
+// @return ResourceOption
+func SetResourceShowProgress(ShowProgress bool) ResourceOption {
+	return func(option *ResourceSetting) {
+		option.ShowProgress = ShowProgress
 	}
 }
 
