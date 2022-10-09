@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/cespare/xxhash"
+	"github.com/google/uuid"
 )
 
 type Uint64Slice []uint64
@@ -13,10 +14,19 @@ func (x Uint64Slice) Len() int           { return len(x) }
 func (x Uint64Slice) Less(i, j int) bool { return x[i] < x[j] }
 func (x Uint64Slice) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
 
-func Hash(hashes ...string) []byte {
+func HashString(hashes ...string) []byte {
 	hashed := make(Uint64Slice, len(hashes))
 	for i := range hashes {
 		hashed[i] = xxhash.Sum64String(hashes[i])
+	}
+	sort.Sort(hashed)
+	return Int64ToBytes(hashed...)
+}
+
+func Hash(ids ...uuid.UUID) []byte {
+	hashed := make(Uint64Slice, len(ids))
+	for i := range ids {
+		hashed[i] = xxhash.Sum64(ids[i][:])
 	}
 	sort.Sort(hashed)
 	return Int64ToBytes(hashed...)

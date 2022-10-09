@@ -12,7 +12,7 @@ type ExtCorrect struct {
 	Type      content.Type `json:"type,omitempty"`
 	StartUnix int64        `json:"start_unix,omitempty"`
 	EndUnix   int64        `json:"end_unix,omitempty"`
-	Hash      string       `json:"hash,omitempty"`
+	Hash      []byte       `json:"hash,omitempty"`
 }
 
 // ExtType ...
