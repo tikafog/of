@@ -28,7 +28,7 @@ enum ExtType : uint {
               Exception,
               Play,
               Feedback,
-              Pin,
+              Resource,
               Correct,
               Max }
 

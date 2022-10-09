@@ -13,7 +13,7 @@ const (
 	ExtTypeException ExtType = 3
 	ExtTypePlay      ExtType = 4
 	ExtTypeFeedback  ExtType = 5
-	ExtTypePin       ExtType = 6
+	ExtTypeResource  ExtType = 6
 	ExtTypeCorrect   ExtType = 7
 	ExtTypeMax       ExtType = 8
 )
@@ -25,7 +25,7 @@ var EnumNamesExtType = map[ExtType]string{
 	ExtTypeException: "Exception",
 	ExtTypePlay:      "Play",
 	ExtTypeFeedback:  "Feedback",
-	ExtTypePin:       "Pin",
+	ExtTypeResource:  "Resource",
 	ExtTypeCorrect:   "Correct",
 	ExtTypeMax:       "Max",
 }
@@ -37,7 +37,7 @@ var EnumValuesExtType = map[string]ExtType{
 	"Exception": ExtTypeException,
 	"Play":      ExtTypePlay,
 	"Feedback":  ExtTypeFeedback,
-	"Pin":       ExtTypePin,
+	"Resource":  ExtTypeResource,
 	"Correct":   ExtTypeCorrect,
 	"Max":       ExtTypeMax,
 }

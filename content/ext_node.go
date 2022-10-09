@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/utils"
 )
 
 // NodeState ...
@@ -14,8 +15,8 @@ type NodeState int
 // ENUM(server,adapter,client,box,mobile,max)
 type NodeType int
 
-//ExtNode ...
-//@Description:
+// ExtNode ...
+// @Description:
 type ExtNode struct {
 	State    NodeState `json:"state,omitempty"`
 	Type     NodeType  `json:"type,omitempty"`
@@ -35,6 +36,21 @@ type ExtNode struct {
 // @return content.ExtType
 func (c *ExtNode) ExtType() content.ExtType {
 	return content.ExtTypeNode
+}
+
+// JSON
+// @receiver *ExtNode
+// @return []byte
+func (c *ExtNode) JSON() []byte {
+	return utils.Must(json.Marshal(c))
+}
+
+// Struct
+// @receiver *ExtNode
+// @param []byte
+// @return error
+func (c *ExtNode) Struct(data []byte) error {
+	return json.Unmarshal(data, c)
 }
 
 // MarshalData ...

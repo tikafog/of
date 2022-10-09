@@ -255,7 +255,7 @@ func (rq *ResourceQuery) Clone() *ResourceQuery {
 // Example:
 //
 //	var v []struct {
-//		Rid string `json:"rid,omitempty"`
+//		RID string `json:"rid,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -283,7 +283,7 @@ func (rq *ResourceQuery) GroupBy(field string, fields ...string) *ResourceGroupB
 // Example:
 //
 //	var v []struct {
-//		Rid string `json:"rid,omitempty"`
+//		RID string `json:"rid,omitempty"`
 //	}
 //
 //	client.Resource.Query().

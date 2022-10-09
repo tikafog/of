@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/utils"
 )
 
 // ExtCorrect ...
@@ -13,6 +14,21 @@ type ExtCorrect struct {
 	StartUnix int64        `json:"start_unix,omitempty"`
 	EndUnix   int64        `json:"end_unix,omitempty"`
 	Hash      []byte       `json:"hash,omitempty"`
+}
+
+// JSON
+// @receiver *ExtCorrect
+// @return []byte
+func (c *ExtCorrect) JSON() []byte {
+	return utils.Must(json.Marshal(c))
+}
+
+// Struct
+// @receiver *ExtCorrect
+// @param []byte
+// @return error
+func (c *ExtCorrect) Struct(data []byte) error {
+	return json.Unmarshal(data, c)
 }
 
 // ExtType ...

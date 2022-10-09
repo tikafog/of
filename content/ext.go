@@ -10,6 +10,8 @@ import (
 // @Description:
 type ExtConverter interface {
 	ExtType() content.ExtType
+	JSON() []byte
+	Struct(data []byte) error
 	MarshalData() ([]byte, error)
 	UnmarshalData(data []byte) error
 }
@@ -68,15 +70,14 @@ func ParseExtConverter(ext Ext, v interface{}) error {
 // @return error
 func MakeExtConverter(v interface{}) (Ext, error) {
 	var ext Ext
-	var err error
 	vv, b := v.(ExtConverter)
 	if !b {
 		return ext, errors.IndexError(ErrWrongExtType)
 	}
 	ext.ExtType = vv.ExtType()
-	ext.Data, err = vv.MarshalData()
+	ext.Data = vv.JSON()
 	ext.Length = len(ext.Data)
-	return ext, errors.WrapStringN(err, "make data failed")
+	return ext, nil
 }
 
 // MakeExt ...
@@ -86,9 +87,8 @@ func MakeExtConverter(v interface{}) (Ext, error) {
 // @return error
 func MakeExt(v ExtConverter) (Ext, error) {
 	var ext Ext
-	var err error
 	ext.ExtType = v.ExtType()
-	ext.Data, err = v.MarshalData()
+	ext.Data = v.JSON()
 	ext.Length = len(ext.Data)
-	return ext, errors.WrapStringN(err, "make data failed")
+	return ext, nil
 }
