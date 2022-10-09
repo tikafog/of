@@ -19,8 +19,17 @@ type client interface {
 }
 
 type Client[T client] struct {
-	Lock sync.Mutex
-	C    *T
+	m sync.Mutex
+	c *T
+}
+
+func (t *Client[T]) Query() *T {
+	return t.c
+}
+
+func (t *Client[T]) Update() (*T, *sync.Mutex) {
+	t.m.Lock()
+	return t.c, &t.m
 }
 
 func openClient[C client](path string, op *Option) (*Client[C], error) {
@@ -43,55 +52,6 @@ func openClient[C client](path string, op *Option) (*Client[C], error) {
 		return nil, Error("unsupported client type")
 	}
 	return &Client[C]{
-		C: (it).(*C),
+		c: (it).(*C),
 	}, err
 }
-
-//c := client[T]{
-//	name: name,
-//	funcs: map[of.Name]OpenFunc[T]{
-//		of.NameBootNode: openBootNode[T],
-//		of.NameKernel:   openKernel[T],
-//		of.NameUpgrade:  openUpgrade[T],
-//		of.NameMedia:    openMedia[T],
-//	},
-//}
-
-//var fn OpenFunc[T]
-//var t T
-//switch name {
-//case of.NameKernel:
-//	fn := openKernel[T]
-//case of.NameUpgrade:
-//	fn := openUpgrade[T]
-//case of.NameBootNode:
-//	fn := openBootNode[T]
-//case of.NameMedia:
-//	fn := openMedia[T]
-//}
-//openKernel[*kernel.Client](name, path, op)
-//return c.open(path, op)
-//}
-//
-//func (c client[T]) open(op *Option) (T, error) {
-//	var it any
-//	var err error
-//	switch c.name {
-//	case of.NameBootNode:
-//		it, err = openBootNode[*bootnode.Client](c.name, c.path, op)
-//	case of.NameKernel:
-//		it, err = openKernel[*kernel.Client](c.name, c.path, op)
-//	case of.NameUpgrade:
-//		it, err = openUpgrade[*upgrade.Client](c.name, c.path, op)
-//	case of.NameMedia:
-//		it, err = openMedia[*media.Client](c.name, c.path, op)
-//	default:
-//		return nil, Errorf("client[%s] not found", c.name)
-//	}
-//	return it.(T), err
-//	//v, exist := c.funcs[c.name]
-//	//if exist {
-//	//	return v(c.name, path, op)
-//	//}
-//
-//}
