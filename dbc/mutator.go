@@ -23,7 +23,7 @@ func UpdateContext(ctx context.Context) context.Context {
 func (m *Mutator) Mutate(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
 	value := ctx.Value("privacy")
 	if value == nil || value == "query" {
-		return nil, merr.New("query not supported update")
+		return nil, merr.New("mutate: privacy(query) not supported update")
 	}
 	return m.parent.Mutate(ctx, mutation)
 }
