@@ -29,6 +29,7 @@ func openMedia(name of.Name, path string, o *Option) (*media.Client, error) {
 	if err := createOrInitMedia(ctx, cli, exist); err != nil {
 		return nil, err
 	}
+	cli.Use(MutatorFunc)
 	return cli, nil
 }
 

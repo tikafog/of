@@ -29,7 +29,7 @@ func openBootNode(name of.Name, path string, o *Option) (*bootnode.Client, error
 	if err := createOrInitBootNode(ctx, cli, exist); err != nil {
 		return nil, err
 	}
-
+	cli.Use(MutatorFunc)
 	return cli, nil
 }
 

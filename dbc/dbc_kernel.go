@@ -29,6 +29,7 @@ func openKernel(name of.Name, path string, o *Option) (*kernel.Client, error) {
 	if err := createOrInitKernel(ctx, cli, exist); err != nil {
 		return nil, err
 	}
+	cli.Use(MutatorFunc)
 	return cli, nil
 }
 

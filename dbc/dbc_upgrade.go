@@ -29,6 +29,7 @@ func openUpgrade(name of.Name, path string, o *Option) (*upgrade.Client, error) 
 	if err := createOrInitUpgrade(ctx, cli, exist); err != nil {
 		return nil, err
 	}
+	cli.Use(MutatorFunc)
 	return cli, nil
 }
 
