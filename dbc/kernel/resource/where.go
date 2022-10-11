@@ -86,14 +86,21 @@ func Rid(v string) predicate.Resource {
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.Resource {
+func Status(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStatus), v))
 	})
 }
 
+// Retries applies equality check predicate on the "retries" field. It's identical to RetriesEQ.
+func Retries(v int) predicate.Resource {
+	return predicate.Resource(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRetries), v))
+	})
+}
+
 // Step applies equality check predicate on the "step" field. It's identical to StepEQ.
-func Step(v string) predicate.Resource {
+func Step(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStep), v))
 	})
@@ -239,21 +246,21 @@ func RidContainsFold(v string) predicate.Resource {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.Resource {
+func StatusEQ(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStatus), v))
 	})
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.Resource {
+func StatusNEQ(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldStatus), v))
 	})
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.Resource {
+func StatusIn(vs ...uint32) predicate.Resource {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -270,7 +277,7 @@ func StatusIn(vs ...string) predicate.Resource {
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.Resource {
+func StatusNotIn(vs ...uint32) predicate.Resource {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -287,84 +294,125 @@ func StatusNotIn(vs ...string) predicate.Resource {
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.Resource {
+func StatusGT(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldStatus), v))
 	})
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.Resource {
+func StatusGTE(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldStatus), v))
 	})
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.Resource {
+func StatusLT(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldStatus), v))
 	})
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.Resource {
+func StatusLTE(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldStatus), v))
 	})
 }
 
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.Resource {
+// RetriesEQ applies the EQ predicate on the "retries" field.
+func RetriesEQ(v int) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldStatus), v))
+		s.Where(sql.EQ(s.C(FieldRetries), v))
 	})
 }
 
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.Resource {
+// RetriesNEQ applies the NEQ predicate on the "retries" field.
+func RetriesNEQ(v int) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldStatus), v))
+		s.Where(sql.NEQ(s.C(FieldRetries), v))
 	})
 }
 
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.Resource {
+// RetriesIn applies the In predicate on the "retries" field.
+func RetriesIn(vs ...int) predicate.Resource {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
 	return predicate.Resource(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldStatus), v))
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldRetries), v...))
 	})
 }
 
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.Resource {
+// RetriesNotIn applies the NotIn predicate on the "retries" field.
+func RetriesNotIn(vs ...int) predicate.Resource {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
 	return predicate.Resource(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldStatus), v))
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldRetries), v...))
 	})
 }
 
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.Resource {
+// RetriesGT applies the GT predicate on the "retries" field.
+func RetriesGT(v int) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldStatus), v))
+		s.Where(sql.GT(s.C(FieldRetries), v))
+	})
+}
+
+// RetriesGTE applies the GTE predicate on the "retries" field.
+func RetriesGTE(v int) predicate.Resource {
+	return predicate.Resource(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldRetries), v))
+	})
+}
+
+// RetriesLT applies the LT predicate on the "retries" field.
+func RetriesLT(v int) predicate.Resource {
+	return predicate.Resource(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldRetries), v))
+	})
+}
+
+// RetriesLTE applies the LTE predicate on the "retries" field.
+func RetriesLTE(v int) predicate.Resource {
+	return predicate.Resource(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldRetries), v))
 	})
 }
 
 // StepEQ applies the EQ predicate on the "step" field.
-func StepEQ(v string) predicate.Resource {
+func StepEQ(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStep), v))
 	})
 }
 
 // StepNEQ applies the NEQ predicate on the "step" field.
-func StepNEQ(v string) predicate.Resource {
+func StepNEQ(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldStep), v))
 	})
 }
 
 // StepIn applies the In predicate on the "step" field.
-func StepIn(vs ...string) predicate.Resource {
+func StepIn(vs ...uint32) predicate.Resource {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -381,7 +429,7 @@ func StepIn(vs ...string) predicate.Resource {
 }
 
 // StepNotIn applies the NotIn predicate on the "step" field.
-func StepNotIn(vs ...string) predicate.Resource {
+func StepNotIn(vs ...uint32) predicate.Resource {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -398,65 +446,30 @@ func StepNotIn(vs ...string) predicate.Resource {
 }
 
 // StepGT applies the GT predicate on the "step" field.
-func StepGT(v string) predicate.Resource {
+func StepGT(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldStep), v))
 	})
 }
 
 // StepGTE applies the GTE predicate on the "step" field.
-func StepGTE(v string) predicate.Resource {
+func StepGTE(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldStep), v))
 	})
 }
 
 // StepLT applies the LT predicate on the "step" field.
-func StepLT(v string) predicate.Resource {
+func StepLT(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldStep), v))
 	})
 }
 
 // StepLTE applies the LTE predicate on the "step" field.
-func StepLTE(v string) predicate.Resource {
+func StepLTE(v uint32) predicate.Resource {
 	return predicate.Resource(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldStep), v))
-	})
-}
-
-// StepContains applies the Contains predicate on the "step" field.
-func StepContains(v string) predicate.Resource {
-	return predicate.Resource(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldStep), v))
-	})
-}
-
-// StepHasPrefix applies the HasPrefix predicate on the "step" field.
-func StepHasPrefix(v string) predicate.Resource {
-	return predicate.Resource(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldStep), v))
-	})
-}
-
-// StepHasSuffix applies the HasSuffix predicate on the "step" field.
-func StepHasSuffix(v string) predicate.Resource {
-	return predicate.Resource(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldStep), v))
-	})
-}
-
-// StepEqualFold applies the EqualFold predicate on the "step" field.
-func StepEqualFold(v string) predicate.Resource {
-	return predicate.Resource(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldStep), v))
-	})
-}
-
-// StepContainsFold applies the ContainsFold predicate on the "step" field.
-func StepContainsFold(v string) predicate.Resource {
-	return predicate.Resource(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldStep), v))
 	})
 }
 

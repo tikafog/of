@@ -28,21 +28,25 @@ func init() {
 	// resourceDescStatus is the schema descriptor for status field.
 	resourceDescStatus := resourceFields[1].Descriptor()
 	// resource.DefaultStatus holds the default value on creation for the status field.
-	resource.DefaultStatus = resourceDescStatus.Default.(string)
+	resource.DefaultStatus = resourceDescStatus.Default.(uint32)
+	// resourceDescRetries is the schema descriptor for retries field.
+	resourceDescRetries := resourceFields[2].Descriptor()
+	// resource.DefaultRetries holds the default value on creation for the retries field.
+	resource.DefaultRetries = resourceDescRetries.Default.(int)
 	// resourceDescStep is the schema descriptor for step field.
-	resourceDescStep := resourceFields[2].Descriptor()
+	resourceDescStep := resourceFields[3].Descriptor()
 	// resource.DefaultStep holds the default value on creation for the step field.
-	resource.DefaultStep = resourceDescStep.Default.(string)
+	resource.DefaultStep = resourceDescStep.Default.(uint32)
 	// resourceDescPriority is the schema descriptor for priority field.
-	resourceDescPriority := resourceFields[3].Descriptor()
+	resourceDescPriority := resourceFields[4].Descriptor()
 	// resource.DefaultPriority holds the default value on creation for the priority field.
 	resource.DefaultPriority = resourceDescPriority.Default.(int)
 	// resourceDescRelate is the schema descriptor for relate field.
-	resourceDescRelate := resourceFields[4].Descriptor()
+	resourceDescRelate := resourceFields[5].Descriptor()
 	// resource.DefaultRelate holds the default value on creation for the relate field.
 	resource.DefaultRelate = resourceDescRelate.Default.(string)
 	// resourceDescUpdatedUnix is the schema descriptor for updated_unix field.
-	resourceDescUpdatedUnix := resourceFields[5].Descriptor()
+	resourceDescUpdatedUnix := resourceFields[6].Descriptor()
 	// resource.DefaultUpdatedUnix holds the default value on creation for the updated_unix field.
 	resource.DefaultUpdatedUnix = resourceDescUpdatedUnix.Default.(int64)
 	versionFields := schema.Version{}.Fields()

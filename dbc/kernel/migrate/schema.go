@@ -24,8 +24,9 @@ var (
 	ResourcesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "rid", Type: field.TypeString, Unique: true},
-		{Name: "status", Type: field.TypeString, Default: "waiting"},
-		{Name: "step", Type: field.TypeString, Default: "none"},
+		{Name: "status", Type: field.TypeUint32, Default: 0},
+		{Name: "retries", Type: field.TypeInt, Default: 0},
+		{Name: "step", Type: field.TypeUint32, Default: 0},
 		{Name: "priority", Type: field.TypeInt, Default: 0},
 		{Name: "relate", Type: field.TypeString, Default: "none"},
 		{Name: "updated_unix", Type: field.TypeInt64, Default: 0},

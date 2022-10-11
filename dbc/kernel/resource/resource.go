@@ -11,6 +11,8 @@ const (
 	FieldRid = "rid"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldRetries holds the string denoting the retries field in the database.
+	FieldRetries = "retries"
 	// FieldStep holds the string denoting the step field in the database.
 	FieldStep = "step"
 	// FieldPriority holds the string denoting the priority field in the database.
@@ -30,6 +32,7 @@ var Columns = []string{
 	FieldID,
 	FieldRid,
 	FieldStatus,
+	FieldRetries,
 	FieldStep,
 	FieldPriority,
 	FieldRelate,
@@ -49,9 +52,11 @@ func ValidColumn(column string) bool {
 
 var (
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus string
+	DefaultStatus uint32
+	// DefaultRetries holds the default value on creation for the "retries" field.
+	DefaultRetries int
 	// DefaultStep holds the default value on creation for the "step" field.
-	DefaultStep string
+	DefaultStep uint32
 	// DefaultPriority holds the default value on creation for the "priority" field.
 	DefaultPriority int
 	// DefaultRelate holds the default value on creation for the "relate" field.

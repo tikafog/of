@@ -471,8 +471,12 @@ type ResourceMutation struct {
 	typ             string
 	id              *int
 	rid             *string
-	status          *string
-	step            *string
+	status          *uint32
+	addstatus       *int32
+	retries         *int
+	addretries      *int
+	step            *uint32
+	addstep         *int32
 	priority        *int
 	addpriority     *int
 	relate          *string
@@ -620,12 +624,13 @@ func (m *ResourceMutation) ResetRid() {
 }
 
 // SetStatus sets the "status" field.
-func (m *ResourceMutation) SetStatus(s string) {
-	m.status = &s
+func (m *ResourceMutation) SetStatus(u uint32) {
+	m.status = &u
+	m.addstatus = nil
 }
 
 // Status returns the value of the "status" field in the mutation.
-func (m *ResourceMutation) Status() (r string, exists bool) {
+func (m *ResourceMutation) Status() (r uint32, exists bool) {
 	v := m.status
 	if v == nil {
 		return
@@ -636,7 +641,7 @@ func (m *ResourceMutation) Status() (r string, exists bool) {
 // OldStatus returns the old "status" field's value of the Resource entity.
 // If the Resource object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ResourceMutation) OldStatus(ctx context.Context) (v string, err error) {
+func (m *ResourceMutation) OldStatus(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
 	}
@@ -650,18 +655,94 @@ func (m *ResourceMutation) OldStatus(ctx context.Context) (v string, err error) 
 	return oldValue.Status, nil
 }
 
+// AddStatus adds u to the "status" field.
+func (m *ResourceMutation) AddStatus(u int32) {
+	if m.addstatus != nil {
+		*m.addstatus += u
+	} else {
+		m.addstatus = &u
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *ResourceMutation) AddedStatus() (r int32, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetStatus resets all changes to the "status" field.
 func (m *ResourceMutation) ResetStatus() {
 	m.status = nil
+	m.addstatus = nil
+}
+
+// SetRetries sets the "retries" field.
+func (m *ResourceMutation) SetRetries(i int) {
+	m.retries = &i
+	m.addretries = nil
+}
+
+// Retries returns the value of the "retries" field in the mutation.
+func (m *ResourceMutation) Retries() (r int, exists bool) {
+	v := m.retries
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRetries returns the old "retries" field's value of the Resource entity.
+// If the Resource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResourceMutation) OldRetries(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRetries is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRetries requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRetries: %w", err)
+	}
+	return oldValue.Retries, nil
+}
+
+// AddRetries adds i to the "retries" field.
+func (m *ResourceMutation) AddRetries(i int) {
+	if m.addretries != nil {
+		*m.addretries += i
+	} else {
+		m.addretries = &i
+	}
+}
+
+// AddedRetries returns the value that was added to the "retries" field in this mutation.
+func (m *ResourceMutation) AddedRetries() (r int, exists bool) {
+	v := m.addretries
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetRetries resets all changes to the "retries" field.
+func (m *ResourceMutation) ResetRetries() {
+	m.retries = nil
+	m.addretries = nil
 }
 
 // SetStep sets the "step" field.
-func (m *ResourceMutation) SetStep(s string) {
-	m.step = &s
+func (m *ResourceMutation) SetStep(u uint32) {
+	m.step = &u
+	m.addstep = nil
 }
 
 // Step returns the value of the "step" field in the mutation.
-func (m *ResourceMutation) Step() (r string, exists bool) {
+func (m *ResourceMutation) Step() (r uint32, exists bool) {
 	v := m.step
 	if v == nil {
 		return
@@ -672,7 +753,7 @@ func (m *ResourceMutation) Step() (r string, exists bool) {
 // OldStep returns the old "step" field's value of the Resource entity.
 // If the Resource object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ResourceMutation) OldStep(ctx context.Context) (v string, err error) {
+func (m *ResourceMutation) OldStep(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStep is only allowed on UpdateOne operations")
 	}
@@ -686,9 +767,28 @@ func (m *ResourceMutation) OldStep(ctx context.Context) (v string, err error) {
 	return oldValue.Step, nil
 }
 
+// AddStep adds u to the "step" field.
+func (m *ResourceMutation) AddStep(u int32) {
+	if m.addstep != nil {
+		*m.addstep += u
+	} else {
+		m.addstep = &u
+	}
+}
+
+// AddedStep returns the value that was added to the "step" field in this mutation.
+func (m *ResourceMutation) AddedStep() (r int32, exists bool) {
+	v := m.addstep
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetStep resets all changes to the "step" field.
 func (m *ResourceMutation) ResetStep() {
 	m.step = nil
+	m.addstep = nil
 }
 
 // SetPriority sets the "priority" field.
@@ -907,12 +1007,15 @@ func (m *ResourceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ResourceMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.rid != nil {
 		fields = append(fields, resource.FieldRid)
 	}
 	if m.status != nil {
 		fields = append(fields, resource.FieldStatus)
+	}
+	if m.retries != nil {
+		fields = append(fields, resource.FieldRetries)
 	}
 	if m.step != nil {
 		fields = append(fields, resource.FieldStep)
@@ -941,6 +1044,8 @@ func (m *ResourceMutation) Field(name string) (ent.Value, bool) {
 		return m.Rid()
 	case resource.FieldStatus:
 		return m.Status()
+	case resource.FieldRetries:
+		return m.Retries()
 	case resource.FieldStep:
 		return m.Step()
 	case resource.FieldPriority:
@@ -964,6 +1069,8 @@ func (m *ResourceMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldRid(ctx)
 	case resource.FieldStatus:
 		return m.OldStatus(ctx)
+	case resource.FieldRetries:
+		return m.OldRetries(ctx)
 	case resource.FieldStep:
 		return m.OldStep(ctx)
 	case resource.FieldPriority:
@@ -991,14 +1098,21 @@ func (m *ResourceMutation) SetField(name string, value ent.Value) error {
 		m.SetRid(v)
 		return nil
 	case resource.FieldStatus:
-		v, ok := value.(string)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
 		return nil
+	case resource.FieldRetries:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRetries(v)
+		return nil
 	case resource.FieldStep:
-		v, ok := value.(string)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1040,6 +1154,15 @@ func (m *ResourceMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ResourceMutation) AddedFields() []string {
 	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, resource.FieldStatus)
+	}
+	if m.addretries != nil {
+		fields = append(fields, resource.FieldRetries)
+	}
+	if m.addstep != nil {
+		fields = append(fields, resource.FieldStep)
+	}
 	if m.addpriority != nil {
 		fields = append(fields, resource.FieldPriority)
 	}
@@ -1054,6 +1177,12 @@ func (m *ResourceMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ResourceMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case resource.FieldStatus:
+		return m.AddedStatus()
+	case resource.FieldRetries:
+		return m.AddedRetries()
+	case resource.FieldStep:
+		return m.AddedStep()
 	case resource.FieldPriority:
 		return m.AddedPriority()
 	case resource.FieldUpdatedUnix:
@@ -1067,6 +1196,27 @@ func (m *ResourceMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ResourceMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case resource.FieldStatus:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
+	case resource.FieldRetries:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRetries(v)
+		return nil
+	case resource.FieldStep:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStep(v)
+		return nil
 	case resource.FieldPriority:
 		v, ok := value.(int)
 		if !ok {
@@ -1122,6 +1272,9 @@ func (m *ResourceMutation) ResetField(name string) error {
 		return nil
 	case resource.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case resource.FieldRetries:
+		m.ResetRetries()
 		return nil
 	case resource.FieldStep:
 		m.ResetStep()

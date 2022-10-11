@@ -28,29 +28,43 @@ func (rc *ResourceCreate) SetRid(s string) *ResourceCreate {
 }
 
 // SetStatus sets the "status" field.
-func (rc *ResourceCreate) SetStatus(s string) *ResourceCreate {
-	rc.mutation.SetStatus(s)
+func (rc *ResourceCreate) SetStatus(u uint32) *ResourceCreate {
+	rc.mutation.SetStatus(u)
 	return rc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (rc *ResourceCreate) SetNillableStatus(s *string) *ResourceCreate {
-	if s != nil {
-		rc.SetStatus(*s)
+func (rc *ResourceCreate) SetNillableStatus(u *uint32) *ResourceCreate {
+	if u != nil {
+		rc.SetStatus(*u)
+	}
+	return rc
+}
+
+// SetRetries sets the "retries" field.
+func (rc *ResourceCreate) SetRetries(i int) *ResourceCreate {
+	rc.mutation.SetRetries(i)
+	return rc
+}
+
+// SetNillableRetries sets the "retries" field if the given value is not nil.
+func (rc *ResourceCreate) SetNillableRetries(i *int) *ResourceCreate {
+	if i != nil {
+		rc.SetRetries(*i)
 	}
 	return rc
 }
 
 // SetStep sets the "step" field.
-func (rc *ResourceCreate) SetStep(s string) *ResourceCreate {
-	rc.mutation.SetStep(s)
+func (rc *ResourceCreate) SetStep(u uint32) *ResourceCreate {
+	rc.mutation.SetStep(u)
 	return rc
 }
 
 // SetNillableStep sets the "step" field if the given value is not nil.
-func (rc *ResourceCreate) SetNillableStep(s *string) *ResourceCreate {
-	if s != nil {
-		rc.SetStep(*s)
+func (rc *ResourceCreate) SetNillableStep(u *uint32) *ResourceCreate {
+	if u != nil {
+		rc.SetStep(*u)
 	}
 	return rc
 }
@@ -192,6 +206,10 @@ func (rc *ResourceCreate) defaults() {
 		v := resource.DefaultStatus
 		rc.mutation.SetStatus(v)
 	}
+	if _, ok := rc.mutation.Retries(); !ok {
+		v := resource.DefaultRetries
+		rc.mutation.SetRetries(v)
+	}
 	if _, ok := rc.mutation.Step(); !ok {
 		v := resource.DefaultStep
 		rc.mutation.SetStep(v)
@@ -217,6 +235,9 @@ func (rc *ResourceCreate) check() error {
 	}
 	if _, ok := rc.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`kernel: missing required field "Resource.status"`)}
+	}
+	if _, ok := rc.mutation.Retries(); !ok {
+		return &ValidationError{Name: "retries", err: errors.New(`kernel: missing required field "Resource.retries"`)}
 	}
 	if _, ok := rc.mutation.Step(); !ok {
 		return &ValidationError{Name: "step", err: errors.New(`kernel: missing required field "Resource.step"`)}
@@ -268,15 +289,23 @@ func (rc *ResourceCreate) createSpec() (*Resource, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := rc.mutation.Status(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: resource.FieldStatus,
 		})
 		_node.Status = value
 	}
+	if value, ok := rc.mutation.Retries(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: resource.FieldRetries,
+		})
+		_node.Retries = value
+	}
 	if value, ok := rc.mutation.Step(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: resource.FieldStep,
 		})
@@ -379,7 +408,7 @@ func (u *ResourceUpsert) UpdateRid() *ResourceUpsert {
 }
 
 // SetStatus sets the "status" field.
-func (u *ResourceUpsert) SetStatus(v string) *ResourceUpsert {
+func (u *ResourceUpsert) SetStatus(v uint32) *ResourceUpsert {
 	u.Set(resource.FieldStatus, v)
 	return u
 }
@@ -390,8 +419,32 @@ func (u *ResourceUpsert) UpdateStatus() *ResourceUpsert {
 	return u
 }
 
+// AddStatus adds v to the "status" field.
+func (u *ResourceUpsert) AddStatus(v uint32) *ResourceUpsert {
+	u.Add(resource.FieldStatus, v)
+	return u
+}
+
+// SetRetries sets the "retries" field.
+func (u *ResourceUpsert) SetRetries(v int) *ResourceUpsert {
+	u.Set(resource.FieldRetries, v)
+	return u
+}
+
+// UpdateRetries sets the "retries" field to the value that was provided on create.
+func (u *ResourceUpsert) UpdateRetries() *ResourceUpsert {
+	u.SetExcluded(resource.FieldRetries)
+	return u
+}
+
+// AddRetries adds v to the "retries" field.
+func (u *ResourceUpsert) AddRetries(v int) *ResourceUpsert {
+	u.Add(resource.FieldRetries, v)
+	return u
+}
+
 // SetStep sets the "step" field.
-func (u *ResourceUpsert) SetStep(v string) *ResourceUpsert {
+func (u *ResourceUpsert) SetStep(v uint32) *ResourceUpsert {
 	u.Set(resource.FieldStep, v)
 	return u
 }
@@ -399,6 +452,12 @@ func (u *ResourceUpsert) SetStep(v string) *ResourceUpsert {
 // UpdateStep sets the "step" field to the value that was provided on create.
 func (u *ResourceUpsert) UpdateStep() *ResourceUpsert {
 	u.SetExcluded(resource.FieldStep)
+	return u
+}
+
+// AddStep adds v to the "step" field.
+func (u *ResourceUpsert) AddStep(v uint32) *ResourceUpsert {
+	u.Add(resource.FieldStep, v)
 	return u
 }
 
@@ -523,9 +582,16 @@ func (u *ResourceUpsertOne) UpdateRid() *ResourceUpsertOne {
 }
 
 // SetStatus sets the "status" field.
-func (u *ResourceUpsertOne) SetStatus(v string) *ResourceUpsertOne {
+func (u *ResourceUpsertOne) SetStatus(v uint32) *ResourceUpsertOne {
 	return u.Update(func(s *ResourceUpsert) {
 		s.SetStatus(v)
+	})
+}
+
+// AddStatus adds v to the "status" field.
+func (u *ResourceUpsertOne) AddStatus(v uint32) *ResourceUpsertOne {
+	return u.Update(func(s *ResourceUpsert) {
+		s.AddStatus(v)
 	})
 }
 
@@ -536,10 +602,38 @@ func (u *ResourceUpsertOne) UpdateStatus() *ResourceUpsertOne {
 	})
 }
 
+// SetRetries sets the "retries" field.
+func (u *ResourceUpsertOne) SetRetries(v int) *ResourceUpsertOne {
+	return u.Update(func(s *ResourceUpsert) {
+		s.SetRetries(v)
+	})
+}
+
+// AddRetries adds v to the "retries" field.
+func (u *ResourceUpsertOne) AddRetries(v int) *ResourceUpsertOne {
+	return u.Update(func(s *ResourceUpsert) {
+		s.AddRetries(v)
+	})
+}
+
+// UpdateRetries sets the "retries" field to the value that was provided on create.
+func (u *ResourceUpsertOne) UpdateRetries() *ResourceUpsertOne {
+	return u.Update(func(s *ResourceUpsert) {
+		s.UpdateRetries()
+	})
+}
+
 // SetStep sets the "step" field.
-func (u *ResourceUpsertOne) SetStep(v string) *ResourceUpsertOne {
+func (u *ResourceUpsertOne) SetStep(v uint32) *ResourceUpsertOne {
 	return u.Update(func(s *ResourceUpsert) {
 		s.SetStep(v)
+	})
+}
+
+// AddStep adds v to the "step" field.
+func (u *ResourceUpsertOne) AddStep(v uint32) *ResourceUpsertOne {
+	return u.Update(func(s *ResourceUpsert) {
+		s.AddStep(v)
 	})
 }
 
@@ -842,9 +936,16 @@ func (u *ResourceUpsertBulk) UpdateRid() *ResourceUpsertBulk {
 }
 
 // SetStatus sets the "status" field.
-func (u *ResourceUpsertBulk) SetStatus(v string) *ResourceUpsertBulk {
+func (u *ResourceUpsertBulk) SetStatus(v uint32) *ResourceUpsertBulk {
 	return u.Update(func(s *ResourceUpsert) {
 		s.SetStatus(v)
+	})
+}
+
+// AddStatus adds v to the "status" field.
+func (u *ResourceUpsertBulk) AddStatus(v uint32) *ResourceUpsertBulk {
+	return u.Update(func(s *ResourceUpsert) {
+		s.AddStatus(v)
 	})
 }
 
@@ -855,10 +956,38 @@ func (u *ResourceUpsertBulk) UpdateStatus() *ResourceUpsertBulk {
 	})
 }
 
+// SetRetries sets the "retries" field.
+func (u *ResourceUpsertBulk) SetRetries(v int) *ResourceUpsertBulk {
+	return u.Update(func(s *ResourceUpsert) {
+		s.SetRetries(v)
+	})
+}
+
+// AddRetries adds v to the "retries" field.
+func (u *ResourceUpsertBulk) AddRetries(v int) *ResourceUpsertBulk {
+	return u.Update(func(s *ResourceUpsert) {
+		s.AddRetries(v)
+	})
+}
+
+// UpdateRetries sets the "retries" field to the value that was provided on create.
+func (u *ResourceUpsertBulk) UpdateRetries() *ResourceUpsertBulk {
+	return u.Update(func(s *ResourceUpsert) {
+		s.UpdateRetries()
+	})
+}
+
 // SetStep sets the "step" field.
-func (u *ResourceUpsertBulk) SetStep(v string) *ResourceUpsertBulk {
+func (u *ResourceUpsertBulk) SetStep(v uint32) *ResourceUpsertBulk {
 	return u.Update(func(s *ResourceUpsert) {
 		s.SetStep(v)
+	})
+}
+
+// AddStep adds v to the "step" field.
+func (u *ResourceUpsertBulk) AddStep(v uint32) *ResourceUpsertBulk {
+	return u.Update(func(s *ResourceUpsert) {
+		s.AddStep(v)
 	})
 }
 

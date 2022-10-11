@@ -6,19 +6,13 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-const (
-	PinWaiting  = "waiting"
-	PinPinning  = "pinning"
-	PinSuccess  = "success"
-	PinFailed   = "failed"
-	PinNotFound = "notfound"
-)
+// Status ...
+// ENUM(none,waiting,success,failed,max)
+type Status uint32
 
-const (
-	StepNone   = "none"
-	StepAdd    = "add"
-	StepRemove = "remove"
-)
+// Step ...
+// ENUM(none,add,remove,max)
+type Step uint32
 
 // Resource holds the schema definition for the Resource entity.
 type Resource struct {
@@ -29,8 +23,9 @@ type Resource struct {
 func (Resource) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("rid").Unique(), //pin hash
-		field.String("status").Default("waiting"),
-		field.String("step").Default("none"),
+		field.Uint32("status").Default(0),
+		field.Int("retries").Default(0),
+		field.Uint32("step").Default(0),
 		field.Int("priority").Default(0), //优先级
 		field.String("relate").Default("none"),
 		field.Int64("updated_unix").Default(0),
