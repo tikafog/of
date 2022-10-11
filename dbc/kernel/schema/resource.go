@@ -8,11 +8,11 @@ import (
 
 // Status ...
 // ENUM(none,waiting,success,failed,max)
-type Status uint32
+type Status uint8
 
 // Step ...
 // ENUM(none,add,remove,max)
-type Step uint32
+type Step uint8
 
 // Resource holds the schema definition for the Resource entity.
 type Resource struct {
@@ -23,10 +23,10 @@ type Resource struct {
 func (Resource) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("rid").Unique(), //pin hash
-		field.Uint32("status").Default(0),
-		field.Int("retries").Default(0),
-		field.Uint32("step").Default(0),
-		field.Int("priority").Default(0), //优先级
+		field.Uint8("status").Default(0),
+		field.Uint8("step").Default(0),
+		field.Int("retried").Default(0),
+		field.Int("priority").Default(-1), //priority(-1:never called)
 		field.String("relate").Default("none"),
 		field.Int64("updated_unix").Default(0),
 		field.String("comment").Optional(), //failed log

@@ -9,7 +9,7 @@ const CurrentResourceVersion = 1
 type ResourceData struct {
 	Version  int      `json:"version,omitempty"`
 	List     []string `json:"list,omitempty"`
-	Step     uint32   `json:"step,omitempty"`
+	Step     uint8    `json:"step,omitempty"`
 	Priority int      `json:"priority,omitempty"`
 	Relate   string   `json:"relate,omitempty"`
 }

@@ -28,15 +28,15 @@ func init() {
 	// resourceDescStatus is the schema descriptor for status field.
 	resourceDescStatus := resourceFields[1].Descriptor()
 	// resource.DefaultStatus holds the default value on creation for the status field.
-	resource.DefaultStatus = resourceDescStatus.Default.(uint32)
-	// resourceDescRetries is the schema descriptor for retries field.
-	resourceDescRetries := resourceFields[2].Descriptor()
-	// resource.DefaultRetries holds the default value on creation for the retries field.
-	resource.DefaultRetries = resourceDescRetries.Default.(int)
+	resource.DefaultStatus = resourceDescStatus.Default.(uint8)
 	// resourceDescStep is the schema descriptor for step field.
-	resourceDescStep := resourceFields[3].Descriptor()
+	resourceDescStep := resourceFields[2].Descriptor()
 	// resource.DefaultStep holds the default value on creation for the step field.
-	resource.DefaultStep = resourceDescStep.Default.(uint32)
+	resource.DefaultStep = resourceDescStep.Default.(uint8)
+	// resourceDescRetried is the schema descriptor for retried field.
+	resourceDescRetried := resourceFields[3].Descriptor()
+	// resource.DefaultRetried holds the default value on creation for the retried field.
+	resource.DefaultRetried = resourceDescRetried.Default.(int)
 	// resourceDescPriority is the schema descriptor for priority field.
 	resourceDescPriority := resourceFields[4].Descriptor()
 	// resource.DefaultPriority holds the default value on creation for the priority field.

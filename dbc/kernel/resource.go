@@ -18,11 +18,11 @@ type Resource struct {
 	// Rid holds the value of the "rid" field.
 	Rid string `json:"rid,omitempty"`
 	// Status holds the value of the "status" field.
-	Status uint32 `json:"status,omitempty"`
-	// Retries holds the value of the "retries" field.
-	Retries int `json:"retries,omitempty"`
+	Status uint8 `json:"status,omitempty"`
 	// Step holds the value of the "step" field.
-	Step uint32 `json:"step,omitempty"`
+	Step uint8 `json:"step,omitempty"`
+	// Retried holds the value of the "retried" field.
+	Retried int `json:"retried,omitempty"`
 	// Priority holds the value of the "priority" field.
 	Priority int `json:"priority,omitempty"`
 	// Relate holds the value of the "relate" field.
@@ -38,7 +38,7 @@ func (*Resource) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case resource.FieldID, resource.FieldStatus, resource.FieldRetries, resource.FieldStep, resource.FieldPriority, resource.FieldUpdatedUnix:
+		case resource.FieldID, resource.FieldStatus, resource.FieldStep, resource.FieldRetried, resource.FieldPriority, resource.FieldUpdatedUnix:
 			values[i] = new(sql.NullInt64)
 		case resource.FieldRid, resource.FieldRelate, resource.FieldComment:
 			values[i] = new(sql.NullString)
@@ -73,19 +73,19 @@ func (r *Resource) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				r.Status = uint32(value.Int64)
-			}
-		case resource.FieldRetries:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field retries", values[i])
-			} else if value.Valid {
-				r.Retries = int(value.Int64)
+				r.Status = uint8(value.Int64)
 			}
 		case resource.FieldStep:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field step", values[i])
 			} else if value.Valid {
-				r.Step = uint32(value.Int64)
+				r.Step = uint8(value.Int64)
+			}
+		case resource.FieldRetried:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field retried", values[i])
+			} else if value.Valid {
+				r.Retried = int(value.Int64)
 			}
 		case resource.FieldPriority:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -145,11 +145,11 @@ func (r *Resource) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", r.Status))
 	builder.WriteString(", ")
-	builder.WriteString("retries=")
-	builder.WriteString(fmt.Sprintf("%v", r.Retries))
-	builder.WriteString(", ")
 	builder.WriteString("step=")
 	builder.WriteString(fmt.Sprintf("%v", r.Step))
+	builder.WriteString(", ")
+	builder.WriteString("retried=")
+	builder.WriteString(fmt.Sprintf("%v", r.Retried))
 	builder.WriteString(", ")
 	builder.WriteString("priority=")
 	builder.WriteString(fmt.Sprintf("%v", r.Priority))

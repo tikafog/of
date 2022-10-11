@@ -35,8 +35,8 @@ func (iu *InstructUpdate) SetInstructWithOptional(input *Instruct) *InstructUpda
 func (rc *ResourceCreate) SetResource(input *Resource) *ResourceCreate {
 	rc.SetRid(input.Rid)
 	rc.SetStatus(input.Status)
-	rc.SetRetries(input.Retries)
 	rc.SetStep(input.Step)
+	rc.SetRetried(input.Retried)
 	rc.SetPriority(input.Priority)
 	rc.SetRelate(input.Relate)
 	rc.SetUpdatedUnix(input.UpdatedUnix)
@@ -46,8 +46,8 @@ func (rc *ResourceCreate) SetResource(input *Resource) *ResourceCreate {
 func (rc *ResourceCreate) SetResourceWithOptional(input *Resource) *ResourceCreate {
 	rc.SetRid(input.Rid)
 	rc.SetStatus(input.Status)
-	rc.SetRetries(input.Retries)
 	rc.SetStep(input.Step)
+	rc.SetRetried(input.Retried)
 	rc.SetPriority(input.Priority)
 	rc.SetRelate(input.Relate)
 	rc.SetUpdatedUnix(input.UpdatedUnix)
@@ -58,8 +58,8 @@ func (rc *ResourceCreate) SetResourceWithOptional(input *Resource) *ResourceCrea
 func (ruo *ResourceUpdateOne) SetResource(input *Resource) *ResourceUpdateOne {
 	ruo.SetRid(input.Rid)
 	ruo.SetStatus(input.Status)
-	ruo.SetRetries(input.Retries)
 	ruo.SetStep(input.Step)
+	ruo.SetRetried(input.Retried)
 	ruo.SetPriority(input.Priority)
 	ruo.SetRelate(input.Relate)
 	ruo.SetUpdatedUnix(input.UpdatedUnix)
@@ -69,8 +69,8 @@ func (ruo *ResourceUpdateOne) SetResource(input *Resource) *ResourceUpdateOne {
 func (ru *ResourceUpdate) SetResource(input *Resource) *ResourceUpdate {
 	ru.SetRid(input.Rid)
 	ru.SetStatus(input.Status)
-	ru.SetRetries(input.Retries)
 	ru.SetStep(input.Step)
+	ru.SetRetried(input.Retried)
 	ru.SetPriority(input.Priority)
 	ru.SetRelate(input.Relate)
 	ru.SetUpdatedUnix(input.UpdatedUnix)
@@ -80,8 +80,8 @@ func (ru *ResourceUpdate) SetResource(input *Resource) *ResourceUpdate {
 func (ru *ResourceUpdate) SetResourceWithOptional(input *Resource) *ResourceUpdate {
 	ru.SetRid(input.Rid)
 	ru.SetStatus(input.Status)
-	ru.SetRetries(input.Retries)
 	ru.SetStep(input.Step)
+	ru.SetRetried(input.Retried)
 	ru.SetPriority(input.Priority)
 	ru.SetRelate(input.Relate)
 	ru.SetUpdatedUnix(input.UpdatedUnix)

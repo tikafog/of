@@ -34,14 +34,14 @@ func (ru *ResourceUpdate) SetRid(s string) *ResourceUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (ru *ResourceUpdate) SetStatus(u uint32) *ResourceUpdate {
+func (ru *ResourceUpdate) SetStatus(u uint8) *ResourceUpdate {
 	ru.mutation.ResetStatus()
 	ru.mutation.SetStatus(u)
 	return ru
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ru *ResourceUpdate) SetNillableStatus(u *uint32) *ResourceUpdate {
+func (ru *ResourceUpdate) SetNillableStatus(u *uint8) *ResourceUpdate {
 	if u != nil {
 		ru.SetStatus(*u)
 	}
@@ -49,41 +49,20 @@ func (ru *ResourceUpdate) SetNillableStatus(u *uint32) *ResourceUpdate {
 }
 
 // AddStatus adds u to the "status" field.
-func (ru *ResourceUpdate) AddStatus(u int32) *ResourceUpdate {
+func (ru *ResourceUpdate) AddStatus(u int8) *ResourceUpdate {
 	ru.mutation.AddStatus(u)
 	return ru
 }
 
-// SetRetries sets the "retries" field.
-func (ru *ResourceUpdate) SetRetries(i int) *ResourceUpdate {
-	ru.mutation.ResetRetries()
-	ru.mutation.SetRetries(i)
-	return ru
-}
-
-// SetNillableRetries sets the "retries" field if the given value is not nil.
-func (ru *ResourceUpdate) SetNillableRetries(i *int) *ResourceUpdate {
-	if i != nil {
-		ru.SetRetries(*i)
-	}
-	return ru
-}
-
-// AddRetries adds i to the "retries" field.
-func (ru *ResourceUpdate) AddRetries(i int) *ResourceUpdate {
-	ru.mutation.AddRetries(i)
-	return ru
-}
-
 // SetStep sets the "step" field.
-func (ru *ResourceUpdate) SetStep(u uint32) *ResourceUpdate {
+func (ru *ResourceUpdate) SetStep(u uint8) *ResourceUpdate {
 	ru.mutation.ResetStep()
 	ru.mutation.SetStep(u)
 	return ru
 }
 
 // SetNillableStep sets the "step" field if the given value is not nil.
-func (ru *ResourceUpdate) SetNillableStep(u *uint32) *ResourceUpdate {
+func (ru *ResourceUpdate) SetNillableStep(u *uint8) *ResourceUpdate {
 	if u != nil {
 		ru.SetStep(*u)
 	}
@@ -91,8 +70,29 @@ func (ru *ResourceUpdate) SetNillableStep(u *uint32) *ResourceUpdate {
 }
 
 // AddStep adds u to the "step" field.
-func (ru *ResourceUpdate) AddStep(u int32) *ResourceUpdate {
+func (ru *ResourceUpdate) AddStep(u int8) *ResourceUpdate {
 	ru.mutation.AddStep(u)
+	return ru
+}
+
+// SetRetried sets the "retried" field.
+func (ru *ResourceUpdate) SetRetried(i int) *ResourceUpdate {
+	ru.mutation.ResetRetried()
+	ru.mutation.SetRetried(i)
+	return ru
+}
+
+// SetNillableRetried sets the "retried" field if the given value is not nil.
+func (ru *ResourceUpdate) SetNillableRetried(i *int) *ResourceUpdate {
+	if i != nil {
+		ru.SetRetried(*i)
+	}
+	return ru
+}
+
+// AddRetried adds i to the "retried" field.
+func (ru *ResourceUpdate) AddRetried(i int) *ResourceUpdate {
+	ru.mutation.AddRetried(i)
 	return ru
 }
 
@@ -258,44 +258,44 @@ func (ru *ResourceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := ru.mutation.Status(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
+			Type:   field.TypeUint8,
 			Value:  value,
 			Column: resource.FieldStatus,
 		})
 	}
 	if value, ok := ru.mutation.AddedStatus(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
+			Type:   field.TypeUint8,
 			Value:  value,
 			Column: resource.FieldStatus,
 		})
 	}
-	if value, ok := ru.mutation.Retries(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: resource.FieldRetries,
-		})
-	}
-	if value, ok := ru.mutation.AddedRetries(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: resource.FieldRetries,
-		})
-	}
 	if value, ok := ru.mutation.Step(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
+			Type:   field.TypeUint8,
 			Value:  value,
 			Column: resource.FieldStep,
 		})
 	}
 	if value, ok := ru.mutation.AddedStep(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
+			Type:   field.TypeUint8,
 			Value:  value,
 			Column: resource.FieldStep,
+		})
+	}
+	if value, ok := ru.mutation.Retried(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: resource.FieldRetried,
+		})
+	}
+	if value, ok := ru.mutation.AddedRetried(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: resource.FieldRetried,
 		})
 	}
 	if value, ok := ru.mutation.Priority(); ok {
@@ -372,14 +372,14 @@ func (ruo *ResourceUpdateOne) SetRid(s string) *ResourceUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (ruo *ResourceUpdateOne) SetStatus(u uint32) *ResourceUpdateOne {
+func (ruo *ResourceUpdateOne) SetStatus(u uint8) *ResourceUpdateOne {
 	ruo.mutation.ResetStatus()
 	ruo.mutation.SetStatus(u)
 	return ruo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ruo *ResourceUpdateOne) SetNillableStatus(u *uint32) *ResourceUpdateOne {
+func (ruo *ResourceUpdateOne) SetNillableStatus(u *uint8) *ResourceUpdateOne {
 	if u != nil {
 		ruo.SetStatus(*u)
 	}
@@ -387,41 +387,20 @@ func (ruo *ResourceUpdateOne) SetNillableStatus(u *uint32) *ResourceUpdateOne {
 }
 
 // AddStatus adds u to the "status" field.
-func (ruo *ResourceUpdateOne) AddStatus(u int32) *ResourceUpdateOne {
+func (ruo *ResourceUpdateOne) AddStatus(u int8) *ResourceUpdateOne {
 	ruo.mutation.AddStatus(u)
 	return ruo
 }
 
-// SetRetries sets the "retries" field.
-func (ruo *ResourceUpdateOne) SetRetries(i int) *ResourceUpdateOne {
-	ruo.mutation.ResetRetries()
-	ruo.mutation.SetRetries(i)
-	return ruo
-}
-
-// SetNillableRetries sets the "retries" field if the given value is not nil.
-func (ruo *ResourceUpdateOne) SetNillableRetries(i *int) *ResourceUpdateOne {
-	if i != nil {
-		ruo.SetRetries(*i)
-	}
-	return ruo
-}
-
-// AddRetries adds i to the "retries" field.
-func (ruo *ResourceUpdateOne) AddRetries(i int) *ResourceUpdateOne {
-	ruo.mutation.AddRetries(i)
-	return ruo
-}
-
 // SetStep sets the "step" field.
-func (ruo *ResourceUpdateOne) SetStep(u uint32) *ResourceUpdateOne {
+func (ruo *ResourceUpdateOne) SetStep(u uint8) *ResourceUpdateOne {
 	ruo.mutation.ResetStep()
 	ruo.mutation.SetStep(u)
 	return ruo
 }
 
 // SetNillableStep sets the "step" field if the given value is not nil.
-func (ruo *ResourceUpdateOne) SetNillableStep(u *uint32) *ResourceUpdateOne {
+func (ruo *ResourceUpdateOne) SetNillableStep(u *uint8) *ResourceUpdateOne {
 	if u != nil {
 		ruo.SetStep(*u)
 	}
@@ -429,8 +408,29 @@ func (ruo *ResourceUpdateOne) SetNillableStep(u *uint32) *ResourceUpdateOne {
 }
 
 // AddStep adds u to the "step" field.
-func (ruo *ResourceUpdateOne) AddStep(u int32) *ResourceUpdateOne {
+func (ruo *ResourceUpdateOne) AddStep(u int8) *ResourceUpdateOne {
 	ruo.mutation.AddStep(u)
+	return ruo
+}
+
+// SetRetried sets the "retried" field.
+func (ruo *ResourceUpdateOne) SetRetried(i int) *ResourceUpdateOne {
+	ruo.mutation.ResetRetried()
+	ruo.mutation.SetRetried(i)
+	return ruo
+}
+
+// SetNillableRetried sets the "retried" field if the given value is not nil.
+func (ruo *ResourceUpdateOne) SetNillableRetried(i *int) *ResourceUpdateOne {
+	if i != nil {
+		ruo.SetRetried(*i)
+	}
+	return ruo
+}
+
+// AddRetried adds i to the "retried" field.
+func (ruo *ResourceUpdateOne) AddRetried(i int) *ResourceUpdateOne {
+	ruo.mutation.AddRetried(i)
 	return ruo
 }
 
@@ -626,44 +626,44 @@ func (ruo *ResourceUpdateOne) sqlSave(ctx context.Context) (_node *Resource, err
 	}
 	if value, ok := ruo.mutation.Status(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
+			Type:   field.TypeUint8,
 			Value:  value,
 			Column: resource.FieldStatus,
 		})
 	}
 	if value, ok := ruo.mutation.AddedStatus(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
+			Type:   field.TypeUint8,
 			Value:  value,
 			Column: resource.FieldStatus,
 		})
 	}
-	if value, ok := ruo.mutation.Retries(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: resource.FieldRetries,
-		})
-	}
-	if value, ok := ruo.mutation.AddedRetries(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: resource.FieldRetries,
-		})
-	}
 	if value, ok := ruo.mutation.Step(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
+			Type:   field.TypeUint8,
 			Value:  value,
 			Column: resource.FieldStep,
 		})
 	}
 	if value, ok := ruo.mutation.AddedStep(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
+			Type:   field.TypeUint8,
 			Value:  value,
 			Column: resource.FieldStep,
+		})
+	}
+	if value, ok := ruo.mutation.Retried(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: resource.FieldRetried,
+		})
+	}
+	if value, ok := ruo.mutation.AddedRetried(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: resource.FieldRetried,
 		})
 	}
 	if value, ok := ruo.mutation.Priority(); ok {
