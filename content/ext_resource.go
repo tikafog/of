@@ -11,8 +11,8 @@ import (
 // @Description:
 type ExtResource struct {
 	RID      string `json:"rid,omitempty"`
-	Status   string `json:"status,omitempty"`
-	Step     string `json:"step,omitempty"`
+	Status   uint8  `json:"status,omitempty"`
+	Step     uint8  `json:"step,omitempty"`
 	Error    string `json:"error,omitempty"`
 	TimeUnix int64  `json:"time_unix,omitempty"`
 }
