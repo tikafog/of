@@ -1,6 +1,7 @@
 package dbc
 
 import (
+	"io"
 	"sync"
 
 	"github.com/tikafog/of"
@@ -16,6 +17,7 @@ type ClientType uint32
 
 type client interface {
 	kernel.Client | bootnode.Client | upgrade.Client | media.Client
+	close() error
 }
 
 type Client[T client] struct {
@@ -30,6 +32,10 @@ func (t *Client[T]) Query() *T {
 func (t *Client[T]) Update() (*T, *sync.Mutex) {
 	t.m.Lock()
 	return t.c, &t.m
+}
+
+func (t *Client[T]) Close() error {
+	return any(t.c).(io.Closer).Close()
 }
 
 func openClient[C client](path string, op *Option) (*Client[C], error) {
@@ -51,7 +57,5 @@ func openClient[C client](path string, op *Option) (*Client[C], error) {
 	default:
 		return nil, Error("unsupported client type")
 	}
-	return &Client[C]{
-		c: (it).(*C),
-	}, err
+	return &Client[C]{c: (it).(*C)}, err
 }
