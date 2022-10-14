@@ -17,7 +17,7 @@ type name struct {
 }
 
 var (
-	NameNoSet       = MyName(0, "notset")
+	NameNotSet      = MyName(0, "notset")
 	NameAccount     = MyName(18275347644319189965, "account")
 	NameAdmin       = MyName(2239877576446804528, "admin")
 	NameAdminClient = MyName(14909113260478095105, "admin_client")
