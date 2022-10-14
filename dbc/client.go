@@ -43,7 +43,7 @@ func openClient[C client](path string, op *Option) (*Client[C], error) {
 	var name of.Name
 	switch it.(type) {
 	case *bootnode.Client:
-		it, err = openBootNode(of.NameBootNode, path, op)
+		it, err = openBootNode(of.NameBootnode, path, op)
 	case *kernel.Client:
 		name = of.NameKernel
 		it, err = openKernel(name, path, op)

@@ -2,11 +2,45 @@ package of
 
 import (
 	"context"
-	"strings"
 )
 
-//Name returns the names of all the modules
-type Name string
+// Name returns the names of all the modules
+type Name interface {
+	Compare(other Name) bool
+	String() string
+	ID() uint64
+}
+
+type name struct {
+	id    uint64
+	value string
+}
+
+var (
+	NameNoSet       = MyName(0, "notset")
+	NameAccount     = MyName(18275347644319189965, "account")
+	NameAdmin       = MyName(2239877576446804528, "admin")
+	NameAdminClient = MyName(14909113260478095105, "admin_client")
+	NameCenter      = MyName(18108201700337443927, "center")
+	NameNode        = MyName(14580695937169233336, "node")
+	NameBootnode    = MyName(16813717775905332386, "bootnode")
+	NameUpgrade     = MyName(10629397049073578029, "upgrade")
+	NameMedia       = MyName(2061340576534510319, "media")
+	NameKernel      = MyName(15590474080070586392, "kernel")
+	NameGateway     = MyName(6483280667709159949, "gateway")
+)
+
+func (n name) Compare(other Name) bool {
+	return n.ID() == other.ID()
+}
+
+func (n name) String() string {
+	return n.value
+}
+
+func (n name) ID() uint64 {
+	return n.id
+}
 
 type ModuleStarter interface {
 	Init() error
@@ -31,19 +65,13 @@ type Module interface {
 	IsValid() bool
 }
 
-//type Module interface {
-//	ModuleStater
-//WaitEvent(name Name, args ...Arg) error
-//}
-
-func (n Name) String() string {
-	return strings.ToLower(string(n))
-}
-
-func (n Name) Compare(other Name) bool {
-	return n.String() == other.String()
-}
-
 func CompareName(n, o Name) bool {
 	return n.String() == o.String()
+}
+
+func MyName(id uint64, value string) Name {
+	return &name{
+		id:    id,
+		value: value,
+	}
 }

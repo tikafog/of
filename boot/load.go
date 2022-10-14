@@ -11,12 +11,14 @@ import (
 
 var (
 	once    sync.Once
-	modules *hashmap.Map[of.Name, Loader]
+	names   *hashmap.Map[uint64, of.Name]
+	modules *hashmap.Map[uint64, Loader]
 )
 
 func init() {
 	once.Do(func() {
-		modules = hashmap.New[of.Name, Loader]()
+		modules = hashmap.New[uint64, Loader]()
+		names = hashmap.New[uint64, of.Name]()
 	})
 }
 
@@ -33,9 +35,10 @@ func Register(m Loader) {
 	if m == nil {
 		panic("of: Register module is nil")
 	}
-	if ok := modules.Insert(m.Name(), m); !ok {
-		panic("of: Register called twice for module " + m.Name())
+	if ok := names.Insert(m.Name().ID(), m.Name()); !ok {
+		panic("of: Register called twice for module " + m.Name().String())
 	}
+	modules.Set(m.Name().ID(), m)
 }
 
 // Load ...
@@ -43,7 +46,7 @@ func Register(m Loader) {
 // @param module.Name
 // @return module.Module
 func Load(name of.Name) Loader {
-	if m, ok := modules.Get(name); ok {
+	if m, ok := modules.Get(name.ID()); ok {
 		return m
 	}
 	return newEmptyLoader(name)
@@ -53,10 +56,13 @@ func Load(name of.Name) Loader {
 // @Description: List all registered modules
 // @return []of.Name
 func LoadModuleNames() []of.Name {
-	names := make([]of.Name, 0, modules.Len())
-	modules.Range(func(k of.Name, v Loader) bool {
-		names = append(names, of.Name(k))
+	rets := make([]of.Name, 0, modules.Len())
+	modules.Range(func(k uint64, v Loader) bool {
+		getted, ok := names.Get(k)
+		if ok {
+			rets = append(rets, getted)
+		}
 		return true
 	})
-	return names
+	return rets
 }
