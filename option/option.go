@@ -24,15 +24,12 @@ type InitializeOption interface {
 	StoragePath() string
 	DBC() *dbc.DBC
 	Tools() of.Tools
-	//Event() of.Event
-	//API() of.API
 }
 
 type Option interface {
 	InitializeOption
 	ID() of.ID
 	Link() any
-	//FatherHandler() func(father of.ID)
 }
 
 type ApplyOption interface {
@@ -53,13 +50,6 @@ func DBC(dbc *dbc.DBC) SetFunc {
 		return o
 	}
 }
-
-//func Event(event of.Event) SetFunc {
-//	return func(o *option) Option {
-//		o.event = event
-//		return o
-//	}
-//}
 
 func Repo(repo string) SetFunc {
 	return func(o *option) Option {

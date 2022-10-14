@@ -3,19 +3,20 @@ package boot
 import (
 	"sync"
 
+	"github.com/cornelk/hashmap"
+
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/option"
 )
 
 var (
-	initOnce  sync.Once
-	modulesMu sync.RWMutex
-	modules   map[of.Name]Loader
+	once    sync.Once
+	modules *hashmap.Map[of.Name, Loader]
 )
 
 func init() {
-	initOnce.Do(func() {
-		modules = make(map[of.Name]Loader, 128)
+	once.Do(func() {
+		modules = hashmap.New[of.Name, Loader]()
 	})
 }
 
@@ -29,16 +30,12 @@ type Loader interface {
 // If Register is called twice with the same name or if module is nil,
 // it panics.
 func Register(m Loader) {
-	modulesMu.Lock()
-	defer modulesMu.Unlock()
 	if m == nil {
 		panic("of: Register module is nil")
 	}
-
-	if _, ok := modules[m.Name()]; ok {
+	if ok := modules.Insert(m.Name(), m); !ok {
 		panic("of: Register called twice for module " + m.Name())
 	}
-	modules[m.Name()] = m
 }
 
 // Load ...
@@ -46,9 +43,7 @@ func Register(m Loader) {
 // @param module.Name
 // @return module.Module
 func Load(name of.Name) Loader {
-	modulesMu.Lock()
-	defer modulesMu.Unlock()
-	if m, ok := modules[name]; ok {
+	if m, ok := modules.Get(name); ok {
 		return m
 	}
 	return newEmptyLoader(name)
@@ -58,11 +53,10 @@ func Load(name of.Name) Loader {
 // @Description: List all registered modules
 // @return []of.Name
 func LoadModuleNames() []of.Name {
-	names := make([]of.Name, 0, len(modules))
-	modulesMu.RLock()
-	defer modulesMu.RUnlock()
-	for name := range modules {
-		names = append(names, of.Name(name))
-	}
+	names := make([]of.Name, 0, modules.Len())
+	modules.Range(func(k of.Name, v Loader) bool {
+		names = append(names, of.Name(k))
+		return true
+	})
 	return names
 }
