@@ -69,6 +69,15 @@ func CompareName(n, o Name) bool {
 	return n.String() == o.String()
 }
 
+func CompareNames(n name, others ...Name) bool {
+	for i := range others {
+		if n.ID() != others[i].ID() {
+			return false
+		}
+	}
+	return true
+}
+
 func MyName(id uint64, value string) Name {
 	return &name{
 		id:    id,
