@@ -17,7 +17,6 @@ type ClientType uint32
 
 type client interface {
 	kernel.Client | bootnode.Client | upgrade.Client | media.Client
-	close() error
 }
 
 type Client[T client] struct {

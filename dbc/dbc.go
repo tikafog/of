@@ -1,6 +1,8 @@
 package dbc
 
 import (
+	"io"
+
 	"github.com/tikafog/of/dbc/bootnode"
 	"github.com/tikafog/of/dbc/kernel"
 	"github.com/tikafog/of/dbc/media"
@@ -9,7 +11,7 @@ import (
 
 type DBC struct {
 	opt *Option
-	cs  [ClientTypeMax]any
+	cs  [ClientTypeMax]io.Closer
 }
 
 func Open(path string, opts ...Opts) (*DBC, error) {
@@ -60,6 +62,18 @@ func (d *DBC) Upgrade() *Client[upgrade.Client] {
 
 func (d *DBC) Media() *Client[media.Client] {
 	return d.cs[ClientTypeMedia].(*Client[media.Client])
+}
+
+func (d *DBC) Close() error {
+	for i := range d.cs {
+		if d.cs[i] == nil {
+			continue
+		}
+		if err := d.cs[i].Close(); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (d *DBC) Client(p ClientType) (any, bool) {
