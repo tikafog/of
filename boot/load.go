@@ -49,7 +49,14 @@ func Load(name of.Name) Loader {
 	if m, ok := modules.Get(name.ID()); ok {
 		return m
 	}
-	return newEmptyLoader(name)
+	return newEmptyLoader(of.NameNotSet)
+}
+
+func LoadFromID(id uint64) Loader {
+	if m, ok := modules.Get(id); ok {
+		return m
+	}
+	return newEmptyLoader(of.NameNotSet)
 }
 
 // LoadModuleNames ...

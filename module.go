@@ -17,17 +17,17 @@ type name struct {
 }
 
 var (
-	NameNotSet      = MyName(0, "notset")
-	NameAccount     = MyName(18275347644319189965, "account")
-	NameAdmin       = MyName(2239877576446804528, "admin")
-	NameAdminClient = MyName(14909113260478095105, "admin_client")
-	NameCenter      = MyName(18108201700337443927, "center")
-	NameNode        = MyName(14580695937169233336, "node")
-	NameBootnode    = MyName(16813717775905332386, "bootnode")
-	NameUpgrade     = MyName(10629397049073578029, "upgrade")
-	NameMedia       = MyName(2061340576534510319, "media")
-	NameKernel      = MyName(15590474080070586392, "kernel")
-	NameGateway     = MyName(6483280667709159949, "gateway")
+	NameNotSet      = OwnName(0, "notset")
+	NameAccount     = OwnName(18275347644319189965, "account")
+	NameAdmin       = OwnName(2239877576446804528, "admin")
+	NameAdminClient = OwnName(14909113260478095105, "admin_client")
+	NameCenter      = OwnName(18108201700337443927, "center")
+	NameNode        = OwnName(14580695937169233336, "node")
+	NameBootnode    = OwnName(16813717775905332386, "bootnode")
+	NameUpgrade     = OwnName(10629397049073578029, "upgrade")
+	NameMedia       = OwnName(2061340576534510319, "media")
+	NameKernel      = OwnName(15590474080070586392, "kernel")
+	NameGateway     = OwnName(6483280667709159949, "gateway")
 )
 
 func (n name) Compare(other Name) bool {
@@ -87,7 +87,7 @@ func CompareNameEq(n name, others ...Name) bool {
 	return false
 }
 
-func MyName(id uint64, value string) Name {
+func OwnName(id uint64, value string) Name {
 	return &name{
 		id:    id,
 		value: value,
