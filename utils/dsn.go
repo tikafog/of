@@ -8,7 +8,7 @@ import (
 )
 
 // DSNType ...
-//ENUM(sqlite3,mysql,postgres,oracle,mssql,redis,mongodb,elasticsearch,couchbase,cassandra,tidb,clickhouse,max)
+// ENUM(sqlite,sqlite3,mysql,postgres,oracle,mssql,redis,mongodb,elasticsearch,couchbase,cassandra,tidb,clickhouse,max)
 type DSNType int
 
 type dsnInitFunc = func(dsn string, path string, name string, debug bool) (string, bool, error)
@@ -23,13 +23,17 @@ var dsnActions = [DSNTypeMax]*dsnAction{
 		dsn: "file:%v?cache=shared&_journal=WAL&_fk=1",
 		fn:  openSqlite3,
 	},
+	DSNTypeSqlite: &dsnAction{
+		dsn: "file:%v?cache=shared&_journal=WAL&_fk=1",
+		fn:  openSqlite3,
+	},
 }
 
 func OpenDSN(t DSNType, path string, name string, debug bool) (string, bool, error) {
 	if t < 0 || t >= DSNTypeMax {
 		return "", false, fmt.Errorf("invalid dsn type:%v", t)
 	}
-	if t != DSNTypeSqlite3 {
+	if t != DSNTypeSqlite3 && t != DSNTypeSqlite {
 		return "", false, fmt.Errorf("now not support dsn type:%v", t)
 	}
 	return dsnActions[t].fn(dsnActions[t].dsn, path, name, debug)
