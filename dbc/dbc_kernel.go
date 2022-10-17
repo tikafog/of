@@ -103,7 +103,7 @@ func openKernelDatabase(path string) (*kernel.Client, error) {
 		options = append(options, kernel.Debug())
 	}
 
-	client, err := kernel.Open("sqlite3", path, options...)
+	client, err := kernel.Open("sqlite", path, options...)
 	if err != nil {
 		return nil, Errorf("failed opening connection to database: %v", err)
 	}
