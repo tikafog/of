@@ -103,7 +103,7 @@ func openBootNodeDatabase(path string) (*bootnode.Client, error) {
 		options = append(options, bootnode.Debug())
 	}
 
-	client, err := bootnode.Open("sqlite", path, options...)
+	client, err := bootnode.Open("sqlite3", path, options...)
 	if err != nil {
 		return nil, Errorf("failed opening connection to database: %v", err)
 	}

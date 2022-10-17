@@ -103,7 +103,7 @@ func openMediaDatabase(path string) (*media.Client, error) {
 		options = append(options, media.Debug())
 	}
 
-	client, err := media.Open("sqlite", path, options...)
+	client, err := media.Open("sqlite3", path, options...)
 	if err != nil {
 		return nil, Errorf("failed opening connection to database: %v", err)
 	}

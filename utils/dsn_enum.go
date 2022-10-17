@@ -11,10 +11,8 @@ import (
 )
 
 const (
-	// DSNTypeSqlite is a DSNType of type Sqlite.
-	DSNTypeSqlite DSNType = iota
 	// DSNTypeSqlite3 is a DSNType of type Sqlite3.
-	DSNTypeSqlite3
+	DSNTypeSqlite3 DSNType = iota
 	// DSNTypeMysql is a DSNType of type Mysql.
 	DSNTypeMysql
 	// DSNTypePostgres is a DSNType of type Postgres.
@@ -41,23 +39,22 @@ const (
 	DSNTypeMax
 )
 
-const _DSNTypeName = "sqlitesqlite3mysqlpostgresoraclemssqlredismongodbelasticsearchcouchbasecassandratidbclickhousemax"
+const _DSNTypeName = "sqlite3mysqlpostgresoraclemssqlredismongodbelasticsearchcouchbasecassandratidbclickhousemax"
 
 var _DSNTypeMap = map[DSNType]string{
-	DSNTypeSqlite:        _DSNTypeName[0:6],
-	DSNTypeSqlite3:       _DSNTypeName[6:13],
-	DSNTypeMysql:         _DSNTypeName[13:18],
-	DSNTypePostgres:      _DSNTypeName[18:26],
-	DSNTypeOracle:        _DSNTypeName[26:32],
-	DSNTypeMssql:         _DSNTypeName[32:37],
-	DSNTypeRedis:         _DSNTypeName[37:42],
-	DSNTypeMongodb:       _DSNTypeName[42:49],
-	DSNTypeElasticsearch: _DSNTypeName[49:62],
-	DSNTypeCouchbase:     _DSNTypeName[62:71],
-	DSNTypeCassandra:     _DSNTypeName[71:80],
-	DSNTypeTidb:          _DSNTypeName[80:84],
-	DSNTypeClickhouse:    _DSNTypeName[84:94],
-	DSNTypeMax:           _DSNTypeName[94:97],
+	DSNTypeSqlite3:       _DSNTypeName[0:7],
+	DSNTypeMysql:         _DSNTypeName[7:12],
+	DSNTypePostgres:      _DSNTypeName[12:20],
+	DSNTypeOracle:        _DSNTypeName[20:26],
+	DSNTypeMssql:         _DSNTypeName[26:31],
+	DSNTypeRedis:         _DSNTypeName[31:36],
+	DSNTypeMongodb:       _DSNTypeName[36:43],
+	DSNTypeElasticsearch: _DSNTypeName[43:56],
+	DSNTypeCouchbase:     _DSNTypeName[56:65],
+	DSNTypeCassandra:     _DSNTypeName[65:74],
+	DSNTypeTidb:          _DSNTypeName[74:78],
+	DSNTypeClickhouse:    _DSNTypeName[78:88],
+	DSNTypeMax:           _DSNTypeName[88:91],
 }
 
 // String implements the Stringer interface.
@@ -69,20 +66,19 @@ func (x DSNType) String() string {
 }
 
 var _DSNTypeValue = map[string]DSNType{
-	_DSNTypeName[0:6]:   DSNTypeSqlite,
-	_DSNTypeName[6:13]:  DSNTypeSqlite3,
-	_DSNTypeName[13:18]: DSNTypeMysql,
-	_DSNTypeName[18:26]: DSNTypePostgres,
-	_DSNTypeName[26:32]: DSNTypeOracle,
-	_DSNTypeName[32:37]: DSNTypeMssql,
-	_DSNTypeName[37:42]: DSNTypeRedis,
-	_DSNTypeName[42:49]: DSNTypeMongodb,
-	_DSNTypeName[49:62]: DSNTypeElasticsearch,
-	_DSNTypeName[62:71]: DSNTypeCouchbase,
-	_DSNTypeName[71:80]: DSNTypeCassandra,
-	_DSNTypeName[80:84]: DSNTypeTidb,
-	_DSNTypeName[84:94]: DSNTypeClickhouse,
-	_DSNTypeName[94:97]: DSNTypeMax,
+	_DSNTypeName[0:7]:   DSNTypeSqlite3,
+	_DSNTypeName[7:12]:  DSNTypeMysql,
+	_DSNTypeName[12:20]: DSNTypePostgres,
+	_DSNTypeName[20:26]: DSNTypeOracle,
+	_DSNTypeName[26:31]: DSNTypeMssql,
+	_DSNTypeName[31:36]: DSNTypeRedis,
+	_DSNTypeName[36:43]: DSNTypeMongodb,
+	_DSNTypeName[43:56]: DSNTypeElasticsearch,
+	_DSNTypeName[56:65]: DSNTypeCouchbase,
+	_DSNTypeName[65:74]: DSNTypeCassandra,
+	_DSNTypeName[74:78]: DSNTypeTidb,
+	_DSNTypeName[78:88]: DSNTypeClickhouse,
+	_DSNTypeName[88:91]: DSNTypeMax,
 }
 
 // ParseDSNType attempts to convert a string to a DSNType.

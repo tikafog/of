@@ -103,7 +103,7 @@ func openUpgradeDatabase(path string) (*upgrade.Client, error) {
 		options = append(options, upgrade.Debug())
 	}
 
-	client, err := upgrade.Open("sqlite", path, options...)
+	client, err := upgrade.Open("sqlite3", path, options...)
 	if err != nil {
 		return nil, fmt.Errorf("failed opening connection to database: %v", err)
 	}
