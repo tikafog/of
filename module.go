@@ -66,10 +66,14 @@ type Module interface {
 }
 
 func CompareName(n, o Name) bool {
-	return n.String() == o.String()
+	return n.ID() == o.ID()
 }
 
-func CompareNameNeq(n name, others ...Name) bool {
+// CompareNameNeq compares the name when the name is eq other one returns true
+// @param Name
+// @param ...Name
+// @return bool
+func CompareNameNeq(n Name, others ...Name) bool {
 	for i := range others {
 		if n.ID() != others[i].ID() {
 			return false
@@ -78,7 +82,11 @@ func CompareNameNeq(n name, others ...Name) bool {
 	return true
 }
 
-func CompareNameEq(n name, others ...Name) bool {
+// CompareNameEq compares the name when the name is neq other one returns true
+// @param Name
+// @param ...Name
+// @return bool
+func CompareNameEq(n Name, others ...Name) bool {
 	for i := range others {
 		if n.ID() == others[i].ID() {
 			return true
