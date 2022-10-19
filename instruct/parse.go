@@ -13,26 +13,26 @@ import (
 // @param []byte
 // @return *metaInstruct
 // @return error
-func ParseJSONInstruct(bytes []byte) (any, error) {
+func ParseJSONInstruct(bytes []byte) (instruct.Type, any, error) {
 	var meta metaInstruct
 	err := json.Unmarshal(bytes, &meta)
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	if string(meta.Version) != version.VersionOne {
-		return nil, ErrWrongVersionType
+		return 0, nil, ErrWrongVersionType
 	}
 	return parseMetaInstruct(&meta)
 }
 
-func ParseJSONInstructFromReader(reader io.Reader) (any, error) {
+func ParseJSONInstructFromReader(reader io.Reader) (instruct.Type, any, error) {
 	var meta metaInstruct
 	err := json.NewDecoder(reader).Decode(&meta)
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	if string(meta.Version) != version.VersionOne {
-		return nil, ErrWrongVersionType
+		return 0, nil, ErrWrongVersionType
 	}
 	return parseMetaInstruct(&meta)
 }
@@ -42,7 +42,7 @@ func ParseJSONInstructFromReader(reader io.Reader) (any, error) {
 // @param []byte
 // @return retC
 // @return errors
-func ParseInstruct(bytes []byte) (retC any, err error) {
+func ParseInstruct(bytes []byte) (p instruct.Type, retC any, err error) {
 	defer func() {
 		if rerr := recover(); rerr != nil {
 			err = Errorf("parse instruct error: %v", rerr)
@@ -50,7 +50,7 @@ func ParseInstruct(bytes []byte) (retC any, err error) {
 	}()
 	c := instruct.GetRootAsInstruct(bytes, 0)
 	if string(c.Version()) != version.VersionTwo {
-		return nil, ErrWrongVersionType
+		return 0, nil, ErrWrongVersionType
 	}
 	meta := instructToMetaInstruct(c)
 	return parseMetaInstruct(meta)
@@ -83,7 +83,7 @@ func instructToMetaInstruct(cc *instruct.Instruct) *metaInstruct {
 	return &inst
 }
 
-func parseMetaInstruct(meta *metaInstruct) (any, error) {
+func parseMetaInstruct(meta *metaInstruct) (instruct.Type, any, error) {
 	var inst metaParser
 	switch meta.Type {
 	case instruct.TypeResource:
@@ -93,8 +93,8 @@ func parseMetaInstruct(meta *metaInstruct) (any, error) {
 	case instruct.TypeReport:
 		inst = NewInstruct[ReportData]()
 	default:
-		return nil, ErrWrongInstructType
+		return meta.Type, nil, ErrWrongInstructType
 	}
 	err := inst.parseMetaInstruct(meta)
-	return inst, err
+	return meta.Type, inst, err
 }
