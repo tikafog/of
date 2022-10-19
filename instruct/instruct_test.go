@@ -30,8 +30,6 @@ func TestNewInstruct(t *testing.T) {
 					List: []string{
 						"a", "b", "c",
 					},
-					Action: 3,
-					Last:   5,
 				},
 			},
 			want: nil,
@@ -63,7 +61,7 @@ func TestNewInstruct(t *testing.T) {
 					return
 				}
 				t.Logf("Decode1: %+v", ri.Data)
-				i, err := ParseJSONInstruct(got.JSON())
+				_, i, err := ParseJSONInstruct(got.JSON())
 				if err != nil {
 					t.Fatal(err)
 					return
@@ -84,7 +82,7 @@ func TestNewInstruct(t *testing.T) {
 				_ = json.Unmarshal(data, &inst)
 				buf := inst.Bytes()
 
-				c, err := ParseInstruct(buf)
+				_, c, err := ParseInstruct(buf)
 				if err != nil {
 					t.Fatal(c)
 				}
@@ -108,7 +106,7 @@ func TestNewInstruct(t *testing.T) {
 				}
 
 				t.Logf("Decode1: %+v", ri.Data)
-				i, err := ParseJSONInstruct(got.JSON())
+				_, i, err := ParseJSONInstruct(got.JSON())
 				if err != nil {
 					t.Fatal(err)
 					return
@@ -129,7 +127,7 @@ func TestNewInstruct(t *testing.T) {
 				_ = json.Unmarshal(data, &inst)
 				buf := inst.Bytes()
 
-				c, err := ParseInstruct(buf)
+				_, c, err := ParseInstruct(buf)
 				if err != nil {
 					t.Fatal(c)
 				}

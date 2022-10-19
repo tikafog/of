@@ -38,8 +38,9 @@ type Instructor interface {
 // Instruct ...
 type Instruct[T Instructor] struct {
 	meta *metaInstruct
-	Data *T   `json:"data,omitempty"`
-	Type Type `json:"type,omitempty"`
+	To   string `json:"to,omitempty"`
+	Type Type   `json:"type,omitempty"`
+	Data *T     `json:"data,omitempty"`
 }
 
 // Bytes ...
@@ -51,14 +52,29 @@ func (t *metaInstruct) Bytes() []byte {
 	return instructToBytes(t)
 }
 
+// SetVersion ...
+// @receiver *metaInstruct
+// @param string
+// @return *metaInstruct
 func (t *metaInstruct) SetVersion(version string) *metaInstruct {
 	t.Version = version
 	return t
 }
 
+// JSON ...
+// @receiver *metaInstruct
+// @return []byte
+// @return error
 func (t *metaInstruct) JSON() ([]byte, error) {
 	t.Version = version.VersionOne
 	return json.Marshal(t)
+}
+
+// SetTo ...
+// @receiver *Instruct[T]
+// @param string
+func (i *Instruct[T]) SetTo(To string) {
+	i.To = To
 }
 
 // MarshalData ...
@@ -117,6 +133,7 @@ func (i *Instruct[T]) Bytes() []byte {
 func (i *Instruct[T]) parseMetaInstruct(m *metaInstruct) error {
 	i.meta = m
 	i.Type = m.Type
+	i.To = m.To
 	if m.Length != 0 && i.Data == nil {
 		i.Data = new(T)
 		return json.Unmarshal(m.Data, i.Data)
@@ -128,6 +145,7 @@ func (i *Instruct[T]) metaInstruct() *metaInstruct {
 	if i.meta == nil {
 		i.meta = new(metaInstruct)
 		i.meta.Type = i.Type
+		i.meta.To = i.To
 		i.meta.Data = utils.Must(json.Marshal(i.Data))
 		i.meta.Length = len(i.meta.Data)
 	}
@@ -138,8 +156,10 @@ func instructToBytes(c *metaInstruct) []byte {
 	builder := flatbuffers.NewBuilder(0)
 	_data := builder.CreateByteString(c.Data)
 	_version := builder.CreateString(c.Version)
+	_to := builder.CreateString(c.To)
 	instruct.InstructStart(builder)
 	instruct.InstructAddData(builder, _data)
+	instruct.InstructAddTo(builder, _to)
 	instruct.InstructAddVersion(builder, _version)
 	instruct.InstructAddType(builder, c.Type)
 	builder.Finish(instruct.InstructEnd(builder))
