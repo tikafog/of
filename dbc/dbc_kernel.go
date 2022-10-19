@@ -2,7 +2,6 @@ package dbc
 
 import (
 	"context"
-	"io"
 	"log"
 
 	"github.com/tikafog/of"
@@ -13,25 +12,25 @@ import (
 	"github.com/tikafog/of/dbc/kernel/schema"
 )
 
-func openKernel(name of.Name, path string, o *Option) (*kernel.Client, io.Closer, error) {
+func openKernel(name of.Name, path string, o *Option) (*kernel.Client, error) {
 	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String(), o.debug)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	if debug {
 		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
 	}
 	cli, err := openKernelDatabase(dbPath)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	ctx, ccf := context.WithTimeout(context.TODO(), o.Timeout())
 	defer ccf()
 	if err := createOrInitKernel(ctx, cli, exist); err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	cli.Use(MutatorFunc)
-	return cli, cli, nil
+	return cli, nil
 }
 
 func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) error {

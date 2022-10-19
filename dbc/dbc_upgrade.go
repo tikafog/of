@@ -3,7 +3,6 @@ package dbc
 import (
 	"context"
 	"fmt"
-	"io"
 	"log"
 
 	"github.com/tikafog/of"
@@ -13,25 +12,25 @@ import (
 	"github.com/tikafog/of/utils"
 )
 
-func openUpgrade(name of.Name, path string, o *Option) (*upgrade.Client, io.Closer, error) {
+func openUpgrade(name of.Name, path string, o *Option) (*upgrade.Client, error) {
 	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String(), o.debug)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	if debug {
 		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
 	}
 	cli, err := openUpgradeDatabase(dbPath)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	ctx, ccf := context.WithTimeout(context.TODO(), o.Timeout())
 	defer ccf()
 	if err := createOrInitUpgrade(ctx, cli, exist); err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	cli.Use(MutatorFunc)
-	return cli, cli, nil
+	return cli, nil
 }
 
 func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) error {

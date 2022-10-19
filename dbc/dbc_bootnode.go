@@ -2,7 +2,6 @@ package dbc
 
 import (
 	"context"
-	"io"
 	"log"
 
 	"github.com/tikafog/of"
@@ -13,25 +12,25 @@ import (
 	"github.com/tikafog/of/dbc/bootnode/schema"
 )
 
-func openBootNode(name of.Name, path string, o *Option) (*bootnode.Client, io.Closer, error) {
+func openBootNode(name of.Name, path string, o *Option) (*bootnode.Client, error) {
 	dbPath, exist, err := utils.OpenDSN(utils.DSNTypeSqlite3, path, name.String(), o.debug)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	if debug {
 		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
 	}
 	cli, err := openBootNodeDatabase(dbPath)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	ctx, ccf := context.WithTimeout(context.TODO(), o.Timeout())
 	defer ccf()
 	if err := createOrInitBootNode(ctx, cli, exist); err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	cli.Use(MutatorFunc)
-	return cli, cli, nil
+	return cli, nil
 }
 
 func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool) error {

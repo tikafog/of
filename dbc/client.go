@@ -37,25 +37,25 @@ func (t *Client[T]) Close() error {
 	return any(t.c).(io.Closer).Close()
 }
 
-func openClient[C client](path string, op *Option) (*Client[C], io.Closer, error) {
+func openClient[C client](path string, op *Option) (*Client[C], error) {
 	var it any = new(C)
 	var err error
 	var name of.Name
-	var closer io.Closer
+	//var closer io.Closer
 	switch it.(type) {
 	case *bootnode.Client:
-		it, closer, err = openBootNode(of.NameBootnode, path, op)
+		it, err = openBootNode(of.NameBootnode, path, op)
 	case *kernel.Client:
 		name = of.NameKernel
-		it, closer, err = openKernel(name, path, op)
+		it, err = openKernel(name, path, op)
 	case *upgrade.Client:
 		name = of.NameUpgrade
-		it, closer, err = openUpgrade(name, path, op)
+		it, err = openUpgrade(name, path, op)
 	case *media.Client:
 		name = of.NameMedia
-		it, closer, err = openMedia(name, path, op)
+		it, err = openMedia(name, path, op)
 	default:
-		return nil, nil, Error("unsupported client type")
+		return nil, Error("unsupported client type")
 	}
-	return &Client[C]{c: (it).(*C)}, closer, err
+	return &Client[C]{c: (it).(*C)}, err
 }
