@@ -18,8 +18,8 @@ func (e *EventKey) Receiver() Name {
 	return e._receiver
 }
 
-func NewEventKey(from, receiver Name, p string) *EventKey {
-	return &EventKey{
+func NewEventKey(from, receiver Name, p string) EventKey {
+	return EventKey{
 		_from:     from,
 		_receiver: receiver,
 		_type:     p,
