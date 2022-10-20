@@ -2,6 +2,7 @@ package of
 
 import (
 	"context"
+	"encoding/json"
 )
 
 // Name returns the names of all the modules
@@ -43,7 +44,7 @@ func (n name) ID() uint64 {
 }
 
 type ModuleStarter interface {
-	Init() error
+	Init(cfg json.RawMessage) (json.RawMessage, error)
 	Run(ctx context.Context) error
 	Destroy()
 
