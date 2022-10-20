@@ -69,8 +69,20 @@ func (rcv *Instruct) Data() []byte {
 	return nil
 }
 
+func (rcv *Instruct) Last() int64 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	if o != 0 {
+		return rcv._tab.GetInt64(o + rcv._tab.Pos)
+	}
+	return 0
+}
+
+func (rcv *Instruct) MutateLast(n int64) bool {
+	return rcv._tab.MutateInt64Slot(12, n)
+}
+
 func InstructStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(5)
 }
 func InstructAddVersion(builder *flatbuffers.Builder, version flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(version), 0)
@@ -83,6 +95,9 @@ func InstructAddType(builder *flatbuffers.Builder, type_ Type) {
 }
 func InstructAddData(builder *flatbuffers.Builder, data flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(data), 0)
+}
+func InstructAddLast(builder *flatbuffers.Builder, last int64) {
+	builder.PrependInt64Slot(4, last, 0)
 }
 func InstructEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

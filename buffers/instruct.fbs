@@ -12,6 +12,7 @@ table Instruct {
   to:string;
   type:Type;
   data:string;
+  last:int64;
 }
 
 root_type Instruct;

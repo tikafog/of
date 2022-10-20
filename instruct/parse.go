@@ -13,26 +13,26 @@ import (
 // @param []byte
 // @return *metaInstruct
 // @return error
-func ParseJSONInstruct(bytes []byte) (instruct.Type, any, error) {
+func ParseJSONInstruct(bytes []byte) (Instructor, error) {
 	var meta metaInstruct
 	err := json.Unmarshal(bytes, &meta)
 	if err != nil {
-		return 0, nil, err
+		return nil, err
 	}
 	if string(meta.Version) != version.VersionOne {
-		return 0, nil, ErrWrongVersionType
+		return nil, ErrWrongVersionType
 	}
 	return parseMetaInstruct(&meta)
 }
 
-func ParseJSONInstructFromReader(reader io.Reader) (instruct.Type, any, error) {
+func ParseJSONInstructFromReader(reader io.Reader) (Instructor, error) {
 	var meta metaInstruct
 	err := json.NewDecoder(reader).Decode(&meta)
 	if err != nil {
-		return 0, nil, err
+		return nil, err
 	}
 	if string(meta.Version) != version.VersionOne {
-		return 0, nil, ErrWrongVersionType
+		return nil, ErrWrongVersionType
 	}
 	return parseMetaInstruct(&meta)
 }
@@ -42,7 +42,7 @@ func ParseJSONInstructFromReader(reader io.Reader) (instruct.Type, any, error) {
 // @param []byte
 // @return retC
 // @return errors
-func ParseInstruct(bytes []byte) (p instruct.Type, retC any, err error) {
+func ParseInstruct(bytes []byte) (retC Instructor, err error) {
 	defer func() {
 		if rerr := recover(); rerr != nil {
 			err = Errorf("parse instruct error: %v", rerr)
@@ -50,13 +50,13 @@ func ParseInstruct(bytes []byte) (p instruct.Type, retC any, err error) {
 	}()
 	c := instruct.GetRootAsInstruct(bytes, 0)
 	if string(c.Version()) != version.VersionTwo {
-		return 0, nil, ErrWrongVersionType
+		return nil, ErrWrongVersionType
 	}
 	meta := instructToMetaInstruct(c)
 	return parseMetaInstruct(meta)
 }
 
-func parseInstructT[T Instructor](meta *metaInstruct) (*Instruct[T], error) {
+func parseInstructT[T DataInstructor](meta *metaInstruct) (*Instruct[T], error) {
 	var inst Instruct[T]
 	inst.Type = meta.Type
 	//inst.Version = meta.Version
@@ -69,21 +69,17 @@ func parseInstructT[T Instructor](meta *metaInstruct) (*Instruct[T], error) {
 	return &inst, nil
 }
 
-type instructBuffer interface {
-	decodeInstruct(inst *instruct.Instruct) error
-	encodeInstruct() []byte
-}
-
 func instructToMetaInstruct(cc *instruct.Instruct) *metaInstruct {
 	var inst metaInstruct
 	inst.Version = string(cc.Version())
 	inst.Type = cc.Type()
 	inst.Data = cc.Data()
+	inst.Last = cc.Last()
 	inst.Length = len(inst.Data)
 	return &inst
 }
 
-func parseMetaInstruct(meta *metaInstruct) (instruct.Type, any, error) {
+func parseMetaInstruct(meta *metaInstruct) (Instructor, error) {
 	var inst metaParser
 	switch meta.Type {
 	case instruct.TypeResource:
@@ -93,8 +89,8 @@ func parseMetaInstruct(meta *metaInstruct) (instruct.Type, any, error) {
 	case instruct.TypeReport:
 		inst = NewInstruct[ReportData]()
 	default:
-		return meta.Type, nil, ErrWrongInstructType
+		return nil, ErrWrongInstructType
 	}
 	err := inst.parseMetaInstruct(meta)
-	return meta.Type, inst, err
+	return inst.(Instructor), err
 }

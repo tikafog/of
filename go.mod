@@ -6,6 +6,7 @@ require (
 	entgo.io/ent v0.11.1
 	github.com/bxcodec/faker/v4 v4.0.0-beta
 	github.com/cespare/xxhash v1.1.0
+	github.com/cornelk/hashmap v1.0.8
 	github.com/gin-gonic/gin v1.8.1
 	github.com/google/flatbuffers v2.0.6+incompatible
 	github.com/google/uuid v1.3.0
@@ -18,7 +19,6 @@ require (
 	ariga.io/atlas v0.5.0 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/cornelk/hashmap v1.0.8 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect

@@ -31,16 +31,42 @@ type Data interface {
 }
 
 type Instructor interface {
+	GetTo() string
+	GetType() instruct.Type
+	GetData() any
+	GetLast() int64
+	JSON() []byte
+	Bytes() []byte
+}
+
+type DataInstructor interface {
 	CorrectData | ResourceData | ReportData
 	Data
 }
 
 // Instruct ...
-type Instruct[T Instructor] struct {
+type Instruct[T DataInstructor] struct {
 	meta *metaInstruct
 	To   string `json:"to,omitempty"`
 	Type Type   `json:"type,omitempty"`
 	Data *T     `json:"data,omitempty"`
+	Last int64  `json:"last,omitempty"`
+}
+
+func (i *Instruct[T]) GetTo() string {
+	return i.To
+}
+
+func (i *Instruct[T]) GetType() Type {
+	return i.Type
+}
+
+func (i *Instruct[T]) GetData() any {
+	return i.Data
+}
+
+func (i *Instruct[T]) GetLast() int64 {
+	return i.Last
 }
 
 // Bytes ...
@@ -134,6 +160,7 @@ func (i *Instruct[T]) parseMetaInstruct(m *metaInstruct) error {
 	i.meta = m
 	i.Type = m.Type
 	i.To = m.To
+	i.Last = m.Last
 	if m.Length != 0 && i.Data == nil {
 		i.Data = new(T)
 		return json.Unmarshal(m.Data, i.Data)
@@ -162,30 +189,15 @@ func instructToBytes(c *metaInstruct) []byte {
 	instruct.InstructAddTo(builder, _to)
 	instruct.InstructAddVersion(builder, _version)
 	instruct.InstructAddType(builder, c.Type)
+	instruct.InstructAddLast(builder, c.Last)
 	builder.Finish(instruct.InstructEnd(builder))
 	return builder.FinishedBytes()
 }
 
 // NewInstruct ...
 // @return *Instruct[T]
-func NewInstruct[T Instructor]() *Instruct[T] {
+func NewInstruct[T DataInstructor]() *Instruct[T] {
 	inst := new(Instruct[T])
 	inst.Type = Data.InstructType(*new(T))
 	return inst
-}
-
-// getInstructType ...
-// @param instruct.Type
-// @return *Instruct[T]
-func getInstructType(p Type) any {
-	switch p {
-	case instruct.TypeResource:
-		return ResourceData{}
-	case instruct.TypeCorrect:
-		return CorrectData{}
-	case instruct.TypeReport:
-		return ReportData{}
-	default:
-		panic(ErrWrongInstructType)
-	}
 }
