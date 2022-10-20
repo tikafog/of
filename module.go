@@ -44,7 +44,8 @@ func (n name) ID() uint64 {
 }
 
 type ModuleStarter interface {
-	Init(cfg json.RawMessage) (json.RawMessage, error)
+	LoadConfig(json.RawMessage) (json.RawMessage, error)
+	Init() error
 	Run(ctx context.Context) error
 	Destroy()
 
