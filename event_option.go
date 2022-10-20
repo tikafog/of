@@ -4,57 +4,66 @@ import (
 	"encoding/json"
 )
 
-type EventRequestOption struct {
+type EventRequestOption interface {
+	Value() any
+	Args() []Arg
+	DecodeFromData(data any) error
+	Callback(res *EventResult)
+}
+
+type eventRequestOption struct {
 	value    any
 	args     []Arg
 	data     []byte
 	callback EventCallbackFunc
 }
 
-func (e EventRequestOption) Value() any {
+func (e eventRequestOption) Value() any {
 	return e.value
 }
 
-func (e EventRequestOption) Args() []Arg {
+func (e eventRequestOption) Args() []Arg {
 	return e.args
 }
 
-func (e EventRequestOption) DecodeFromData(data any) error {
+func (e eventRequestOption) DecodeFromData(data any) error {
 	return json.Unmarshal(e.data, data)
 }
 
-func (e EventRequestOption) Callback() EventCallbackFunc {
-	return e.callback
+func (e eventRequestOption) Callback(res *EventResult) {
+	if e.callback != nil {
+		e.callback(res)
+	}
 }
 
-type EventRequestOptions func(*EventRequestOption)
+type EventRequestOptions func(*eventRequestOption)
 
 func EROValue(v any) EventRequestOptions {
-	return func(e *EventRequestOption) {
+	return func(e *eventRequestOption) {
 		e.value = v
 	}
 }
 
 func EROCallback(c EventCallbackFunc) EventRequestOptions {
-	return func(e *EventRequestOption) {
+	return func(e *eventRequestOption) {
 		e.callback = c
 	}
 }
 
 func EROArg(arg Arg) EventRequestOptions {
-	return func(e *EventRequestOption) {
+	return func(e *eventRequestOption) {
 		e.args = append(e.args, arg)
 	}
 }
 
 func EROArgs(args []Arg) EventRequestOptions {
-	return func(e *EventRequestOption) {
+	return func(e *eventRequestOption) {
 		e.args = args
 	}
 }
 
 func EROData(data any) EventRequestOptions {
-	return func(e *EventRequestOption) {
+	return func(e *eventRequestOption) {
 		e.data, _ = json.Marshal(data)
 	}
 }

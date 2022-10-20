@@ -1,6 +1,6 @@
 package of
 
-type EventFunc = func(r *EventRequest) error
+type EventFunc = func(r EventRequester) error
 type EventCallbackFunc = func(res *EventResult)
 
 //type EventTrigger interface {
@@ -23,35 +23,10 @@ type EventRegister interface {
 
 type EventRequester interface {
 	EventKey
-	EventCallbackFunc
-}
-
-type EventRequest struct {
-	EventKey
-	*EventRequestOption
+	EventRequestOption
 }
 
 type EventResult struct {
 	Result any
 	Error  error
-}
-
-func parseERO(opts []EventRequestOptions) *EventRequestOption {
-	var option EventRequestOption
-	for i := range opts {
-		opts[i](&option)
-	}
-	return &option
-}
-
-// NewEventRequest ...
-// @param EventKey
-// @param ...EventRequestOptions
-// @return *EventRequest
-func NewEventRequest(key EventKey, opts ...EventRequestOptions) *EventRequest {
-	opt := parseERO(opts)
-	return &EventRequest{
-		EventKey:           key,
-		EventRequestOption: opt,
-	}
 }
