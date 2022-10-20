@@ -25,7 +25,7 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeInstruct = "instruct"
+	TypeInstruct = "Instruct"
 	TypeResource = "Resource"
 	TypeVersion  = "Version"
 )
@@ -308,7 +308,7 @@ func (m *InstructMutation) OldField(ctx context.Context, name string) (ent.Value
 	case instruct.FieldUpdatedUnix:
 		return m.OldUpdatedUnix(ctx)
 	}
-	return nil, fmt.Errorf("unknown instruct field %s", name)
+	return nil, fmt.Errorf("unknown Instruct field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
@@ -331,7 +331,7 @@ func (m *InstructMutation) SetField(name string, value ent.Value) error {
 		m.SetUpdatedUnix(v)
 		return nil
 	}
-	return fmt.Errorf("unknown instruct field %s", name)
+	return fmt.Errorf("unknown Instruct field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
@@ -380,7 +380,7 @@ func (m *InstructMutation) AddField(name string, value ent.Value) error {
 		m.AddUpdatedUnix(v)
 		return nil
 	}
-	return fmt.Errorf("unknown instruct numeric field %s", name)
+	return fmt.Errorf("unknown Instruct numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
@@ -399,7 +399,7 @@ func (m *InstructMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *InstructMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown instruct nullable field %s", name)
+	return fmt.Errorf("unknown Instruct nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
@@ -413,7 +413,7 @@ func (m *InstructMutation) ResetField(name string) error {
 		m.ResetUpdatedUnix()
 		return nil
 	}
-	return fmt.Errorf("unknown instruct field %s", name)
+	return fmt.Errorf("unknown Instruct field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
@@ -455,13 +455,13 @@ func (m *InstructMutation) EdgeCleared(name string) bool {
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *InstructMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown instruct unique edge %s", name)
+	return fmt.Errorf("unknown Instruct unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *InstructMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown instruct edge %s", name)
+	return fmt.Errorf("unknown Instruct edge %s", name)
 }
 
 // ResourceMutation represents an operation that mutates the Resource nodes in the graph.
