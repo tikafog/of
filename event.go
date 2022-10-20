@@ -1,6 +1,6 @@
 package of
 
-type TypeEventFunc = func(r *EventRequest) error
+type EventFunc = func(r *EventRequest) error
 type EventCallbackFunc = func(res *EventResult)
 
 type EventTrigger interface {
@@ -9,7 +9,7 @@ type EventTrigger interface {
 
 type Event interface {
 	EventTrigger
-	Register(key EventKey, fn TypeEventFunc) error
+	Register(key EventKey, fn EventFunc) error
 }
 
 type EventRegister interface {
