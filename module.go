@@ -51,11 +51,8 @@ type ModuleStarter interface {
 	PreloadCore(core Core) error
 
 	//this all calls after run
-	RegisterAPI(api API) error
-	RegisterEvent(event Event) error
-	//RegisterMessageHandler(name string, handler MessageHandler) error
-	//this all calls after init
-	//RegisterMessageHandler(name string, handler MessageHandler) error
+	APIRegister
+	EventRegister
 
 	Module
 }

@@ -15,5 +15,5 @@ type API interface {
 }
 
 type APIRegister interface {
-	Register(API) error
+	RegisterAPI(API) error
 }

@@ -1,26 +1,24 @@
 package of
 
 type TypeEventFunc = func(r *EventRequest) error
-type TypeEventCallbackFunc = func(res *EventResult)
+type EventCallbackFunc = func(res *EventResult)
+
+type EventTrigger interface {
+	Trigger(key EventKey, opts ...EventRequestOptions) error
+}
 
 type Event interface {
-	Trigger(self Name, r *EventRequest) error
-	TriggerAsync(self Name, r *EventRequest) error
-	Register(from Name, event string, fn TypeEventFunc) error
-	//EventKey(name string) uint64
-	//Register(from Name, event uint64, fn TypeEventFunc) error
+	EventTrigger
+	Register(key EventKey, fn TypeEventFunc) error
 }
 
 type EventRegister interface {
-	Register(Event) error
+	RegisterEvent(Event) error
 }
 
 type EventRequest struct {
-	Receiver Name
-	Type     string
-	Args     []Arg
-	Value    any
-	//Callback TypeEventCallbackFunc
+	EventKey
+	EventRequestOption
 }
 
 type EventResult struct {
