@@ -25,3 +25,23 @@ type EventResult struct {
 	Result any
 	Error  error
 }
+
+func parseERO(opts []EventRequestOptions) *EventRequestOption {
+	var option EventRequestOption
+	for i := range opts {
+		opts[i](&option)
+	}
+	return &option
+}
+
+// NewEventRequest ...
+// @param EventKey
+// @param ...EventRequestOptions
+// @return *EventRequest
+func NewEventRequest(key EventKey, opts ...EventRequestOptions) *EventRequest {
+	opt := parseERO(opts)
+	return &EventRequest{
+		EventKey:           key,
+		EventRequestOption: opt,
+	}
+}
