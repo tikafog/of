@@ -67,3 +67,11 @@ func EROData(data any) EventRequestOptions {
 		e.data, _ = json.Marshal(data)
 	}
 }
+
+func ParseERO(opts ...EventRequestOptions) EventRequestOption {
+	var op eventRequestOption
+	for i := range opts {
+		opts[i](&op)
+	}
+	return op
+}
