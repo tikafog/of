@@ -17,8 +17,8 @@ type EventRegister interface {
 }
 
 type EventRequest struct {
-	EventKey
-	EventRequestOption
+	*EventKey
+	*EventRequestOption
 }
 
 type EventResult struct {
