@@ -22,10 +22,14 @@ func init() {
 	})
 }
 
-type Loader interface {
-	of.ModuleStarter
+type LoadSetter interface {
 	WithInit(option.InitializeOption) of.ModuleStarter
 	WithOption(option.Option) of.ModuleStarter
+}
+
+type Loader interface {
+	of.ModuleStarter
+	LoadSetter
 }
 
 // Register makes a database module available by the provided name.

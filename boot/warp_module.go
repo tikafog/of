@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/tikafog/of"
+	"github.com/tikafog/of/option"
 )
 
 type wrapModule struct {
@@ -14,6 +15,21 @@ type wrapModule struct {
 	core  of.CoreLoader
 	run   of.ModuleRunner
 	cfg   of.ConfigLoader
+	set   LoadSetter
+}
+
+func (w wrapModule) WithInit(option option.InitializeOption) of.ModuleStarter {
+	if w.cfg != nil {
+		return w.set.WithInit(option)
+	}
+	return w
+}
+
+func (w wrapModule) WithOption(option option.Option) of.ModuleStarter {
+	if w.cfg != nil {
+		return w.set.WithOption(option)
+	}
+	return w
 }
 
 func (w wrapModule) LoadConfig(message json.RawMessage) (json.RawMessage, error) {
@@ -64,7 +80,7 @@ func (w wrapModule) RegisterEvent(event of.Event) error {
 	return nil
 }
 
-func WarpLoader(m of.Module) of.ModuleStarter {
+func WarpLoader(m of.Module) Loader {
 	wm := &wrapModule{Module: m}
 
 	event, ok := m.(of.EventRegister)
@@ -87,6 +103,9 @@ func WarpLoader(m of.Module) of.ModuleStarter {
 	if ok {
 		wm.cfg = cfg
 	}
-
+	set, ok := m.(LoadSetter)
+	if ok {
+		wm.set = set
+	}
 	return wm
 }
