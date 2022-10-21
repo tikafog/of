@@ -2,8 +2,6 @@ package bootstrap
 
 import (
 	"context"
-
-	"github.com/tikafog/of"
 )
 
 // Level ...
@@ -64,6 +62,6 @@ func UpgradeAddr(addrs ...string) UpgradeOption {
 type Bootstrap interface {
 	Add(ctx context.Context, addrs ...string) error
 	Ls(ctx context.Context, opts ...LsOption) (int64, []string, error)
-	Upgrade(ctx context.Context, id of.ID, opts ...UpgradeOption) error
+	Upgrade(ctx context.Context, id string, opts ...UpgradeOption) error
 	Remove(ctx context.Context, addr ...string) error
 }
