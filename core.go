@@ -3,7 +3,7 @@ package of
 import (
 	"context"
 
-	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/dbc"
 )
 
 // Core
@@ -12,7 +12,7 @@ type Core interface {
 	Context() context.Context
 	State() State
 
-	QueryHandler(ct content.Type) (DataQueryHandler, error)
+	DataQuery(clientType dbc.ClientType, p uint32) (DataQueryHandler, error)
 
 	CoreFeature
 }
