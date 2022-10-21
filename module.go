@@ -43,14 +43,26 @@ func (n name) ID() uint64 {
 	return n.id
 }
 
-type ModuleStarter interface {
+type ConfigLoader interface {
 	LoadConfig(json.RawMessage) (json.RawMessage, error)
+}
+
+type ModuleRunner interface {
 	Init() error
 	Run(ctx context.Context) error
 	Destroy()
+}
+
+type CoreLoader interface {
+	PreloadCore(core Core) error
+}
+
+type ModuleStarter interface {
+	ConfigLoader
+	ModuleRunner
 
 	//this all calls before run
-	PreloadCore(core Core) error
+	CoreLoader
 
 	//this all calls after run
 	APIRegister
