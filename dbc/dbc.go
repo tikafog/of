@@ -7,6 +7,7 @@ import (
 	"github.com/tikafog/of/dbc/kernel"
 	"github.com/tikafog/of/dbc/media"
 	"github.com/tikafog/of/dbc/upgrade"
+	"github.com/tikafog/of/feature/query"
 )
 
 type DBC struct {
@@ -22,25 +23,25 @@ func Open(path string, opts ...Opts) (*DBC, error) {
 
 	var err error
 	if _, ok := ignores[ClientTypeBootnode]; !ok {
-		dbc.cs[ClientTypeBootnode], err = openClient[bootnode.Client](path, dbc.opt)
+		dbc.cs[query.ClientTypeBootnode], err = openClient[bootnode.Client](path, dbc.opt)
 		if err != nil {
 			return nil, merr.Wrap(err, "open bootnode failed")
 		}
 	}
 	if _, ok := ignores[ClientTypeKernel]; !ok {
-		dbc.cs[ClientTypeKernel], err = openClient[kernel.Client](path, dbc.opt)
+		dbc.cs[query.ClientTypeKernel], err = openClient[kernel.Client](path, dbc.opt)
 		if err != nil {
 			return nil, merr.Wrap(err, "open kernel failed")
 		}
 	}
 	if _, ok := ignores[ClientTypeUpgrade]; !ok {
-		dbc.cs[ClientTypeUpgrade], err = openClient[upgrade.Client](path, dbc.opt)
+		dbc.cs[query.ClientTypeUpgrade], err = openClient[upgrade.Client](path, dbc.opt)
 		if err != nil {
 			return nil, merr.Wrap(err, "open upgrade failed")
 		}
 	}
 	if _, ok := ignores[ClientTypeMedia]; !ok {
-		dbc.cs[ClientTypeMedia], err = openClient[media.Client](path, dbc.opt)
+		dbc.cs[query.ClientTypeMedia], err = openClient[media.Client](path, dbc.opt)
 		if err != nil {
 			return nil, merr.Wrap(err, "open media failed")
 		}
@@ -49,19 +50,19 @@ func Open(path string, opts ...Opts) (*DBC, error) {
 }
 
 func (d *DBC) BootNode() *Client[bootnode.Client] {
-	return d.cs[ClientTypeBootnode].(*Client[bootnode.Client])
+	return d.cs[query.ClientTypeBootnode].(*Client[bootnode.Client])
 }
 
 func (d *DBC) Kernel() *Client[kernel.Client] {
-	return d.cs[ClientTypeKernel].(*Client[kernel.Client])
+	return d.cs[query.ClientTypeKernel].(*Client[kernel.Client])
 }
 
 func (d *DBC) Upgrade() *Client[upgrade.Client] {
-	return d.cs[ClientTypeUpgrade].(*Client[upgrade.Client])
+	return d.cs[query.ClientTypeUpgrade].(*Client[upgrade.Client])
 }
 
 func (d *DBC) Media() *Client[media.Client] {
-	return d.cs[ClientTypeMedia].(*Client[media.Client])
+	return d.cs[query.ClientTypeMedia].(*Client[media.Client])
 }
 
 func (d *DBC) Close() error {
@@ -76,8 +77,8 @@ func (d *DBC) Close() error {
 	return nil
 }
 
-func (d *DBC) Client(p ClientType) (any, bool) {
-	if p >= ClientTypeMax {
+func (d *DBC) Client(p query.ClientType) (any, bool) {
+	if p >= query.ClientTypeMax {
 		return nil, false
 	}
 	return d.cs[p], true

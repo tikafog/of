@@ -11,10 +11,6 @@ import (
 	"github.com/tikafog/of/dbc/upgrade"
 )
 
-// ClientType ...
-// ENUM(bootnode,kernel,upgrade,media,max)
-type ClientType uint32
-
 type client interface {
 	kernel.Client | bootnode.Client | upgrade.Client | media.Client
 }

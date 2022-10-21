@@ -4,8 +4,11 @@ import (
 	"context"
 
 	"github.com/tikafog/of"
-	"github.com/tikafog/of/dbc/bootnode/bootstrap"
 )
+
+// Level ...
+// ENUM(core,speed,normal,max)
+type Level uint32
 
 type LsOption func(*LsSetting)
 
@@ -35,14 +38,14 @@ func LsIndex(index int64) LsOption {
 type UpgradeOption func(*UpgradeSetting)
 
 type UpgradeSetting struct {
-	Level bootstrap.Level
+	Level Level
 	Addrs []string
 }
 
 // UpgradeLevel ...
 // @param bootstrap.Level
 // @return BootstrapUpgradeOption
-func UpgradeLevel(level bootstrap.Level) UpgradeOption {
+func UpgradeLevel(level Level) UpgradeOption {
 	return func(option *UpgradeSetting) {
 		option.Level = level
 	}
