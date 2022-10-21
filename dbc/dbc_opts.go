@@ -2,6 +2,8 @@ package dbc
 
 import (
 	"time"
+
+	"github.com/tikafog/of/feature/query"
 )
 
 const (
@@ -12,7 +14,7 @@ const (
 type Option struct {
 	timeout time.Duration
 	debug   bool
-	ignores map[ClientType]struct{}
+	ignores map[query.ClientType]struct{}
 }
 
 func (o Option) Debug() bool {
@@ -29,7 +31,7 @@ func (o Option) Timeout() time.Duration {
 	return o.timeout
 }
 
-func (o Option) Ignores() map[ClientType]struct{} {
+func (o Option) Ignores() map[query.ClientType]struct{} {
 	return o.ignores
 }
 
@@ -37,7 +39,7 @@ type Opts func(opt *Option)
 
 func parseOption(opts []Opts) *Option {
 	o := &Option{
-		ignores: make(map[ClientType]struct{}),
+		ignores: make(map[query.ClientType]struct{}),
 		timeout: MinTimeout,
 		debug:   false,
 	}
@@ -59,7 +61,7 @@ func TimeoutOpt(t time.Duration) Opts {
 	}
 }
 
-func IgnoresOpt(ps ...ClientType) Opts {
+func IgnoresOpt(ps ...query.ClientType) Opts {
 	return func(opt *Option) {
 		for i := range ps {
 			opt.ignores[ps[i]] = struct{}{}
