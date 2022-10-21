@@ -1,15 +1,15 @@
-package of
+package resource
 
 import (
 	"context"
 )
 
-// ResourceType ...
+// Type ...
 // ENUM(local,remote,hash,remote hash,max)
-type ResourceType uint32
+type Type uint32
 
 type Resource interface {
-	Add(ctx context.Context, path string, ro ...ResourceOption) (string, error)
+	Add(ctx context.Context, path string, ro ...AddOption) (string, error)
 	//Ls(ctx context.Context, path string, ro ...ResourceOption) (string, error)
 	//Remove(ctx context.Context, path string, ro ...ResourceOption) error
 	//Validate(ctx context.Context, path string, ro ...ResourceOption) error
