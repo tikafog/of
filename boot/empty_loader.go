@@ -2,6 +2,7 @@ package boot
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/tikafog/errors"
 
@@ -11,6 +12,10 @@ import (
 
 type emptyModule struct {
 	name of.Name
+}
+
+func (m emptyModule) LoadConfig(message json.RawMessage) (json.RawMessage, error) {
+	return nil, nil
 }
 
 var ErrEmptyModule = errors.New("empty module")
