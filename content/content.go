@@ -176,17 +176,16 @@ func (c *Content) CurrentJSON() []byte {
 // @return error
 func (c *Content) JSON() []byte {
 	if c.meta == nil {
-		var message []byte
-		if c.Message != nil {
-			message = utils.Must(json.Marshal(c.Message.v1()))
-		}
+
 		c.meta = &metaContent{
 			Version: "",
 			From:    c.From,
-			Message: message,
 			Exts:    c.Exts,
 			Type:    c.Type,
 		}
+	}
+	if c.Message != nil {
+		c.meta.Message = utils.Must(json.Marshal(c.Message.v1()))
 	}
 	c.meta.Version = version.VersionOne
 	if debug {
@@ -202,17 +201,15 @@ func (c *Content) JSON() []byte {
 // @return error
 func (c *Content) JSONV2() []byte {
 	if c.meta == nil {
-		var message []byte
-		if c.Message != nil {
-			message = utils.Must(json.Marshal(c.Message.v2()))
-		}
 		c.meta = &metaContent{
 			Version: "",
 			From:    c.From,
-			Message: message,
 			Exts:    c.Exts,
 			Type:    c.Type,
 		}
+	}
+	if c.Message != nil {
+		c.meta.Message = utils.Must(json.Marshal(c.Message.v2()))
 	}
 	c.meta.Version = version.VersionOne
 	if debug {
@@ -223,16 +220,14 @@ func (c *Content) JSONV2() []byte {
 
 func (c *Content) JSONV3() []byte {
 	if c.meta == nil {
-		var message []byte
-		if c.Message != nil {
-			message = utils.Must(json.Marshal(c.Message))
-		}
 		c.meta = &metaContent{
-			From:    c.From,
-			Message: message,
-			Exts:    c.Exts,
-			Type:    c.Type,
+			From: c.From,
+			Exts: c.Exts,
+			Type: c.Type,
 		}
+	}
+	if c.Message != nil {
+		c.meta.Message = utils.Must(json.Marshal(c.Message))
 	}
 	c.meta.Version = version.VersionOne
 	if debug {
