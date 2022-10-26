@@ -28,6 +28,7 @@ var (
 	NameUpgrade     = OwnName(10629397049073578029, "upgrade")
 	NameMedia       = OwnName(2061340576534510319, "media")
 	NameKernel      = OwnName(15590474080070586392, "kernel")
+	NameInstruct    = OwnName(3635930719169311595, "instruct")
 	NameGateway     = OwnName(6483280667709159949, "gateway")
 )
 
