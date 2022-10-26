@@ -10,8 +10,8 @@ type InquireRequest struct {
 }
 
 type AnswerRequest struct {
-	conn   Conn
-	reader io.Reader
+	Conn   Conn
+	Reader io.Reader
 }
 
 type Inquirer interface {
