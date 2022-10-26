@@ -239,6 +239,7 @@ func (c *Content) JSONV3() []byte {
 // Clear
 // @receiver *Content
 func (c *Content) Clear() {
+	c.meta = nil
 	c.Message = EmptyMessage
 	c.Exts = []Ext{}
 }
