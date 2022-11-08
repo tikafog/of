@@ -39,6 +39,7 @@ type Getter interface {
 	Type() instruct.Type
 	Data() json.RawMessage
 	Last() int64
+	Version() string
 	JSON() []byte
 	Bytes() []byte
 }
@@ -48,6 +49,7 @@ type Setter interface {
 	SetType(instruct.Type)
 	SetData(message json.RawMessage)
 	SetLast(int64)
+	SetVersion(string)
 }
 
 type Instructor interface {
@@ -62,6 +64,14 @@ type Instruct[T DataSource] struct {
 	//Type Type   `json:"type,omitempty"`
 	dataSource *T
 	//Last int64  `json:"last,omitempty"`
+}
+
+func (i *Instruct[T]) Version() string {
+	return i.meta.Version
+}
+
+func (i *Instruct[T]) SetVersion(v string) {
+	i.meta.Version = v
 }
 
 // SetLast ...
@@ -238,3 +248,7 @@ func dataType(a any) instruct.Type {
 	}
 	return instruct.TypeMax
 }
+
+var _ Instructor = (*Instruct[ReportData])(nil)
+var _ Instructor = (*Instruct[CorrectData])(nil)
+var _ Instructor = (*Instruct[ResourceData])(nil)

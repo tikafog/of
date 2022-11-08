@@ -95,5 +95,3 @@ func parseMetaInstruct(meta *metaInstruct) (Instructor, error) {
 	err := inst.parseMetaInstruct(meta)
 	return inst.(Instructor), err
 }
-
-var _ Instructor = (*Instruct[ReportData])(nil)
