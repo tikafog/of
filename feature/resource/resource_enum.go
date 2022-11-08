@@ -17,13 +17,13 @@ const (
 	TypeRemote
 	// TypeHash is a Type of type Hash.
 	TypeHash
-	// TypeRemoteHash is a Type of type Remote Hash.
+	// TypeRemoteHash is a Type of type Remote_hash.
 	TypeRemoteHash
 	// TypeMax is a Type of type Max.
 	TypeMax
 )
 
-const _TypeName = "localremotehashremote hashmax"
+const _TypeName = "localremotehashremote_hashmax"
 
 var _TypeMap = map[Type]string{
 	TypeLocal:      _TypeName[0:5],

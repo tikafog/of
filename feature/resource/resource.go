@@ -5,7 +5,7 @@ import (
 )
 
 // Type ...
-// ENUM(local,remote,hash,remote hash,max)
+// ENUM(local,remote,hash,remote_hash,max)
 type Type uint32
 
 type Resource interface {
