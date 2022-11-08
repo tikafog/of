@@ -24,4 +24,4 @@ func (d ResourceData) InstructType() Type {
 	return instruct.TypeResource
 }
 
-var _ Data = (*ResourceData)(nil)
+var _ dataAble = (*ResourceData)(nil)

@@ -25,6 +25,10 @@ func ParseJSONInstruct(bytes []byte) (Instructor, error) {
 	return parseMetaInstruct(&meta)
 }
 
+// ParseJSONInstructFromReader ...
+// @param io.Reader
+// @return Instructor
+// @return error
 func ParseJSONInstructFromReader(reader io.Reader) (Instructor, error) {
 	var meta metaInstruct
 	err := json.NewDecoder(reader).Decode(&meta)
@@ -56,16 +60,13 @@ func ParseInstruct(bytes []byte) (retC Instructor, err error) {
 	return parseMetaInstruct(meta)
 }
 
-func parseInstructT[T DataInstructor](meta *metaInstruct) (*Instruct[T], error) {
+func parseInstructT[T DataSource](meta *metaInstruct) (*Instruct[T], error) {
 	var inst Instruct[T]
-	inst.Type = meta.Type
-	//inst.Version = meta.Version
-	if meta.Length != 0 && inst.Data == nil {
-		inst.Data = new(T)
-		err := json.Unmarshal(meta.Data, inst.Data)
+	if meta.Length != 0 && meta.Data == nil {
+		inst.dataSource = new(T)
+		err := json.Unmarshal(meta.Data, inst.dataSource)
 		return &inst, err
 	}
-
 	return &inst, nil
 }
 
@@ -94,3 +95,5 @@ func parseMetaInstruct(meta *metaInstruct) (Instructor, error) {
 	err := inst.parseMetaInstruct(meta)
 	return inst.(Instructor), err
 }
+
+var _ Instructor = (*Instruct[ReportData])(nil)

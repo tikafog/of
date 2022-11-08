@@ -320,7 +320,7 @@ func (iuo *InstructUpdateOne) sqlSave(ctx context.Context) (_node *Instruct, err
 	}
 	id, ok := iuo.mutation.ID()
 	if !ok {
-		return nil, &ValidationError{Name: "id", err: errors.New(`kernel: missing "Instruct.id" for update`)}
+		return nil, &ValidationError{Name: "id", err: errors.New(`kernel: missing "innteInstruct.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
 	if fields := iuo.fields; len(fields) > 0 {

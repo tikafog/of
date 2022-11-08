@@ -259,7 +259,7 @@ func (iq *InstructQuery) Clone() *InstructQuery {
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.Instruct.Query().
+//	client.innteInstruct.Query().
 //		GroupBy(instruct.FieldCurrentUnix).
 //		Aggregate(kernel.Count()).
 //		Scan(ctx, &v)
@@ -286,7 +286,7 @@ func (iq *InstructQuery) GroupBy(field string, fields ...string) *InstructGroupB
 //		CurrentUnix int64 `json:"current_unix,omitempty"`
 //	}
 //
-//	client.Instruct.Query().
+//	client.innteInstruct.Query().
 //		Select(instruct.FieldCurrentUnix).
 //		Scan(ctx, &v)
 func (iq *InstructQuery) Select(fields ...string) *InstructSelect {

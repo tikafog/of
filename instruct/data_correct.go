@@ -35,4 +35,4 @@ func (d *CorrectData) SetStartUnix(startUnix int64) {
 	d.StartUnix = startUnix
 }
 
-var _ Data = (*CorrectData)(nil)
+var _ dataAble = (*CorrectData)(nil)

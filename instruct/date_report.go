@@ -34,4 +34,4 @@ func (d *ReportData) JSON() []byte {
 	return v
 }
 
-var _ Data = (*ReportData)(nil)
+var _ dataAble = (*ReportData)(nil)

@@ -26,47 +26,77 @@ type metaInstruct struct {
 	Last    int64           `json:"last,omitempty"`
 }
 
-type Data interface {
+type DataSource interface {
+	CorrectData | ResourceData | ReportData
+}
+
+type dataAble interface {
 	InstructType() Type
 }
 
-type Instructor interface {
-	GetTo() string
-	GetType() instruct.Type
-	GetData() any
-	GetLast() int64
+type Getter interface {
+	To() string
+	Type() instruct.Type
+	Data() json.RawMessage
+	Last() int64
 	JSON() []byte
 	Bytes() []byte
 }
 
-type DataInstructor interface {
-	CorrectData | ResourceData | ReportData
-	Data
+type Setter interface {
+	SetTo(string)
+	SetType(instruct.Type)
+	SetData(message json.RawMessage)
+	SetLast(int64)
+}
+
+type Instructor interface {
+	Getter
+	Setter
 }
 
 // Instruct ...
-type Instruct[T DataInstructor] struct {
+type Instruct[T DataSource] struct {
 	meta *metaInstruct
-	To   string `json:"to,omitempty"`
-	Type Type   `json:"type,omitempty"`
-	Data *T     `json:"data,omitempty"`
-	Last int64  `json:"last,omitempty"`
+	//To   string `json:"to,omitempty"`
+	//Type Type   `json:"type,omitempty"`
+	dataSource *T
+	//Last int64  `json:"last,omitempty"`
 }
 
-func (i *Instruct[T]) GetTo() string {
-	return i.To
+// SetLast ...
+// @receiver *Instruct[T]
+// @param int64
+func (i *Instruct[T]) SetLast(last int64) {
+	i.meta.Last = last
 }
 
-func (i *Instruct[T]) GetType() Type {
-	return i.Type
+// To ...
+// @receiver *Instruct[T]
+// @return string
+func (i *Instruct[T]) To() string {
+	return i.meta.To
 }
 
-func (i *Instruct[T]) GetData() any {
-	return i.Data
+// Type ...
+// @receiver *Instruct[T]
+// @return Type
+func (i *Instruct[T]) Type() Type {
+	return i.meta.Type
 }
 
-func (i *Instruct[T]) GetLast() int64 {
-	return i.Last
+// Data ...
+// @receiver *Instruct[T]
+// @return json.RawMessage
+func (i *Instruct[T]) Data() json.RawMessage {
+	return i.meta.Data
+}
+
+// Last ...
+// @receiver *Instruct[T]
+// @return int64
+func (i *Instruct[T]) Last() int64 {
+	return i.meta.Last
 }
 
 // Bytes ...
@@ -100,7 +130,7 @@ func (t *metaInstruct) JSON() ([]byte, error) {
 // @receiver *Instruct[T]
 // @param string
 func (i *Instruct[T]) SetTo(To string) {
-	i.To = To
+	i.meta.To = To
 }
 
 // MarshalData ...
@@ -120,23 +150,28 @@ func (i *Instruct[T]) UnmarshalData(data []byte) error {
 	return json.Unmarshal(data, i)
 }
 
-// SetData
+// SetData ...
+// @receiver *Instruct[T]
+// @param json.RawMessage
+func (i *Instruct[T]) SetData(data json.RawMessage) {
+	i.meta.Data = data
+}
+
+// SetDataSource
 // @receiver *Instruct[T]
 // @param []byte
 // @return *Instruct[T]
-func (i *Instruct[T]) SetData(data *T) *Instruct[T] {
-	i.Data = data
+func (i *Instruct[T]) SetDataSource(data *T) *Instruct[T] {
+	i.dataSource = data
+	i.meta.Data = utils.Must(json.Marshal(data))
 	return i
 }
 
-// SetType
+// SetType ...
 // @receiver *Instruct[T]
 // @param instruct.Type
-// @return *Instruct[T]
-func (i *Instruct[T]) SetType(p instruct.Type) *Instruct[T] {
-	i.Type = p
-	//i.meta.Type = i.Type
-	return i
+func (i *Instruct[T]) SetType(p instruct.Type) {
+	i.meta.Type = p
 }
 
 // JSON ...
@@ -145,7 +180,7 @@ func (i *Instruct[T]) SetType(p instruct.Type) *Instruct[T] {
 // @return []byte
 // @return error
 func (i *Instruct[T]) JSON() []byte {
-	return utils.Must(i.metaInstruct().JSON())
+	return utils.Must(i.meta.JSON())
 }
 
 // Bytes ...
@@ -153,31 +188,28 @@ func (i *Instruct[T]) JSON() []byte {
 // @receiver Instruct[T]
 // @return []byte
 func (i *Instruct[T]) Bytes() []byte {
-	return i.metaInstruct().Bytes()
+	return i.meta.Bytes()
 }
 
 func (i *Instruct[T]) parseMetaInstruct(m *metaInstruct) error {
 	i.meta = m
-	i.Type = m.Type
-	i.To = m.To
-	i.Last = m.Last
-	if m.Length != 0 && i.Data == nil {
-		i.Data = new(T)
-		return json.Unmarshal(m.Data, i.Data)
+	if m.Length != 0 && m.Data == nil {
+		i.dataSource = new(T)
+		return json.Unmarshal(m.Data, i.dataSource)
 	}
 	return nil
 }
 
-func (i *Instruct[T]) metaInstruct() *metaInstruct {
-	if i.meta == nil {
-		i.meta = new(metaInstruct)
-		i.meta.Type = i.Type
-		i.meta.To = i.To
-		i.meta.Data = utils.Must(json.Marshal(i.Data))
-		i.meta.Length = len(i.meta.Data)
-	}
-	return i.meta
-}
+//func (i *Instruct[T]) metaInstruct() *metaInstruct {
+//	if i.meta == nil {
+//		i.meta = new(metaInstruct)
+//		i.meta.Type = i.Type
+//		i.meta.To = i.To()
+//		i.meta.Data = utils.Must(json.Marshal(i.Data))
+//		i.meta.Length = len(i.meta.Data)
+//	}
+//	return i.meta
+//}
 
 func instructToBytes(c *metaInstruct) []byte {
 	builder := flatbuffers.NewBuilder(0)
@@ -196,8 +228,22 @@ func instructToBytes(c *metaInstruct) []byte {
 
 // NewInstruct ...
 // @return *Instruct[T]
-func NewInstruct[T DataInstructor]() *Instruct[T] {
+func NewInstruct[T DataSource]() *Instruct[T] {
 	inst := new(Instruct[T])
-	inst.Type = Data.InstructType(*new(T))
+	inst.meta = new(metaInstruct)
+	inst.SetType(dataType(new(T)))
 	return inst
+}
+
+func CastInstruct[T DataSource](instructor Instructor) (*Instruct[T], bool) {
+	v, ok := any(instructor).(*Instruct[T])
+	return v, ok
+}
+
+func dataType(a any) instruct.Type {
+	p, ok := a.(dataAble)
+	if ok {
+		return dataAble.InstructType(p)
+	}
+	return instruct.TypeMax
 }

@@ -29,7 +29,7 @@ func (*Instruct) scanValues(columns []string) ([]interface{}, error) {
 		case instruct.FieldID, instruct.FieldCurrentUnix, instruct.FieldUpdatedUnix:
 			values[i] = new(sql.NullInt64)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type Instruct", columns[i])
+			return nil, fmt.Errorf("unexpected column %q for type innteInstruct", columns[i])
 		}
 	}
 	return values, nil
@@ -78,7 +78,7 @@ func (i *Instruct) Update() *InstructUpdateOne {
 func (i *Instruct) Unwrap() *Instruct {
 	_tx, ok := i.config.driver.(*txDriver)
 	if !ok {
-		panic("kernel: Instruct is not a transactional entity")
+		panic("kernel: innteInstruct is not a transactional entity")
 	}
 	i.config.driver = _tx.drv
 	return i
@@ -87,7 +87,7 @@ func (i *Instruct) Unwrap() *Instruct {
 // String implements the fmt.Stringer.
 func (i *Instruct) String() string {
 	var builder strings.Builder
-	builder.WriteString("Instruct(")
+	builder.WriteString("innteInstruct(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", i.ID))
 	builder.WriteString("current_unix=")
 	builder.WriteString(fmt.Sprintf("%v", i.CurrentUnix))
