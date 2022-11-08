@@ -156,6 +156,7 @@ func (i *Instruct[T]) UnmarshalData(data []byte) error {
 // @param json.RawMessage
 func (i *Instruct[T]) SetData(data json.RawMessage) {
 	i.meta.Data = data
+	i.meta.Length = len(data)
 }
 
 // SetDataSource
@@ -164,7 +165,7 @@ func (i *Instruct[T]) SetData(data json.RawMessage) {
 // @return *Instruct[T]
 func (i *Instruct[T]) SetDataSource(data *T) *Instruct[T] {
 	i.dataSource = data
-	i.meta.Data = utils.Must(json.Marshal(data))
+	i.SetData(utils.Must(json.Marshal(data)))
 	return i
 }
 
@@ -200,17 +201,6 @@ func (i *Instruct[T]) parseMetaInstruct(m *metaInstruct) error {
 	}
 	return nil
 }
-
-//func (i *Instruct[T]) metaInstruct() *metaInstruct {
-//	if i.meta == nil {
-//		i.meta = new(metaInstruct)
-//		i.meta.Type = i.Type
-//		i.meta.To = i.To()
-//		i.meta.Data = utils.Must(json.Marshal(i.Data))
-//		i.meta.Length = len(i.meta.Data)
-//	}
-//	return i.meta
-//}
 
 func instructToBytes(c *metaInstruct) []byte {
 	builder := flatbuffers.NewBuilder(0)
