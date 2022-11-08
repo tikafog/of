@@ -138,7 +138,7 @@ func (i *Instruct[T]) SetTo(To string) {
 // @receiver ContentReport
 // @return data
 func (i *Instruct[T]) MarshalData() ([]byte, error) {
-	return json.Marshal(i)
+	return json.Marshal(i.meta)
 }
 
 // UnmarshalData ...
@@ -147,7 +147,8 @@ func (i *Instruct[T]) MarshalData() ([]byte, error) {
 // @param []byte
 // @return error
 func (i *Instruct[T]) UnmarshalData(data []byte) error {
-	return json.Unmarshal(data, i)
+	i.meta = new(metaInstruct)
+	return json.Unmarshal(data, i.meta)
 }
 
 // SetData ...
