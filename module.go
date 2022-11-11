@@ -20,6 +20,7 @@ type name struct {
 var (
 	NameNotSet      = OwnName(0, "notset")
 	NameAccount     = OwnName(18275347644319189965, "account")
+	NameSystem      = OwnName(7852121090758537921, "system")
 	NameAdmin       = OwnName(2239877576446804528, "admin")
 	NameAdminClient = OwnName(14909113260478095105, "admin_client")
 	NameCenter      = OwnName(18108201700337443927, "center")
