@@ -66,6 +66,13 @@ type Instruct[T DataSource] struct {
 	//Last int64  `json:"last,omitempty"`
 }
 
+// DataSource ...
+// @receiver *Instruct[T]
+// @return *T
+func (i *Instruct[T]) DataSource() *T {
+	return i.dataSource
+}
+
 func (i *Instruct[T]) Version() string {
 	return i.meta.Version
 }
