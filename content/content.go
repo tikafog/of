@@ -8,6 +8,7 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 
 	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/feature/source"
 	"github.com/tikafog/of/utils"
 	"github.com/tikafog/of/version"
 )
@@ -61,6 +62,16 @@ func (m metaContent) contentV3() *ContentV3 {
 		Exts:    m.Exts,
 		Type:    m.Type,
 	}
+}
+
+func (c *Content) Source() source.Type {
+	switch c.Type {
+	case content.TypeUpdate:
+		return source.TypeUpgrade
+	case content.TypeBootstrap:
+		return source.TypeBootnode
+	}
+	return source.TypeMedia
 }
 
 // SetExts

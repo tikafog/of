@@ -4,10 +4,11 @@ import (
 	"context"
 
 	"github.com/tikafog/of/buffers/content"
+	"github.com/tikafog/of/feature/source"
 )
 
 type DataQuery interface {
-	DataQuery(clientType ClientType, p uint32) (DataQueryHandler, error)
+	DataQuery(clientType source.Type, p uint32) (DataQueryHandler, error)
 }
 
 // DataQueryHandler is a query handler interface
@@ -16,15 +17,15 @@ type DataQueryHandler interface {
 	Last() int64
 }
 
-// ContentClientType ...
+// ContentSourceType ...
 // @param content.Type
-// @return ClientType
-func ContentClientType(tp content.Type) ClientType {
+// @return Type
+func ContentSourceType(tp content.Type) source.Type {
 	switch tp {
 	case content.TypeUpdate:
-		return ClientTypeUpgrade
+		return source.TypeUpgrade
 	case content.TypeBootstrap:
-		return ClientTypeBootnode
+		return source.TypeBootnode
 	}
-	return ClientTypeMedia
+	return source.TypeMedia
 }
