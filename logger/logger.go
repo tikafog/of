@@ -8,16 +8,12 @@ import (
 	"golang.org/x/exp/slog"
 )
 
-var defaultLog = slog.New(slog.NewTextHandler(os.Stdout))
+var Default = slog.New(slog.NewJSONHandler(os.Stdout))
 
 type FileLogger struct {
 	*slog.Logger
 	buf   *bufio.Writer
 	close func() error
-}
-
-func Group(name string) *slog.Logger {
-	return defaultLog.WithGroup(name)
 }
 
 func NewFileLogger(path string) (*FileLogger, error) {
