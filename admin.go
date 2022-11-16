@@ -7,7 +7,7 @@ import (
 	"github.com/tikafog/of/feature/source"
 )
 
-type AdminHooker = func(ctx context.Context, data []byte) error
+type AdminHookFunc = func(ctx context.Context, data []byte) error
 
 type InquireRequest struct {
 	Data []byte
@@ -18,9 +18,12 @@ type AnswerRequest struct {
 	Reader io.Reader
 }
 
+type Hooker interface {
+	Hook(p source.Type, h AdminHookFunc) error
+}
+
 type Inquirer interface {
 	Inquire(ctx context.Context, r *InquireRequest) error
-	Hook(p source.Type, h AdminHooker) error
 }
 
 type Answer interface {
@@ -31,4 +34,5 @@ type Adminer interface {
 	IsAdmin() bool
 	Inquirer
 	Answer
+	Hooker
 }
