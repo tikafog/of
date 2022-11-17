@@ -18,7 +18,6 @@ type DBC struct {
 func Open(path string, opts ...Opts) (*DBC, error) {
 	var dbc DBC
 	dbc.opt = parseOption(opts)
-	debug = dbc.opt.Debug()
 	ignores := dbc.opt.Ignores()
 
 	var err error
