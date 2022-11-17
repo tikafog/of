@@ -3,7 +3,6 @@ package dbc
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/dbc/upgrade"
@@ -17,10 +16,9 @@ func openUpgrade(name of.Name, path string, o *Option) (*upgrade.Client, error) 
 	if err != nil {
 		return nil, err
 	}
-	if debug {
-		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
-	}
-	cli, err := openUpgradeDatabase(dbPath)
+	log.Debug("open upgrade database", "path", dbPath, "exist", exist)
+
+	cli, err := openUpgradeDatabase(dbPath, o.Debug())
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +33,9 @@ func openUpgrade(name of.Name, path string, o *Option) (*upgrade.Client, error) 
 
 func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) error {
 	if !exist {
-		if debug {
-			log.Println("[DBC] upgrade not exist")
-		}
+
+		log.Warn("upgrade not exist, run migrating")
+
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -53,9 +51,9 @@ func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) e
 		}
 		return nil
 	}
-	if debug {
-		log.Println("[DBC] upgrade exist")
-	}
+
+	log.Debug("upgrade exist")
+
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {
@@ -96,7 +94,7 @@ func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) e
 	return nil
 }
 
-func openUpgradeDatabase(path string) (*upgrade.Client, error) {
+func openUpgradeDatabase(path string, debug bool) (*upgrade.Client, error) {
 	var options []upgrade.Option
 
 	if debug {

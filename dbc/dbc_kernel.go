@@ -2,7 +2,6 @@ package dbc
 
 import (
 	"context"
-	"log"
 
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/utils"
@@ -17,10 +16,10 @@ func openKernel(name of.Name, path string, o *Option) (*kernel.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	if debug {
-		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
-	}
-	cli, err := openKernelDatabase(dbPath)
+
+	log.Debug("open kernel database", "path", dbPath, "exist", exist)
+
+	cli, err := openKernelDatabase(dbPath, o.Debug())
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +34,7 @@ func openKernel(name of.Name, path string, o *Option) (*kernel.Client, error) {
 
 func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) error {
 	if !exist {
-		if debug {
-			log.Println("[DBC] kernel not exist")
-		}
+		log.Warn(" kernel not exist, run migrating")
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -53,9 +50,7 @@ func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) err
 		}
 		return nil
 	}
-	if debug {
-		log.Println("[DBC] kernel exist")
-	}
+	log.Debug("kernel exist")
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {
@@ -96,7 +91,7 @@ func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) err
 	return nil
 }
 
-func openKernelDatabase(path string) (*kernel.Client, error) {
+func openKernelDatabase(path string, debug bool) (*kernel.Client, error) {
 	var options []kernel.Option
 
 	if debug {

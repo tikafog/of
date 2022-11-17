@@ -2,7 +2,6 @@ package dbc
 
 import (
 	"context"
-	"log"
 
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/utils"
@@ -17,10 +16,10 @@ func openBootNode(name of.Name, path string, o *Option) (*bootnode.Client, error
 	if err != nil {
 		return nil, err
 	}
-	if debug {
-		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
-	}
-	cli, err := openBootNodeDatabase(dbPath)
+
+	log.Debug("open bootnode database", "path", dbPath, "exist", exist)
+
+	cli, err := openBootNodeDatabase(dbPath, o.Debug())
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +34,8 @@ func openBootNode(name of.Name, path string, o *Option) (*bootnode.Client, error
 
 func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool) error {
 	if !exist {
-		if debug {
-			log.Println("[DBC] bootnode not exist")
-		}
+		log.Warn("bootnode not exist, run migrating")
+
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -53,9 +51,9 @@ func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool)
 		}
 		return nil
 	}
-	if debug {
-		log.Println("[DBC] bootnode exist")
-	}
+
+	log.Debug("bootnode exist")
+
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {
@@ -96,7 +94,7 @@ func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool)
 	return nil
 }
 
-func openBootNodeDatabase(path string) (*bootnode.Client, error) {
+func openBootNodeDatabase(path string, debug bool) (*bootnode.Client, error) {
 	var options []bootnode.Option
 
 	if debug {

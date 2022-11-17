@@ -2,7 +2,6 @@ package dbc
 
 import (
 	"context"
-	"log"
 
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/utils"
@@ -17,10 +16,9 @@ func openMedia(name of.Name, path string, o *Option) (*media.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	if debug {
-		log.Println("[DBC] open database", "path", dbPath, "exist", exist)
-	}
-	cli, err := openMediaDatabase(dbPath)
+	log.Debug("open media database", "path", dbPath, "exist", exist)
+
+	cli, err := openMediaDatabase(dbPath, o.Debug())
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +33,8 @@ func openMedia(name of.Name, path string, o *Option) (*media.Client, error) {
 
 func createOrInitMedia(ctx context.Context, cli *media.Client, exist bool) error {
 	if !exist {
-		if debug {
-			log.Println("[DBC] media not exist")
-		}
+		log.Warn("media not exist, run migrating")
+
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -53,9 +50,9 @@ func createOrInitMedia(ctx context.Context, cli *media.Client, exist bool) error
 		}
 		return nil
 	}
-	if debug {
-		log.Println("[DBC] media exist")
-	}
+
+	log.Debug("media exist")
+
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {
@@ -96,7 +93,7 @@ func createOrInitMedia(ctx context.Context, cli *media.Client, exist bool) error
 	return nil
 }
 
-func openMediaDatabase(path string) (*media.Client, error) {
+func openMediaDatabase(path string, debug bool) (*media.Client, error) {
 	var options []media.Option
 
 	if debug {

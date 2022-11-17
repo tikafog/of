@@ -1,3 +1,7 @@
 package dbc
 
-var debug = false
+import (
+	"github.com/tikafog/of/logger"
+)
+
+var log = logger.WithGroup("[DBC]")
