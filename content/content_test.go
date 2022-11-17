@@ -11,7 +11,6 @@ import (
 )
 
 func TestNewContentWithType(t *testing.T) {
-	Debug()
 	type args struct {
 		tp  content.Type
 		msg *Message
@@ -127,14 +126,13 @@ func TestNewContentWithType(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			t.Logf("data:%+v", Wipe(c2.JSON()))
+			t.Logf("data:%+v", c2.JSON())
 			bc2 := c2.Bytes()
-			log.Println("parse bytes")
 			cb2, err := ParseContent(bc2)
 			if err != nil {
 				t.Fatal(err)
 			}
-			t.Logf("data:%+v", Wipe(cb2.JSON()))
+			t.Logf("data:%+v", cb2.JSON())
 		})
 	}
 }

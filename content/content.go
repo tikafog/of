@@ -187,7 +187,6 @@ func (c *Content) CurrentJSON() []byte {
 // @return error
 func (c *Content) JSON() []byte {
 	if c.meta == nil {
-
 		c.meta = &metaContent{
 			Version: "",
 			From:    c.From,
@@ -199,9 +198,7 @@ func (c *Content) JSON() []byte {
 		c.meta.Message = utils.Must(json.Marshal(c.Message.v1()))
 	}
 	c.meta.Version = version.VersionOne
-	if debug {
-		log.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
-	}
+	log.Debug("print content meta", utils.Must(json.Marshal(c.meta)))
 	return utils.Must(json.Marshal(c.meta))
 }
 
@@ -223,9 +220,7 @@ func (c *Content) JSONV2() []byte {
 		c.meta.Message = utils.Must(json.Marshal(c.Message.v2()))
 	}
 	c.meta.Version = version.VersionOne
-	if debug {
-		log.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
-	}
+	log.Debug("print content meta:", utils.Must(json.Marshal(c.meta)))
 	return utils.Must(json.Marshal(c.meta))
 }
 
@@ -241,9 +236,7 @@ func (c *Content) JSONV3() []byte {
 		c.meta.Message = utils.Must(json.Marshal(c.Message))
 	}
 	c.meta.Version = version.VersionOne
-	if debug {
-		log.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
-	}
+	log.Debug("print content meta:", utils.Must(json.Marshal(c.meta)))
 	return utils.Must(json.Marshal(c.meta))
 }
 
@@ -276,9 +269,7 @@ func (c *Content) metaCopy() metaContent {
 			c.meta.Message = utils.Must(json.Marshal(c.Message.v1()))
 		}
 	}
-	if debug {
-		log.Println("print content meta:", Wipe(utils.Must(json.Marshal(c.meta))))
-	}
+	log.Debug("print content meta:", utils.Must(json.Marshal(c.meta)))
 	return *c.meta
 }
 
@@ -295,9 +286,7 @@ func contentToBytes(c *Content, empty bool) []byte {
 
 	var _message flatbuffers.UOffsetT
 	if !empty {
-		if debug {
-			log.Println("message is not empty", "last", c.Message.Last, "index", c.Message.Index)
-		}
+		log.Debug("message is not empty", "last", c.Message.Last, "index", c.Message.Index)
 
 		_dataM := builder.CreateByteString(c.Message.Data)
 		content.MessageStart(builder)
@@ -332,9 +321,7 @@ func contentToBytes(c *Content, empty bool) []byte {
 	content.ContentAddVersion(builder, _version)
 	content.ContentAddType(builder, c.Type)
 	builder.Finish(content.ContentEnd(builder))
-	if debug {
-		log.Println("print content", Wipe(c.JSON()))
-	}
+	log.Debug("content before bytes", "data", string(c.JSON()))
 	return builder.FinishedBytes()
 }
 
