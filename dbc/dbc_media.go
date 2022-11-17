@@ -97,7 +97,7 @@ func openMediaDatabase(path string, debug bool) (*media.Client, error) {
 	var options []media.Option
 
 	if debug {
-		options = append(options, media.Debug())
+		options = append(options, media.Debug(), media.Log(mediaDebug))
 	}
 
 	client, err := media.Open("sqlite3", path, options...)

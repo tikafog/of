@@ -98,7 +98,7 @@ func openUpgradeDatabase(path string, debug bool) (*upgrade.Client, error) {
 	var options []upgrade.Option
 
 	if debug {
-		options = append(options, upgrade.Debug())
+		options = append(options, upgrade.Debug(), upgrade.Log(upgradeDebug))
 	}
 
 	client, err := upgrade.Open("sqlite3", path, options...)

@@ -98,7 +98,7 @@ func openBootNodeDatabase(path string, debug bool) (*bootnode.Client, error) {
 	var options []bootnode.Option
 
 	if debug {
-		options = append(options, bootnode.Debug())
+		options = append(options, bootnode.Debug(), bootnode.Log(bootnodeDebug))
 	}
 
 	client, err := bootnode.Open("sqlite3", path, options...)

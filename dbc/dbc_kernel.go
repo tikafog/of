@@ -95,7 +95,7 @@ func openKernelDatabase(path string, debug bool) (*kernel.Client, error) {
 	var options []kernel.Option
 
 	if debug {
-		options = append(options, kernel.Debug())
+		options = append(options, kernel.Debug(), kernel.Log(kernelDebug))
 	}
 
 	client, err := kernel.Open("sqlite3", path, options...)
