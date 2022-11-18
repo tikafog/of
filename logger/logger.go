@@ -62,6 +62,10 @@ func openWriter(path string) error {
 	return nil
 }
 
+func SetLogger(l *slog.Logger) {
+	defaultLogger = l
+}
+
 func Default() *slog.Logger {
 	return slog.New(slog.NewJSONHandler(writer))
 }
