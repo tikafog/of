@@ -16,6 +16,7 @@ const (
 
 var (
 	writer         io.Writer = os.Stderr
+	opts                     = slog.HandlerOptions{AddSource: true}
 	WipeData       bool      = false
 	WipeDataLength int       = 1024
 )
@@ -67,7 +68,7 @@ func SetLogger(l *slog.Logger) {
 }
 
 func Default() *slog.Logger {
-	return slog.New(slog.NewJSONHandler(writer))
+	return slog.New(opts.NewJSONHandler(writer))
 }
 
 func ToFile(path string) (*slog.Logger, error) {
@@ -79,7 +80,7 @@ func ToFile(path string) (*slog.Logger, error) {
 	if err != nil {
 		return nil, err
 	}
-	return slog.New(slog.NewJSONHandler(file)), nil
+	return slog.New(opts.NewJSONHandler(file)), nil
 }
 
 type FileLogger struct {
@@ -100,7 +101,7 @@ func NewFileLogger(path string) (*FileLogger, error) {
 	fl := new(FileLogger)
 	fl.buf = bufio.NewWriter(file)
 	fl.close = file.Close
-	fl.Logger = slog.New(slog.NewJSONHandler(fl.buf))
+	fl.Logger = slog.New(opts.NewJSONHandler(fl.buf))
 	return fl, nil
 }
 
