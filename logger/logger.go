@@ -3,7 +3,6 @@ package logger
 import (
 	"bufio"
 	"context"
-	"io"
 	"os"
 	"path/filepath"
 
@@ -15,10 +14,10 @@ const (
 )
 
 var (
-	writer         io.Writer = os.Stderr
-	opts                     = slog.HandlerOptions{AddSource: true}
-	WipeData       bool      = false
-	WipeDataLength int       = 1024
+	output         = newWriter(os.Stderr)
+	opts           = slog.HandlerOptions{AddSource: true}
+	WipeData       = false
+	WipeDataLength = 1024
 )
 
 type Logger interface {
@@ -59,7 +58,7 @@ func openWriter(path string) error {
 	if err != nil {
 		return err
 	}
-	writer = file
+	output.SetOutput(file)
 	return nil
 }
 
@@ -68,7 +67,7 @@ func SetLogger(l *slog.Logger) {
 }
 
 func Default() *slog.Logger {
-	return slog.New(opts.NewJSONHandler(writer))
+	return slog.New(opts.NewJSONHandler(output))
 }
 
 func ToFile(path string) (*slog.Logger, error) {
@@ -80,7 +79,8 @@ func ToFile(path string) (*slog.Logger, error) {
 	if err != nil {
 		return nil, err
 	}
-	return slog.New(opts.NewJSONHandler(file)), nil
+	output.SetOutput(file)
+	return slog.New(opts.NewJSONHandler(output)), nil
 }
 
 type FileLogger struct {
