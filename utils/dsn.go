@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 )
@@ -53,10 +52,7 @@ func openSqlite3(dsn string, path string, name string, debug bool) (string, bool
 	dsn = fmt.Sprintf(dsn, filepath.ToSlash(fp))
 	if FileNotExists(path) {
 		_ = os.MkdirAll(path, 0755)
-		//return dsn, false, nil
 	}
-	if debug {
-		log.Println("[DBC] check file exists", "filepath", fp, "exist", !FileNotExists(fp))
-	}
+	log.Debug("check file", "path", fp, "dsn", dsn, "is_exists", !FileNotExists(fp))
 	return dsn, !FileNotExists(fp), nil
 }
