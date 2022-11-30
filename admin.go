@@ -26,14 +26,14 @@ type Inquirer interface {
 	Inquire(ctx context.Context, r *InquireRequest) error
 }
 
-type AdminHandler interface {
-	Receive(ctx context.Context, protocol Protocol, r *AdminDataRequest) error
+type StreamCaller interface {
 	SetStreams(streams [ProtocolMax]MessageHandler)
+	Stream(protocol Protocol) (MessageHandler, bool)
 }
 
 type Adminer interface {
 	IsAdmin() bool
 	Inquirer
-	AdminHandler
+	StreamCaller
 	Hooker
 }
