@@ -6,14 +6,14 @@ import (
 
 type EventRequestOption interface {
 	Value() any
-	Args() []Arg
+	Args() Args
 	DecodeFromData(data any) error
 	Callback(res *EventResult)
 }
 
 type eventRequestOption struct {
 	value    any
-	args     []Arg
+	args     Args
 	data     []byte
 	callback EventCallbackFunc
 }
@@ -22,7 +22,7 @@ func (e eventRequestOption) Value() any {
 	return e.value
 }
 
-func (e eventRequestOption) Args() []Arg {
+func (e eventRequestOption) Args() Args {
 	return e.args
 }
 
@@ -50,13 +50,13 @@ func EROCallback(c EventCallbackFunc) EventRequestOptions {
 	}
 }
 
-func EROArg(arg Arg) EventRequestOptions {
+func EROArg(arg KeyArg) EventRequestOptions {
 	return func(e *eventRequestOption) {
-		e.args = append(e.args, arg)
+		e.args.Add(arg)
 	}
 }
 
-func EROArgs(args []Arg) EventRequestOptions {
+func EROArgs(args Args) EventRequestOptions {
 	return func(e *eventRequestOption) {
 		e.args = args
 	}
