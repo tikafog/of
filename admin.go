@@ -13,7 +13,7 @@ type InquireRequest struct {
 	Data []byte
 }
 
-type AnswerRequest struct {
+type AdminDataRequest struct {
 	Conn   Conn
 	Reader io.Reader
 }
@@ -26,13 +26,13 @@ type Inquirer interface {
 	Inquire(ctx context.Context, r *InquireRequest) error
 }
 
-type Answer interface {
-	Answer(ctx context.Context, r *AnswerRequest) error
+type AdminHandler interface {
+	Handler(ctx context.Context, protocol Protocol, r *AdminDataRequest)
 }
 
 type Adminer interface {
 	IsAdmin() bool
 	Inquirer
-	Answer
+	AdminHandler
 	Hooker
 }
