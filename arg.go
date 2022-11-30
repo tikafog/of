@@ -95,9 +95,22 @@ func NewTypeArg(arg any) KeyArg {
 	}
 }
 
+// NewKeyArg ...
+// @param string
+// @param any
+// @return KeyArg
 func NewKeyArg(key string, arg any) KeyArg {
 	return KeyArg{
 		Key:   key,
 		Value: arg,
 	}
+}
+
+// TypeGetArgs ...
+// @param Args
+// @return any
+// @return bool
+func TypeGetArgs[T any](args Args) (any, bool) {
+	t := reflect.TypeOf(*new(T))
+	return args.Get(t)
 }
