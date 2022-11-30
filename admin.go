@@ -28,6 +28,7 @@ type Inquirer interface {
 
 type AdminHandler interface {
 	Receive(ctx context.Context, protocol Protocol, r *AdminDataRequest) error
+	SetStreams(streams [ProtocolMax]MessageHandler)
 }
 
 type Adminer interface {
