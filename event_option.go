@@ -69,9 +69,15 @@ func EROData(data any) EventRequestOptions {
 }
 
 func ParseERO(opts ...EventRequestOptions) EventRequestOption {
-	var op eventRequestOption
+	op := initOpts()
 	for i := range opts {
-		opts[i](&op)
+		opts[i](op)
 	}
 	return op
+}
+
+func initOpts() *eventRequestOption {
+	return &eventRequestOption{
+		args: NewArgs(),
+	}
 }
