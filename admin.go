@@ -27,7 +27,7 @@ type Inquirer interface {
 }
 
 type AdminHandler interface {
-	Handler(ctx context.Context, protocol Protocol, r *AdminDataRequest)
+	Receive(ctx context.Context, protocol Protocol, r *AdminDataRequest) error
 }
 
 type Adminer interface {
