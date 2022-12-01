@@ -13,11 +13,6 @@ type InquireRequest struct {
 	Data []byte
 }
 
-type AdminDataRequest struct {
-	Conn   Conn
-	Reader io.Reader
-}
-
 type Hooker interface {
 	Hook(p source.Type, h AdminHookFunc) error
 }
@@ -28,12 +23,13 @@ type Inquirer interface {
 
 type StreamCaller interface {
 	SetStreams(streams [ProtocolMax]MessageHandler)
-	Stream(protocol Protocol) (MessageHandler, bool)
+	Call(ctx context.Context, protocol Protocol, conn Conn, reader io.Reader) error
 }
 
 type Adminer interface {
 	IsAdmin() bool
+
+	Hooker
 	Inquirer
 	StreamCaller
-	Hooker
 }
