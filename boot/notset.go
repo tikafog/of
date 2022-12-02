@@ -10,10 +10,6 @@ func (n notsetModule) IsValid() bool {
 	return false
 }
 
-func (n notsetModule) WaitEvent(name of.Name, args ...of.Arg) error {
-	return nil
-}
-
 func (n notsetModule) IsNil() bool {
 	return false
 }
