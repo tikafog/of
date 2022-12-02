@@ -15,8 +15,11 @@ type Connection interface {
 	Bootstrap(addrs ...string) error
 	Connect(ctx context.Context, bootaddr ...string) error
 	Disconnect(ctx context.Context, bootaddr ...string) error
+
 	NodeConn(id ID) (Conn, bool)
-	NodeLen() int64
+	IsConnected(id ID) bool
+
 	ConnNodes() []Conn
 	ConnNodeIDs() []ID
+	TotalConnNodes() int64
 }
