@@ -32,9 +32,8 @@ func openMedia(name of.Name, path string, o *Option) (*media.Client, error) {
 }
 
 func createOrInitMedia(ctx context.Context, cli *media.Client, exist bool) error {
+	log.Warn("media init", "file_exist", exist)
 	if !exist {
-		log.Warn("media not exist, run migrating")
-
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -50,8 +49,6 @@ func createOrInitMedia(ctx context.Context, cli *media.Client, exist bool) error
 		}
 		return nil
 	}
-
-	log.Debug("media exist")
 
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {

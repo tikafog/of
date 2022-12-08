@@ -33,8 +33,8 @@ func openKernel(name of.Name, path string, o *Option) (*kernel.Client, error) {
 }
 
 func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) error {
+	log.Warn("kernel init", "file_exist", exist)
 	if !exist {
-		log.Warn(" kernel not exist, run migrating")
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -50,7 +50,6 @@ func createOrInitKernel(ctx context.Context, cli *kernel.Client, exist bool) err
 		}
 		return nil
 	}
-	log.Debug("kernel exist")
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
 		//if db.IsNotFound(err) {

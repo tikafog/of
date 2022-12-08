@@ -33,9 +33,8 @@ func openBootNode(name of.Name, path string, o *Option) (*bootnode.Client, error
 }
 
 func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool) error {
+	log.Warn("bootnode init", "file_exist", exist)
 	if !exist {
-		log.Warn("bootnode not exist, run migrating")
-
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -51,8 +50,6 @@ func createOrInitBootNode(ctx context.Context, cli *bootnode.Client, exist bool)
 		}
 		return nil
 	}
-
-	log.Debug("bootnode exist")
 
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {

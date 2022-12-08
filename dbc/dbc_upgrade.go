@@ -32,10 +32,8 @@ func openUpgrade(name of.Name, path string, o *Option) (*upgrade.Client, error) 
 }
 
 func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) error {
+	log.Warn("upgrade init", "file_exist", exist)
 	if !exist {
-
-		log.Warn("upgrade not exist, run migrating")
-
 		err := cli.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -51,8 +49,6 @@ func createOrInitUpgrade(ctx context.Context, cli *upgrade.Client, exist bool) e
 		}
 		return nil
 	}
-
-	log.Debug("upgrade exist")
 
 	boot, err := cli.Version.Query().First(ctx)
 	if err != nil {
