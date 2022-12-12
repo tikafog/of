@@ -25,12 +25,12 @@ type action struct {
 }
 
 var actions = [DSNTypeMax]*action{
-	DSNTypeSqlite3: &action{
+	DSNTypeSqlite3: {
 		driverName: DSNTypeSqlite3.String(),
 		dsn:        "file:%v?cache=shared&_journal=WAL&_fk=1",
 		dsnFunc:    openSqlite3,
 	},
-	DSNTypeMysql: &action{
+	DSNTypeMysql: {
 		dsnFunc: func(dsn string, path string, name string, debug bool) (string, bool, error) {
 			panic("not implemented")
 		},
