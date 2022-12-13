@@ -7,10 +7,22 @@ type KeyMaker interface {
 	To(receiver Name, p string) EventKey
 }
 
+type EventTrigger interface {
+	EventTrigger(event string, opts ...EventRequestOptions)
+}
+
+type EventHandler interface {
+	EventHandleEvent(event string, fn EventFunc) error
+}
+
+type EventListener interface {
+	EventTrigger
+	EventHandler
+}
+
 type Event interface {
-	KeyMaker(from Name) KeyMaker
-	Register(key EventKey, fn EventFunc) error
-	Trigger(key EventKey, opts ...EventRequestOptions) error
+	RegisterModule(name Name) (EventListener, error)
+	ModuleEvent(name) (EventListener, bool)
 }
 
 type EventRegister interface {

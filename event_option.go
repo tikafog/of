@@ -12,10 +12,19 @@ type EventRequestOption interface {
 }
 
 type eventRequestOption struct {
+	receiver Name
 	value    any
 	args     Args
 	data     []byte
 	callback EventCallbackFunc
+}
+
+func (e *eventRequestOption) Receiver() Name {
+	return e.receiver
+}
+
+func (e *eventRequestOption) SetReceiver(receiver Name) {
+	e.receiver = receiver
 }
 
 func (e eventRequestOption) Value() any {
@@ -65,6 +74,12 @@ func EROArgs(args Args) EventRequestOptions {
 func EROData(data any) EventRequestOptions {
 	return func(e *eventRequestOption) {
 		e.data, _ = json.Marshal(data)
+	}
+}
+
+func EROReceiver(name Name) EventRequestOptions {
+	return func(e *eventRequestOption) {
+		e.receiver = name
 	}
 }
 

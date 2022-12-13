@@ -45,32 +45,36 @@ func (n name) ID() uint64 {
 	return n.id
 }
 
-type ConfigLoader interface {
+type ModuleConfigLoader interface {
 	LoadConfig(json.RawMessage) (json.RawMessage, error)
 }
 
 type ModuleRunner interface {
 	Init() error
 	Run(ctx context.Context) error
-	Destroy()
+	Stop()
 }
 
-type CoreLoader interface {
-	PreloadCore(core Core) error
+type CoreRegister interface {
+	RegisterCore(core Core) error
 }
 
 type ModuleStarter interface {
-	ConfigLoader
+	//	ModuleConfiger
 	ModuleRunner
-
-	//this all calls before run
-	CoreLoader
-
-	//this all calls after run
-	APIRegister
-	EventRegister
-
+	//
+	//	//this all calls before run
+	//	CoreRegister
+	//
+	//	//this all calls after run
+	//	//APIRegister
+	//	//EventRegister
+	//
 	Module
+}
+
+type ModuleInjector interface {
+	Inject(name string, v interface{}) error
 }
 
 type Module interface {
@@ -78,6 +82,10 @@ type Module interface {
 	IsValid() bool
 }
 
+// CompareName compares the name of a module
+// @param Name
+// @param Name
+// @return bool
 func CompareName(n, o Name) bool {
 	return n.ID() == o.ID()
 }
@@ -108,6 +116,10 @@ func CompareNameEq(n Name, others ...Name) bool {
 	return false
 }
 
+// OwnName create self name with id
+// @param uint64
+// @param string
+// @return Name
 func OwnName(id uint64, value string) Name {
 	return &name{
 		id:    id,
