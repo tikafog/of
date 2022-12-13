@@ -298,7 +298,7 @@ func (cq *ChannelQuery) WithInformations(opts ...func(*InformationV1Query)) *Cha
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.Channel.Query().
+//	client.Channel.DB().
 //		GroupBy(channel.FieldCreatedUnix).
 //		Aggregate(media.Count()).
 //		Scan(ctx, &v)
@@ -325,7 +325,7 @@ func (cq *ChannelQuery) GroupBy(field string, fields ...string) *ChannelGroupBy 
 //		CreatedUnix int64 `json:"created_unix,omitempty"`
 //	}
 //
-//	client.Channel.Query().
+//	client.Channel.DB().
 //		Select(channel.FieldCreatedUnix).
 //		Scan(ctx, &v)
 func (cq *ChannelQuery) Select(fields ...string) *ChannelSelect {

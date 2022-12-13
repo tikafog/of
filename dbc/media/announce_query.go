@@ -260,7 +260,7 @@ func (aq *AnnounceQuery) Clone() *AnnounceQuery {
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.Announce.Query().
+//	client.Announce.DB().
 //		GroupBy(announce.FieldCreatedUnix).
 //		Aggregate(media.Count()).
 //		Scan(ctx, &v)
@@ -287,7 +287,7 @@ func (aq *AnnounceQuery) GroupBy(field string, fields ...string) *AnnounceGroupB
 //		CreatedUnix int64 `json:"created_unix,omitempty"`
 //	}
 //
-//	client.Announce.Query().
+//	client.Announce.DB().
 //		Select(announce.FieldCreatedUnix).
 //		Scan(ctx, &v)
 func (aq *AnnounceQuery) Select(fields ...string) *AnnounceSelect {

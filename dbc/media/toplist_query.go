@@ -333,7 +333,7 @@ func (tlq *TopListQuery) WithPage(opts ...func(*PageQuery)) *TopListQuery {
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.TopList.Query().
+//	client.TopList.DB().
 //		GroupBy(toplist.FieldCreatedUnix).
 //		Aggregate(media.Count()).
 //		Scan(ctx, &v)
@@ -360,7 +360,7 @@ func (tlq *TopListQuery) GroupBy(field string, fields ...string) *TopListGroupBy
 //		CreatedUnix int64 `json:"created_unix,omitempty"`
 //	}
 //
-//	client.TopList.Query().
+//	client.TopList.DB().
 //		Select(toplist.FieldCreatedUnix).
 //		Scan(ctx, &v)
 func (tlq *TopListQuery) Select(fields ...string) *TopListSelect {

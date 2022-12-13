@@ -205,7 +205,7 @@ func (tx *txDriver) Exec(ctx context.Context, query string, args, v interface{})
 	return tx.tx.Exec(ctx, query, args, v)
 }
 
-// Query calls tx.Query.
+// Query calls tx.DB.
 func (tx *txDriver) Query(ctx context.Context, query string, args, v interface{}) error {
 	return tx.tx.Query(ctx, query, args, v)
 }

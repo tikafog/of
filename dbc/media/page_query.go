@@ -368,7 +368,7 @@ func (pq *PageQuery) WithTopLists(opts ...func(*TopListQuery)) *PageQuery {
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.Page.Query().
+//	client.Page.DB().
 //		GroupBy(page.FieldCreatedUnix).
 //		Aggregate(media.Count()).
 //		Scan(ctx, &v)
@@ -395,7 +395,7 @@ func (pq *PageQuery) GroupBy(field string, fields ...string) *PageGroupBy {
 //		CreatedUnix int64 `json:"created_unix,omitempty"`
 //	}
 //
-//	client.Page.Query().
+//	client.Page.DB().
 //		Select(page.FieldCreatedUnix).
 //		Scan(ctx, &v)
 func (pq *PageQuery) Select(fields ...string) *PageSelect {

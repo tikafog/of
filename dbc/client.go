@@ -1,6 +1,7 @@
 package dbc
 
 import (
+	"context"
 	"io"
 	"sync"
 
@@ -20,13 +21,25 @@ type Client[T client] struct {
 	c *T
 }
 
-func (t *Client[T]) Query() *T {
+// DB returns the database connection
+// @receiver *Client[T]
+// @return *T
+func (t *Client[T]) DB() *T {
 	return t.c
 }
 
-func (t *Client[T]) Update() (*T, *sync.Mutex) {
-	t.m.Lock()
-	return t.c, &t.m
+// UpdateStart lock for database updates
+// @receiver *Client[T]
+// @param context.Context
+// @return context.Context
+func (t *Client[T]) UpdateStart(ctx context.Context) context.Context {
+	return context.WithValue(ctx, "privacy", &t.m)
+}
+
+// UpdateFinish unlock for database updates
+// @receiver *Client[T]
+func (t *Client[T]) UpdateFinish() {
+	t.m.Unlock()
 }
 
 func (t *Client[T]) Close() error {

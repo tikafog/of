@@ -259,7 +259,7 @@ func (vq *VersionQuery) Clone() *VersionQuery {
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.Version.Query().
+//	client.Version.DB().
 //		GroupBy(version.FieldCurrent).
 //		Aggregate(media.Count()).
 //		Scan(ctx, &v)
@@ -286,7 +286,7 @@ func (vq *VersionQuery) GroupBy(field string, fields ...string) *VersionGroupBy 
 //		Current int `json:"Current,omitempty"`
 //	}
 //
-//	client.Version.Query().
+//	client.Version.DB().
 //		Select(version.FieldCurrent).
 //		Scan(ctx, &v)
 func (vq *VersionQuery) Select(fields ...string) *VersionSelect {

@@ -259,7 +259,7 @@ func (rq *ResourceQuery) Clone() *ResourceQuery {
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.Resource.Query().
+//	client.Resource.DB().
 //		GroupBy(resource.FieldRid).
 //		Aggregate(kernel.Count()).
 //		Scan(ctx, &v)
@@ -286,7 +286,7 @@ func (rq *ResourceQuery) GroupBy(field string, fields ...string) *ResourceGroupB
 //		Rid string `json:"rid,omitempty"`
 //	}
 //
-//	client.Resource.Query().
+//	client.Resource.DB().
 //		Select(resource.FieldRid).
 //		Scan(ctx, &v)
 func (rq *ResourceQuery) Select(fields ...string) *ResourceSelect {
