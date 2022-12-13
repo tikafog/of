@@ -260,7 +260,7 @@ func (uq *UpdateQuery) Clone() *UpdateQuery {
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.Update.DB().
+//	client.Update.Query().
 //		GroupBy(update.FieldCreatedUnix).
 //		Aggregate(upgrade.Count()).
 //		Scan(ctx, &v)
@@ -287,7 +287,7 @@ func (uq *UpdateQuery) GroupBy(field string, fields ...string) *UpdateGroupBy {
 //		CreatedUnix int64 `json:"created_unix,omitempty"`
 //	}
 //
-//	client.Update.DB().
+//	client.Update.Query().
 //		Select(update.FieldCreatedUnix).
 //		Scan(ctx, &v)
 func (uq *UpdateQuery) Select(fields ...string) *UpdateSelect {

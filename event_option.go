@@ -5,6 +5,7 @@ import (
 )
 
 type EventRequestOption interface {
+	Receiver() Name
 	Value() any
 	Args() Args
 	DecodeFromData(data any) error

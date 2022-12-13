@@ -334,7 +334,7 @@ func (iv *InformationV1Query) WithChannel(opts ...func(*ChannelQuery)) *Informat
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.InformationV1.DB().
+//	client.InformationV1.Query().
 //		GroupBy(informationv1.FieldCreatedUnix).
 //		Aggregate(media.Count()).
 //		Scan(ctx, &v)
@@ -361,7 +361,7 @@ func (iv *InformationV1Query) GroupBy(field string, fields ...string) *Informati
 //		CreatedUnix int64 `json:"created_unix,omitempty"`
 //	}
 //
-//	client.InformationV1.DB().
+//	client.InformationV1.Query().
 //		Select(informationv1.FieldCreatedUnix).
 //		Scan(ctx, &v)
 func (iv *InformationV1Query) Select(fields ...string) *InformationV1Select {

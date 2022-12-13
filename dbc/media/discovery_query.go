@@ -260,7 +260,7 @@ func (dq *DiscoveryQuery) Clone() *DiscoveryQuery {
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.Discovery.DB().
+//	client.Discovery.Query().
 //		GroupBy(discovery.FieldCreatedUnix).
 //		Aggregate(media.Count()).
 //		Scan(ctx, &v)
@@ -287,7 +287,7 @@ func (dq *DiscoveryQuery) GroupBy(field string, fields ...string) *DiscoveryGrou
 //		CreatedUnix int64 `json:"created_unix,omitempty"`
 //	}
 //
-//	client.Discovery.DB().
+//	client.Discovery.Query().
 //		Select(discovery.FieldCreatedUnix).
 //		Scan(ctx, &v)
 func (dq *DiscoveryQuery) Select(fields ...string) *DiscoverySelect {

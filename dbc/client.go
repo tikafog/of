@@ -49,20 +49,21 @@ func (t *Client[T]) Close() error {
 func openClient[C client](path string, op *Option) (*Client[C], error) {
 	var it any = new(C)
 	var err error
-	var name of.Name
+	//var name of.Name
 	//var closer io.Closer
 	switch it.(type) {
 	case *bootnode.Client:
+		//name = of.NameBootnode
 		it, err = openBootNode(of.NameBootnode, path, op)
 	case *kernel.Client:
-		name = of.NameKernel
-		it, err = openKernel(name, path, op)
+		//name = of.NameKernel
+		it, err = openKernel(of.NameKernel, path, op)
 	case *upgrade.Client:
-		name = of.NameUpgrade
-		it, err = openUpgrade(name, path, op)
+		//name = of.NameUpgrade
+		it, err = openUpgrade(of.NameUpgrade, path, op)
 	case *media.Client:
-		name = of.NameMedia
-		it, err = openMedia(name, path, op)
+		//name = of.NameMedia
+		it, err = openMedia(of.NameMedia, path, op)
 	default:
 		return nil, Error("unsupported client type")
 	}

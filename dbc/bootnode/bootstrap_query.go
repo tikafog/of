@@ -259,7 +259,7 @@ func (bq *BootstrapQuery) Clone() *BootstrapQuery {
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.Bootstrap.DB().
+//	client.Bootstrap.Query().
 //		GroupBy(bootstrap.FieldPid).
 //		Aggregate(bootnode.Count()).
 //		Scan(ctx, &v)
@@ -286,7 +286,7 @@ func (bq *BootstrapQuery) GroupBy(field string, fields ...string) *BootstrapGrou
 //		Pid string `json:"pid,omitempty"`
 //	}
 //
-//	client.Bootstrap.DB().
+//	client.Bootstrap.Query().
 //		Select(bootstrap.FieldPid).
 //		Scan(ctx, &v)
 func (bq *BootstrapQuery) Select(fields ...string) *BootstrapSelect {
