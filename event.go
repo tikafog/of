@@ -28,7 +28,7 @@ type EventRegister interface {
 }
 
 type EventRequester interface {
-	Key() uint64
+	EventKey() EventKey
 	EventRequestOption
 }
 
