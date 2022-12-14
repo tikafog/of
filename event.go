@@ -8,7 +8,7 @@ type EventTrigger interface {
 }
 
 type EventHandler interface {
-	EventHandleEvent(event EventKey, fn EventFunc) error
+	EventHandler(event EventKey, fn EventFunc) error
 }
 
 type EventListener interface {
