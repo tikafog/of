@@ -1,7 +1,7 @@
 package of
 
-type EventKey interface {
-	KeyID() uint64
-	Type() string
-	From() Name
+type EventKey uint64
+
+func (key EventKey) Key() uint64 {
+	return uint64(key)
 }

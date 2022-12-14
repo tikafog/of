@@ -5,6 +5,7 @@ import (
 )
 
 type EventRequestOption interface {
+	From() Name
 	Receiver() Name
 	Value() any
 	Args() Args
@@ -13,11 +14,20 @@ type EventRequestOption interface {
 }
 
 type eventRequestOption struct {
+	from     Name
 	receiver Name
 	value    any
 	args     Args
 	data     []byte
 	callback EventCallbackFunc
+}
+
+func (e *eventRequestOption) From() Name {
+	return e.from
+}
+
+func (e *eventRequestOption) SetFrom(from Name) {
+	e.from = from
 }
 
 func (e *eventRequestOption) Receiver() Name {
