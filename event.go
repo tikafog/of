@@ -20,7 +20,7 @@ type Event interface {
 	Key(str string) EventKey
 	KeyName(EventKey) string
 	RegisterModule(name Name) (EventListener, error)
-	ModuleEvent(name) (EventListener, bool)
+	ModuleEvent(name Name) (EventListener, bool)
 }
 
 type EventRegister interface {
