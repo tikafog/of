@@ -9,14 +9,28 @@ import (
 	"sync"
 )
 
+type injectFunction func(module of.Module) error
+
+// RegisterAny ...
+type RegisterAny interface {
+	RegisterAny(v any) error
+}
+
 type loader struct {
 	rw      sync.RWMutex
 	names   *hashmap.Map[uint64, of.Name]
 	modules *hashmap.Map[uint64, of.Module]
-	dbc     *dbc.DBC
-	event   of.Event
-	api     of.API
-	option  option.Option
+	//dbc     *dbc.DBC
+	//event   of.Event
+	//api     of.API
+	//option  option.Option
+}
+
+func newLoader() Loader {
+	return &loader{
+		names:   hashmap.New[uint64, of.Name](),
+		modules: hashmap.New[uint64, of.Module](),
+	}
 }
 
 func (i *loader) Names() []of.Name {
@@ -58,61 +72,24 @@ func (i *loader) GetByName(name of.Name) (of.Module, bool) {
 	return i.modules.Get(name.ID())
 }
 
-func newLoader() Loader {
-	return &loader{
-		names:   hashmap.New[uint64, of.Name](),
-		modules: hashmap.New[uint64, of.Module](),
-	}
-}
-
-func (i *loader) AddSource(v any) error {
+func (i *loader) Inject(v any) error {
+	var fn injectFunction
 	switch d := v.(type) {
 	case *dbc.DBC:
-		i.dbc = d
+		fn = i.injectDBC(d)
 	case of.Event:
-		i.event = d
+		fn = i.injectEvent(d)
 	case of.API:
-		i.api = d
+		fn = i.injectAPI(d)
 	case option.Option:
-		i.option = d
+		fn = i.injectOption(d)
 	default:
-		return errors.New("unknown add type")
+		fn = i.injectAny(d)
 	}
-	return nil
-}
 
-func (i *loader) Inject() error {
-	var err error
-	if i.option != nil {
-		i.modules.Range(func(idx uint64, module of.Module) bool {
-			err = i.InjectOption(module)
-			if err != nil {
-				return false
-			}
-			return true
-		})
-	}
-	if i.dbc != nil {
-		i.modules.Range(func(idx uint64, module of.Module) bool {
-			err = i.InjectDBC(module)
-			if err != nil {
-				return false
-			}
-			return true
-		})
-	}
-	if i.event != nil {
-		i.modules.Range(func(idx uint64, module of.Module) bool {
-			err = i.InjectEvent(module)
-			if err != nil {
-				return false
-			}
-			return true
-		})
-	}
-	if i.api != nil {
-		i.modules.Range(func(idx uint64, module of.Module) bool {
-			err = i.InjectAPI(module)
+	if fn != nil {
+		i.modules.Range(func(_ uint64, module of.Module) bool {
+			err := fn(module)
 			if err != nil {
 				return false
 			}
@@ -122,42 +99,62 @@ func (i *loader) Inject() error {
 	return nil
 }
 
-func (i *loader) InjectDBC(module of.Module) error {
-	if v, ok := module.(dbc.DatabaseRegister); ok {
-		err := v.RegisterDBC(i.dbc)
-		if err != nil {
-			return err
+func (i *loader) injectDBC(d *dbc.DBC) injectFunction {
+	return func(module of.Module) error {
+		if v, ok := module.(dbc.DatabaseRegister); ok {
+			err := v.RegisterDBC(d)
+			if err != nil {
+				return err
+			}
 		}
+		return nil
 	}
-	return nil
 }
 
-func (i *loader) InjectEvent(module of.Module) error {
-	if v, ok := module.(of.EventRegister); ok {
-		err := v.RegisterEvent(i.event)
-		if err != nil {
-			return err
+func (i *loader) injectEvent(event of.Event) injectFunction {
+	return func(module of.Module) error {
+		if v, ok := module.(of.EventRegister); ok {
+			err := v.RegisterEvent(event)
+			if err != nil {
+				return err
+			}
 		}
+		return nil
 	}
-	return nil
 }
 
-func (i *loader) InjectAPI(module of.Module) error {
-	if v, ok := module.(of.APIRegister); ok {
-		err := v.RegisterAPI(i.api)
-		if err != nil {
-			return err
+func (i *loader) injectAPI(api of.API) injectFunction {
+	return func(module of.Module) error {
+		if v, ok := module.(of.APIRegister); ok {
+			err := v.RegisterAPI(api)
+			if err != nil {
+				return err
+			}
 		}
+		return nil
 	}
-	return nil
 }
 
-func (i *loader) InjectOption(module of.Module) error {
-	if v, ok := module.(option.Register); ok {
-		err := v.RegisterOption(i.option)
-		if err != nil {
-			return err
+func (i *loader) injectOption(op option.Option) injectFunction {
+	return func(module of.Module) error {
+		if v, ok := module.(option.Register); ok {
+			err := v.RegisterOption(op)
+			if err != nil {
+				return err
+			}
 		}
+		return nil
 	}
-	return nil
+}
+
+func (i *loader) injectAny(d any) injectFunction {
+	return func(module of.Module) error {
+		if v, ok := module.(RegisterAny); ok {
+			err := v.RegisterAny(d)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	}
 }

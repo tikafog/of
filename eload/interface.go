@@ -17,8 +17,7 @@ type Loader interface {
 }
 
 type Injector interface {
-	AddSource(v any) error
-	Inject() error
+	Inject(v any) error
 }
 
 type NameRegister interface {
