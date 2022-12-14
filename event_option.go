@@ -26,16 +26,8 @@ func (e *eventRequestOption) From() Name {
 	return e.from
 }
 
-func (e *eventRequestOption) SetFrom(from Name) {
-	e.from = from
-}
-
 func (e *eventRequestOption) Receiver() Name {
 	return e.receiver
-}
-
-func (e *eventRequestOption) SetReceiver(receiver Name) {
-	e.receiver = receiver
 }
 
 func (e eventRequestOption) Value() any {
@@ -91,6 +83,12 @@ func EROData(data any) EventRequestOptions {
 func EROReceiver(name Name) EventRequestOptions {
 	return func(e *eventRequestOption) {
 		e.receiver = name
+	}
+}
+
+func EROFrom(name Name) EventRequestOptions {
+	return func(e *eventRequestOption) {
+		e.from = name
 	}
 }
 
