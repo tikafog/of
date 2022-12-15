@@ -4,15 +4,16 @@ type EventFunc = func(r EventRequester) error
 type EventCallbackFunc = func(res *EventResult)
 
 type EventTrigger interface {
+	EventKeyAble
 	EventTrigger(event EventKey, opts ...EventRequestOptions)
 }
 
 type EventHandler interface {
+	EventKeyAble
 	EventHandler(event EventKey, fn EventFunc) error
 }
 
 type EventListener interface {
-	EventKeyAble
 	EventTrigger
 	EventHandler
 }
