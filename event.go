@@ -12,13 +12,13 @@ type EventHandler interface {
 }
 
 type EventListener interface {
+	EventKeyAble
 	EventTrigger
 	EventHandler
 }
 
 type Event interface {
-	Key(str string) EventKey
-	KeyName(EventKey) string
+	EventKeyAble
 	RegisterModule(name Name) (EventListener, error)
 	ModuleEvent(name Name) (EventListener, bool)
 }
