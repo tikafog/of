@@ -39,11 +39,7 @@ func (i *loader) LoadConfig(message json.RawMessage) (json.RawMessage, error) {
 		return nil, err
 	}
 	i.modules.Range(func(u uint64, m of.Module) bool {
-		name, ok := i.names.Get(u)
-		if !ok {
-			return true
-		}
-		cfg, ok := cfgs[name.String()]
+		cfg, ok := cfgs[m.Name().String()]
 		if !ok {
 			return true
 		}
@@ -55,10 +51,10 @@ func (i *loader) LoadConfig(message json.RawMessage) (json.RawMessage, error) {
 		if err != nil {
 			return true
 		}
-		cfgs[name.String()] = cfg
+		cfgs[m.Name().String()] = cfg
 		return true
 	})
-	return json.Marshal(cfgs)
+	return json.MarshalIndent(cfgs, "", " ")
 }
 
 func newLoader() Loader {

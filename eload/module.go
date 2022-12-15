@@ -36,13 +36,6 @@ func Register(m of.Module) {
 	}
 }
 
-// AddSource ...
-// @param any
-// @return error
-func AddSource(v any) error {
-	return _loader.AddSource(v)
-}
-
 // Load ...
 // @Description: Load module
 // @param module.Name
