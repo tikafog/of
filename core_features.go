@@ -7,8 +7,6 @@ import (
 
 type CoreFeature interface {
 	Module(name Name) Module
-	//API() API
-	//Event() Event
 	EventTrigger(name Name) EventTrigger
 	Node() Node
 	Resource() resource.Resource
