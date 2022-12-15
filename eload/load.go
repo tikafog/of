@@ -1,6 +1,7 @@
 package eload
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/cornelk/hashmap"
 	"github.com/tikafog/of"
@@ -24,6 +25,40 @@ type loader struct {
 	//event   of.Event
 	//api     of.API
 	//option  option.Option
+}
+
+// LoadConfig ...
+// @receiver *loader
+// @param json.RawMessage
+// @return json.RawMessage
+// @return error
+func (i *loader) LoadConfig(message json.RawMessage) (json.RawMessage, error) {
+	cfgs := make(map[string]json.RawMessage, i.modules.Len())
+	err := json.Unmarshal(message, &cfgs)
+	if err != nil {
+		return nil, err
+	}
+	i.modules.Range(func(u uint64, m of.Module) bool {
+		name, ok := i.names.Get(u)
+		if !ok {
+			return true
+		}
+		cfg, ok := cfgs[name.String()]
+		if !ok {
+			return true
+		}
+		mm, ok := m.(ConfigLoader)
+		if !ok {
+			return true
+		}
+		cfg, err = mm.LoadConfig(cfg)
+		if err != nil {
+			return true
+		}
+		cfgs[name.String()] = cfg
+		return true
+	})
+	return json.Marshal(cfgs)
 }
 
 func newLoader() Loader {

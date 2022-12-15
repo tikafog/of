@@ -1,6 +1,7 @@
 package eload
 
 import (
+	"encoding/json"
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/option"
 )
@@ -9,8 +10,13 @@ type OptionLoader interface {
 	WithOption(option.Option) of.ModuleStarter
 }
 
+type ConfigLoader interface {
+	LoadConfig(message json.RawMessage) (json.RawMessage, error)
+}
+
 type Loader interface {
 	OptionLoader
+	ConfigLoader
 	Injector
 	NameRegister
 	ModuleInterface
