@@ -23,10 +23,6 @@ type ApplyOption interface {
 	Apply(fns ...OptSetFunc)
 }
 
-type Register interface {
-	RegisterOption(op Option) error
-}
-
 func Tools(tools of.Tools) OptSetFunc {
 	return func(o *option) Option {
 		o.tools = tools

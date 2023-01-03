@@ -168,7 +168,7 @@ func (i *loader) injectAPI(api of.API) injectFunc {
 
 func (i *loader) injectOption(op option.Option) injectFunc {
 	return func(module of.Module) error {
-		if v, ok := module.(option.Register); ok {
+		if v, ok := module.(OptionRegister); ok {
 			err := v.RegisterOption(op)
 			if err != nil {
 				return err
