@@ -15,10 +15,6 @@ type DBC struct {
 	cs  [source.TypeMax]io.Closer
 }
 
-type DatabaseRegister interface {
-	RegisterDBC(dbc *DBC) error
-}
-
 func Open(path string, opts ...Opts) (*DBC, error) {
 	var dbc DBC
 	dbc.opt = parseOption(opts)

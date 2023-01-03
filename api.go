@@ -13,7 +13,3 @@ type APIHandler struct {
 type API interface {
 	Register(module Module, handler ...APIHandler) error
 }
-
-type APIRegister interface {
-	RegisterAPI(API) error
-}

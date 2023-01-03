@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-type injectFunction func(module of.Module) error
+type injectFunc func(module of.Module) error
 
 // RegisterAny ...
 type RegisterAny interface {
@@ -104,7 +104,7 @@ func (i *loader) GetByName(name of.Name) (of.Module, bool) {
 }
 
 func (i *loader) Inject(v any) error {
-	var fn injectFunction
+	var fn injectFunc
 	switch d := v.(type) {
 	case *dbc.DBC:
 		fn = i.injectDBC(d)
@@ -130,9 +130,9 @@ func (i *loader) Inject(v any) error {
 	return nil
 }
 
-func (i *loader) injectDBC(d *dbc.DBC) injectFunction {
+func (i *loader) injectDBC(d *dbc.DBC) injectFunc {
 	return func(module of.Module) error {
-		if v, ok := module.(dbc.DatabaseRegister); ok {
+		if v, ok := module.(DatabaseRegister); ok {
 			err := v.RegisterDBC(d)
 			if err != nil {
 				return err
@@ -142,9 +142,9 @@ func (i *loader) injectDBC(d *dbc.DBC) injectFunction {
 	}
 }
 
-func (i *loader) injectEvent(event of.Event) injectFunction {
+func (i *loader) injectEvent(event of.Event) injectFunc {
 	return func(module of.Module) error {
-		if v, ok := module.(of.EventRegister); ok {
+		if v, ok := module.(EventRegister); ok {
 			err := v.RegisterEvent(event)
 			if err != nil {
 				return err
@@ -154,9 +154,9 @@ func (i *loader) injectEvent(event of.Event) injectFunction {
 	}
 }
 
-func (i *loader) injectAPI(api of.API) injectFunction {
+func (i *loader) injectAPI(api of.API) injectFunc {
 	return func(module of.Module) error {
-		if v, ok := module.(of.APIRegister); ok {
+		if v, ok := module.(APIRegister); ok {
 			err := v.RegisterAPI(api)
 			if err != nil {
 				return err
@@ -166,7 +166,7 @@ func (i *loader) injectAPI(api of.API) injectFunction {
 	}
 }
 
-func (i *loader) injectOption(op option.Option) injectFunction {
+func (i *loader) injectOption(op option.Option) injectFunc {
 	return func(module of.Module) error {
 		if v, ok := module.(option.Register); ok {
 			err := v.RegisterOption(op)
@@ -178,7 +178,7 @@ func (i *loader) injectOption(op option.Option) injectFunction {
 	}
 }
 
-func (i *loader) injectAny(d any) injectFunction {
+func (i *loader) injectAny(d any) injectFunc {
 	return func(module of.Module) error {
 		if v, ok := module.(RegisterAny); ok {
 			err := v.RegisterAny(d)

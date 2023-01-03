@@ -24,10 +24,6 @@ type Event interface {
 	ModuleEvent(name Name) (EventListener, bool)
 }
 
-type EventRegister interface {
-	RegisterEvent(Event) error
-}
-
 type EventRequester interface {
 	EventKey() EventKey
 	EventRequestOption

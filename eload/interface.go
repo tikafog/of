@@ -22,10 +22,6 @@ type Loader interface {
 	ModuleInterface
 }
 
-type Injector interface {
-	Inject(v any) error
-}
-
 type NameRegister interface {
 	Names() []of.Name
 	Register(id uint64, name of.Name) error
