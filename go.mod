@@ -3,21 +3,21 @@ module github.com/tikafog/of
 go 1.18
 
 require (
-	entgo.io/ent v0.11.1
+	entgo.io/ent v0.11.4
 	github.com/bxcodec/faker/v4 v4.0.0-beta.3
 	github.com/cespare/xxhash/v2 v2.2.0
 	github.com/cornelk/hashmap v1.0.8
 	github.com/gin-gonic/gin v1.8.2
 	github.com/google/flatbuffers v22.11.23+incompatible
 	github.com/google/uuid v1.3.0
-	github.com/mattn/go-sqlite3 v1.14.14
+	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/stretchr/testify v1.8.1
 	github.com/tikafog/errors v0.1.2
 	golang.org/x/exp v0.0.0-20221114191408-850992195362
 )
 
 require (
-	ariga.io/atlas v0.5.0 // indirect
+	ariga.io/atlas v0.7.3-0.20221011160332-3ca609863edd // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -28,7 +28,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
-	github.com/hashicorp/hcl/v2 v2.10.0 // indirect
+	github.com/hashicorp/hcl/v2 v2.13.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
