@@ -33,6 +33,7 @@ func (t *Client[T]) DB() *T {
 // @param context.Context
 // @return context.Context
 func (t *Client[T]) UpdateStart(ctx context.Context) context.Context {
+	t.m.Lock()
 	return context.WithValue(ctx, "privacy", &t.m)
 }
 
