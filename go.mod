@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	entgo.io/ent v0.11.1
-	github.com/bxcodec/faker/v4 v4.0.0-beta
+	github.com/bxcodec/faker/v4 v4.0.0-beta.3
 	github.com/cespare/xxhash/v2 v2.2.0
 	github.com/cornelk/hashmap v1.0.8
 	github.com/gin-gonic/gin v1.8.1
