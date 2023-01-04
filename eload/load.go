@@ -1,8 +1,10 @@
 package eload
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/cornelk/hashmap"
 	"github.com/tikafog/of"
 	"github.com/tikafog/of/dbc"
@@ -21,10 +23,98 @@ type loader struct {
 	rw      sync.RWMutex
 	names   *hashmap.Map[uint64, of.Name]
 	modules *hashmap.Map[uint64, of.Module]
-	//dbc     *dbc.DBC
-	//event   of.Event
-	//api     of.API
-	//option  option.Option
+	//hooks   *hashmap.Map[uint64, func(module of.Module)]
+}
+
+func (i *loader) InitAll(option option.Option, fns ...RunnerHookFunc) error {
+	var err error
+	i.modules.Range(func(u uint64, module of.Module) bool {
+		m, ok := module.(Runner)
+		if !ok {
+			return true
+		}
+
+		for _, fn := range fns {
+			fn(RunnerStateInit, module, option)
+		}
+		err = m.Init(option)
+		if err != nil {
+			return false
+		}
+		return true
+	})
+	return err
+}
+
+func (i *loader) Init(name of.Name, option option.Option) error {
+	m, ok := i.modules.Get(name.ID())
+	if !ok {
+		return fmt.Errorf("module %s not found", name)
+	}
+	r, ok := m.(Runner)
+	if !ok {
+		return nil
+	}
+	return r.Init(option)
+}
+
+func (i *loader) RunAll(ctx context.Context, fns ...RunnerHookFunc) error {
+	var err error
+	i.modules.Range(func(u uint64, module of.Module) bool {
+		m, ok := module.(Runner)
+		if !ok {
+			return true
+		}
+
+		for _, fn := range fns {
+			fn(RunnerStateRun, module)
+		}
+		err = m.Run(ctx)
+		if err != nil {
+			return false
+		}
+		return true
+	})
+	return err
+}
+
+func (i *loader) Run(ctx context.Context, name of.Name) error {
+	m, ok := i.modules.Get(name.ID())
+	if !ok {
+		return fmt.Errorf("module %s not found", name)
+	}
+	r, ok := m.(Runner)
+	if !ok {
+		return nil
+	}
+	return r.Run(ctx)
+}
+
+func (i *loader) StopAll(fns ...RunnerHookFunc) {
+	i.modules.Range(func(u uint64, module of.Module) bool {
+		m, ok := module.(Runner)
+		if !ok {
+			return true
+		}
+
+		for _, fn := range fns {
+			fn(RunnerStateStop, module)
+		}
+		m.Stop()
+		return true
+	})
+}
+
+func (i *loader) Stop(name of.Name) {
+	m, ok := i.modules.Get(name.ID())
+	if !ok {
+		return
+	}
+	r, ok := m.(Runner)
+	if !ok {
+		return
+	}
+	r.Stop()
 }
 
 // LoadConfig ...
@@ -64,6 +154,9 @@ func newLoader() Loader {
 	}
 }
 
+// Names ...
+// @receiver *loader
+// @return []of.Name
 func (i *loader) Names() []of.Name {
 	rets := make([]of.Name, 0, i.names.Len())
 	i.names.Range(func(k uint64, n of.Name) bool {
@@ -73,10 +166,11 @@ func (i *loader) Names() []of.Name {
 	return rets
 }
 
-func (i *loader) WithOption(o option.Option) of.ModuleStarter {
-	return nil
-}
-
+// Register ...
+// @receiver *loader
+// @param uint64
+// @param of.Name
+// @return error
 func (i *loader) Register(id uint64, name of.Name) error {
 	if !i.names.Insert(id, name) {
 		return errors.New("module is already loaded")
@@ -114,6 +208,8 @@ func (i *loader) Inject(v any) error {
 		fn = i.injectAPI(d)
 	case option.Option:
 		fn = i.injectOption(d)
+	case of.Core:
+		fn = i.injectCore(d)
 	default:
 		fn = i.injectAny(d)
 	}
@@ -182,6 +278,18 @@ func (i *loader) injectAny(d any) injectFunc {
 	return func(module of.Module) error {
 		if v, ok := module.(RegisterAny); ok {
 			err := v.RegisterAny(d)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+}
+
+func (i *loader) injectCore(d of.Core) injectFunc {
+	return func(module of.Module) error {
+		if v, ok := module.(CoreRegister); ok {
+			err := v.RegisterCore(d)
 			if err != nil {
 				return err
 			}

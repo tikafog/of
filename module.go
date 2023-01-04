@@ -1,7 +1,6 @@
 package of
 
 import (
-	"context"
 	"encoding/json"
 )
 
@@ -49,29 +48,19 @@ type ModuleConfigLoader interface {
 	LoadConfig(json.RawMessage) (json.RawMessage, error)
 }
 
-type ModuleRunner interface {
-	Init() error
-	Run(ctx context.Context) error
-	Stop()
-}
-
-type CoreRegister interface {
-	RegisterCore(core Core) error
-}
-
-type ModuleStarter interface {
-	//	ModuleConfiger
-	ModuleRunner
-	//
-	//	//this all calls before run
-	//	CoreRegister
-	//
-	//	//this all calls after run
-	//	//APIRegister
-	//	//EventRegister
-	//
-	Module
-}
+//type ModuleStarter interface {
+//	ModuleConfiger
+//ModuleRunner
+//
+//	//this all calls before run
+//	CoreRegister
+//
+//	//this all calls after run
+//	//APIRegister
+//	//EventRegister
+//
+//Module
+//}
 
 type ModuleInjector interface {
 	Inject(name string, v interface{}) error

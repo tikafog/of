@@ -25,3 +25,7 @@ type APIRegister interface {
 type OptionRegister interface {
 	RegisterOption(op option.Option) error
 }
+
+type CoreRegister interface {
+	RegisterCore(core of.Core) error
+}
