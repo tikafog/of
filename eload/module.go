@@ -27,10 +27,12 @@ func Register(m of.Module) {
 	if m == nil {
 		panic("of: Register module is nil")
 	}
-	if err := _loader.Register(m.Name().ID(), m.Name()); err != nil {
+	var err error
+	err = _loader.Register(m.Name())
+	if err != nil {
 		panic(err)
 	}
-	err := _loader.Add(m.Name().ID(), m)
+	err = _loader.Add(m.Name().ID(), m)
 	if err != nil {
 		panic(err)
 	}

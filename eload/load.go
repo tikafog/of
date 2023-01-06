@@ -171,20 +171,16 @@ func (i *loader) Names() []of.Name {
 // @param uint64
 // @param of.Name
 // @return error
-func (i *loader) Register(id uint64, name of.Name) error {
-	if !i.names.Insert(id, name) {
-		return errors.New("module is already loaded")
+func (i *loader) Register(name of.Name) error {
+	if !i.names.Insert(name.ID(), name) {
+		return errors.New("module is already registered")
 	}
 	return nil
 }
 
-func (i *loader) Add(id uint64, m of.Module) error {
-	err := i.Register(id, m.Name())
-	if err != nil {
-		return err
-	}
-	if !i.modules.Insert(id, m) {
-		return errors.New("module is already loaded")
+func (i *loader) Add(u uint64, m of.Module) error {
+	if !i.modules.Insert(u, m) {
+		return errors.New("module is already added")
 	}
 	return nil
 }

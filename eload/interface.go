@@ -23,7 +23,7 @@ type Loader interface {
 
 type NameRegister interface {
 	Names() []of.Name
-	Register(id uint64, name of.Name) error
+	Register(name of.Name) error
 }
 
 type ModuleInterface interface {
