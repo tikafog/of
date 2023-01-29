@@ -102,6 +102,11 @@ func ParseERO(opts ...EventRequestOptions) EventRequestOption {
 
 func initOpts() *eventRequestOption {
 	return &eventRequestOption{
-		args: NewArgs(),
+		args:     NewArgs(),
+		from:     NameNotSet,
+		receiver: NameNotSet,
+		//value:    nil,
+		//data:     nil,
+		//callback: nil,
 	}
 }
