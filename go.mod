@@ -3,7 +3,7 @@ module github.com/tikafog/of
 go 1.18
 
 require (
-	entgo.io/ent v0.12.3
+	entgo.io/ent v0.12.4
 	github.com/bxcodec/faker/v4 v4.0.0-beta.3
 	github.com/cespare/xxhash/v2 v2.2.0
 	github.com/cornelk/hashmap v1.0.8
@@ -17,7 +17,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.10.2-0.20230427182402-87a07dfb83bf // indirect
+	ariga.io/atlas v0.14.1-0.20230918065911-83ad451a4935 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/bytedance/sonic v1.8.0 // indirect
