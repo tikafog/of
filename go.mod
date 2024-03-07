@@ -8,7 +8,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0
 	github.com/cornelk/hashmap v1.0.8
 	github.com/gin-gonic/gin v1.9.0
-	github.com/google/flatbuffers v23.5.26+incompatible
+	github.com/google/flatbuffers v24.3.6+incompatible
 	github.com/google/uuid v1.6.0
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/stretchr/testify v1.9.0
