@@ -11,7 +11,7 @@ require (
 	github.com/google/flatbuffers v23.5.26+incompatible
 	github.com/google/uuid v1.6.0
 	github.com/mattn/go-sqlite3 v1.14.22
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/tikafog/errors v0.1.2
 	golang.org/x/exp v0.0.0-20221114191408-850992195362
 )
