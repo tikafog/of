@@ -3,7 +3,7 @@ module github.com/tikafog/of
 go 1.18
 
 require (
-	entgo.io/ent v0.14.2
+	entgo.io/ent v0.14.3
 	github.com/bxcodec/faker/v4 v4.0.0-beta.3
 	github.com/cespare/xxhash/v2 v2.3.0
 	github.com/cornelk/hashmap v1.0.8
