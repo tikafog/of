@@ -1,6 +1,7 @@
 module github.com/tikafog/of
 
-go 1.18
+go 1.23
+
 toolchain go1.24.1
 
 require (
@@ -12,7 +13,7 @@ require (
 	github.com/google/flatbuffers v25.1.24+incompatible
 	github.com/google/uuid v1.6.0
 	github.com/mattn/go-sqlite3 v1.14.24
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	github.com/tikafog/errors v0.1.2
 	golang.org/x/exp v0.0.0-20221114191408-850992195362
 )
