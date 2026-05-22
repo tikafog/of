@@ -1,6 +1,7 @@
 module github.com/tikafog/of
 
-go 1.18
+go 1.23
+
 toolchain go1.24.1
 
 require (
@@ -9,7 +10,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0
 	github.com/cornelk/hashmap v1.0.8
 	github.com/gin-gonic/gin v1.10.0
-	github.com/google/flatbuffers v25.1.24+incompatible
+	github.com/google/flatbuffers v25.12.19+incompatible
 	github.com/google/uuid v1.6.0
 	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/stretchr/testify v1.10.0
